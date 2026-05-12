@@ -1,0 +1,89 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Literata:ital,opsz,wght@0,7..72,300;1,7..72,300;1,7..72,500&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --font-syne: 'Syne', sans-serif;
+  --font-literata: 'Literata', serif;
+  --font-jetbrains: 'JetBrains Mono', monospace;
+}
+
+* {
+  scroll-behavior: smooth;
+}
+
+::selection {
+  background: rgba(255, 101, 0, 0.2);
+  color: #FF6500;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: #FAF8F3;
+}
+::-webkit-scrollbar-thumb {
+  background: #FF6500;
+  border-radius: 2px;
+}
+
+/* Grid background for hero */
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 58px 58px;
+}
+
+/* Prose styles for blog content */
+.prose-scalify h2 {
+  @apply font-sans font-bold text-2xl mt-8 mb-3 text-navy;
+}
+.prose-scalify h3 {
+  @apply font-sans font-bold text-lg mt-6 mb-2 text-navy;
+}
+.prose-scalify p {
+  @apply text-[#44403C] mb-4 leading-relaxed text-[0.95rem];
+}
+.prose-scalify ul {
+  @apply list-none space-y-2 mb-5;
+}
+.prose-scalify ul li {
+  @apply text-[#44403C] text-[0.92rem] leading-relaxed flex items-start gap-2;
+}
+.prose-scalify ul li::before {
+  content: '→';
+  @apply text-saffron font-bold flex-shrink-0;
+}
+.prose-scalify ol {
+  @apply list-decimal list-inside space-y-2 mb-5;
+}
+.prose-scalify ol li {
+  @apply text-[#44403C] text-[0.92rem] leading-relaxed;
+}
+.prose-scalify strong {
+  @apply text-navy font-bold;
+}
+.prose-scalify blockquote {
+  @apply border-l-4 border-saffron pl-4 my-5 italic text-[#7C7268];
+}
+.prose-scalify hr {
+  @apply border-cream-300 my-8;
+}
+.prose-scalify table {
+  @apply w-full border-collapse mb-5 text-sm;
+}
+.prose-scalify th {
+  @apply bg-navy text-white px-3 py-2 text-left text-xs;
+}
+.prose-scalify td {
+  @apply px-3 py-2 border-b border-cream-300 text-[#44403C];
+}
+
+/* Admin editor */
+.admin-editor {
+  @apply font-mono text-sm leading-relaxed;
+}
