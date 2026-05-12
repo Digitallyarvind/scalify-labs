@@ -40,6 +40,7 @@ const SERVICES = [
     items: [
       { icon: MessageCircle, name: 'WhatsApp Automation', desc: '98% open-rate nurture sequences', href: '/services/whatsapp-marketing' },
       { icon: Smartphone, name: 'RCS Messaging', desc: 'Rich media messages at scale', href: '/services/rcs-messaging' },
+
       { icon: BrainCircuit, name: 'AI Chatbots', desc: '24/7 lead qualification on autopilot', href: '/services/ai-systems' },
     ],
   },
