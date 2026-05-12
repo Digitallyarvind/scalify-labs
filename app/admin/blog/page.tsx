@@ -1,6 +1,7 @@
 import { createServerClient } from '@/lib/supabase'
 import Link from 'next/link'
 import { deletePost } from '@/lib/actions'
+import type { Post } from '@/types/database'
 
 export const revalidate = 0
 
@@ -25,10 +26,10 @@ export default async function BlogAdminPage({
   const search = searchParams.search || ''
 
   let query = db.from('posts').select('*').order('created_at', { ascending: false })
-  if (status !== 'all') query = query.eq('status', status)
-  if (search) query = query.ilike('title', `%${search}%`)
+  if (status !== 'all') query = query.eq('status', status) as typeof query
+  if (search) query = query.ilike('title', `%${search}%`) as typeof query
 
-  const { data: posts } = await query
+  const { data: posts } = await query as unknown as { data: Post[] | null }
 
   // Counts for tabs
   const { count: allCount } = await db.from('posts').select('*', { count: 'exact', head: true })

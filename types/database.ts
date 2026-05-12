@@ -22,7 +22,7 @@ export type Database = {
           views: number
         }
         Insert: Omit<Database['public']['Tables']['posts']['Row'], 'id' | 'created_at' | 'updated_at' | 'views'>
-        Update: Partial<Database['public']['Tables']['posts']['Insert']>
+        Update: Partial<Omit<Database['public']['Tables']['posts']['Row'], 'id' | 'created_at' | 'updated_at'>>
       }
       pages: {
         Row: {

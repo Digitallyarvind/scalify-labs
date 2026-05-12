@@ -1,5 +1,6 @@
 import { createServerClient } from '@/lib/supabase'
 import { CRMBoard } from '@/components/admin/CRMBoard'
+import type { Lead } from '@/types/database'
 
 export const revalidate = 0
 
@@ -12,9 +13,9 @@ export default async function CRMPage({
   const source = searchParams.source || 'all'
 
   let query = db.from('leads').select('*, lead_activities(*)').order('created_at', { ascending: false })
-  if (source !== 'all') query = query.ilike('source', `%${source}%`)
+  if (source !== 'all') query = query.ilike('source', `%${source}%`) as typeof query
 
-  const { data: leads } = await query
+  const { data: leads } = await query as unknown as { data: Lead[] | null }
 
   // Pipeline summary
   const stages = ['new', 'contacted', 'qualified', 'proposal', 'negotiation', 'won', 'lost']

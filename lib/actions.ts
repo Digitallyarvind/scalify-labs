@@ -3,6 +3,11 @@
 import { createServerClient } from './supabase'
 import { revalidatePath } from 'next/cache'
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+function table(db: ReturnType<typeof createServerClient>, name: string) {
+  return (db as any).from(name)
+}
+
 // ─── LEAD SUBMISSION ───────────────────────────────────────
 export async function submitLead(formData: {
   name: string
@@ -16,7 +21,7 @@ export async function submitLead(formData: {
 }) {
   const db = createServerClient()
 
-  const { error } = await db.from('leads').insert({
+  const { error } = await table(db, 'leads').insert({
     name: formData.name,
     phone: formData.phone,
     email: formData.email || null,
@@ -49,12 +54,11 @@ export async function submitS30Application(formData: {
   const db = createServerClient()
 
   // Check ban list
-  const { data: banned } = await db
-    .from('s30_applicants')
+  const { data: banned } = await table(db, 's30_applicants')
     .select('ban_until, name')
     .or(`phone.eq.${formData.phone},email.eq.${formData.email}`)
     .not('ban_until', 'is', null)
-    .single()
+    .single() as { data: { ban_until: string | null } | null }
 
   if (banned?.ban_until) {
     const banDate = new Date(banned.ban_until)
@@ -65,7 +69,7 @@ export async function submitS30Application(formData: {
     }
   }
 
-  const { error } = await db.from('s30_applicants').insert({
+  const { error } = await table(db, 's30_applicants').insert({
     batch_id: formData.batch_id,
     name: formData.name,
     phone: formData.phone,
@@ -109,13 +113,12 @@ export async function savePost(post: {
   const db = createServerClient()
 
   if (post.id) {
-    const { error } = await db
-      .from('posts')
+    const { error } = await table(db, 'posts')
       .update({ ...post, updated_at: new Date().toISOString(), published_at: post.status === 'published' ? new Date().toISOString() : undefined })
       .eq('id', post.id)
     if (error) throw new Error('Failed to update post')
   } else {
-    const { error } = await db.from('posts').insert({
+    const { error } = await table(db, 'posts').insert({
       ...post,
       author_name: 'Arvind Gupta',
       views: 0,
@@ -132,7 +135,7 @@ export async function savePost(post: {
 // ─── ADMIN: DELETE POST ────────────────────────────────────
 export async function deletePost(id: string) {
   const db = createServerClient()
-  const { error } = await db.from('posts').delete().eq('id', id)
+  const { error } = await table(db, 'posts').delete().eq('id', id)
   if (error) throw new Error('Failed to delete post')
   revalidatePath('/blog')
   revalidatePath('/admin/blog')
@@ -152,10 +155,10 @@ export async function savePage(page: {
 }) {
   const db = createServerClient()
   if (page.id) {
-    const { error } = await db.from('pages').update({ ...page, updated_at: new Date().toISOString() }).eq('id', page.id)
+    const { error } = await table(db, 'pages').update({ ...page, updated_at: new Date().toISOString() }).eq('id', page.id)
     if (error) throw new Error('Failed to update page')
   } else {
-    const { error } = await db.from('pages').insert(page)
+    const { error } = await table(db, 'pages').insert(page)
     if (error) throw new Error('Failed to create page')
   }
   revalidatePath('/')
@@ -171,7 +174,7 @@ export async function updateLead(id: string, updates: {
   notes?: string
 }) {
   const db = createServerClient()
-  const { error } = await db.from('leads').update({ ...updates, updated_at: new Date().toISOString() }).eq('id', id)
+  const { error } = await table(db, 'leads').update({ ...updates, updated_at: new Date().toISOString() }).eq('id', id)
   if (error) throw new Error('Failed to update lead')
   revalidatePath('/admin/crm')
   return { success: true }
@@ -184,7 +187,7 @@ export async function addLeadActivity(activity: {
   content: string
 }) {
   const db = createServerClient()
-  const { error } = await db.from('lead_activities').insert({ ...activity, created_by: 'Arvind Gupta' })
+  const { error } = await table(db, 'lead_activities').insert({ ...activity, created_by: 'Arvind Gupta' })
   if (error) throw new Error('Failed to add activity')
   revalidatePath('/admin/crm')
   return { success: true }
@@ -210,7 +213,7 @@ export async function updateApplicant(id: string, updates: Partial<{
   notes: string
 }>) {
   const db = createServerClient()
-  const { error } = await db.from('s30_applicants').update({ ...updates, updated_at: new Date().toISOString() }).eq('id', id)
+  const { error } = await table(db, 's30_applicants').update({ ...updates, updated_at: new Date().toISOString() }).eq('id', id)
   if (error) throw new Error('Failed to update applicant')
   revalidatePath('/admin/super-30')
   return { success: true }
@@ -222,7 +225,7 @@ export async function applyBan(applicantId: string) {
   banUntil.setFullYear(banUntil.getFullYear() + 1)
 
   const db = createServerClient()
-  const { error } = await db.from('s30_applicants').update({
+  const { error } = await table(db, 's30_applicants').update({
     offer_declined: true,
     ban_until: banUntil.toISOString(),
     stage: 'rejected',
@@ -234,5 +237,4 @@ export async function applyBan(applicantId: string) {
   return { success: true, banUntil: banUntil.toLocaleDateString('en-IN') }
 }
 
-// Re-export type for actions file
 type Lead = { stage: 'new' | 'contacted' | 'qualified' | 'proposal' | 'negotiation' | 'won' | 'lost' }

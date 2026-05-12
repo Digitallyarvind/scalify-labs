@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { createServerClient } from '@/lib/supabase'
 import { SITE } from '@/lib/data'
 import { CTABanner } from '@/components/sections/CTABanner'
+import type { Post } from '@/types/database'
 
 export const metadata: Metadata = {
   title: 'Digital Marketing Blog | SEO, Google Ads, WhatsApp Tips',
@@ -44,10 +45,10 @@ export default async function BlogPage({
     .order('published_at', { ascending: false })
 
   if (selectedCat !== 'All') {
-    query = query.eq('category', selectedCat)
+    query = query.eq('category', selectedCat) as typeof query
   }
 
-  const { data: posts } = await query
+  const { data: posts } = await query as unknown as { data: Post[] | null }
 
   // Blog listing schema
   const schema = {

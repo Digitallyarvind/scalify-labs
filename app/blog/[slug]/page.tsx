@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { createServerClient } from '@/lib/supabase'
 import { SITE } from '@/lib/data'
+import type { Post } from '@/types/database'
 
 interface Props {
   params: { slug: string }
@@ -12,12 +13,13 @@ export const revalidate = 60
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const db = createServerClient()
-  const { data: post } = await db
+  const { data: postRaw } = await db
     .from('posts')
     .select('title, excerpt, meta_title, meta_description, category, published_at')
     .eq('slug', params.slug)
     .eq('status', 'published')
     .single()
+  const post = postRaw as Post | null
 
   if (!post) return {}
 
@@ -47,26 +49,29 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function BlogPostPage({ params }: Props) {
   const db = createServerClient()
 
-  const { data: post } = await db
+  const { data: postRaw2 } = await db
     .from('posts')
     .select('*')
     .eq('slug', params.slug)
     .eq('status', 'published')
     .single()
+  const post = postRaw2 as Post | null
 
   if (!post) notFound()
 
   // Increment view count (fire and forget)
+  // @ts-expect-error — Supabase update type collapses to never when chained after cast
   db.from('posts').update({ views: (post.views || 0) + 1 }).eq('id', post.id).then(() => {})
 
   // Get related posts
-  const { data: related } = await db
+  const { data: relatedRaw } = await db
     .from('posts')
     .select('id, title, slug, category, published_at')
     .eq('status', 'published')
     .eq('category', post.category)
     .neq('id', post.id)
     .limit(3)
+  const related = relatedRaw as Post[] | null
 
   // Article schema markup
   const schema = {

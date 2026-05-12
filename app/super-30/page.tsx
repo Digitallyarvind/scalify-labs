@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { createServerClient } from '@/lib/supabase'
 import { SITE } from '@/lib/data'
 import { Super30Form } from '@/components/sections/Super30Form'
+import type { Batch } from '@/types/database'
 
 export const metadata: Metadata = {
   title: 'Super 30 Digital Marketing Course Ranchi | Scalify Labs',
@@ -20,13 +21,14 @@ export default async function Super30Page() {
   const db = createServerClient()
 
   // Get current accepting batch
-  const { data: batch } = await db
+  const { data: batchRaw } = await db
     .from('s30_batches')
     .select('*')
     .eq('status', 'accepting')
     .order('created_at', { ascending: false })
     .limit(1)
     .single()
+  const batch = batchRaw as Batch | null
 
   // Count applications for this batch
   const { count: appCount } = await db

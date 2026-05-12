@@ -1,5 +1,6 @@
 import { createServerClient } from '@/lib/supabase'
 import Link from 'next/link'
+import type { Lead, Post, Applicant } from '@/types/database'
 
 export const revalidate = 30
 
@@ -13,9 +14,9 @@ async function getDashboardData() {
     { count: pubPosts },
     { count: totalApps },
     { count: newApps },
-    { data: recentLeads },
-    { data: recentApps },
-    { data: topPosts },
+    { data: recentLeadsRaw },
+    { data: recentAppsRaw },
+    { data: topPostsRaw },
   ] = await Promise.all([
     db.from('leads').select('*', { count: 'exact', head: true }),
     db.from('leads').select('*', { count: 'exact', head: true }).eq('stage', 'new'),
@@ -28,6 +29,10 @@ async function getDashboardData() {
     db.from('s30_applicants').select('id,name,city,stage,created_at').order('created_at', { ascending: false }).limit(5),
     db.from('posts').select('id,title,slug,views,category').eq('status', 'published').order('views', { ascending: false }).limit(5),
   ])
+
+  const recentLeads = recentLeadsRaw as Lead[] | null
+  const recentApps = recentAppsRaw as Applicant[] | null
+  const topPosts = topPostsRaw as Post[] | null
 
   return { totalLeads, newLeads, wonLeads, totalPosts, pubPosts, totalApps, newApps, recentLeads, recentApps, topPosts }
 }

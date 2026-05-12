@@ -1,6 +1,7 @@
 import { MetadataRoute } from 'next'
 import { createServerClient } from '@/lib/supabase'
 import { SERVICES, CITIES, SITE } from '@/lib/data'
+import type { Post } from '@/types/database'
 
 export const revalidate = 3600 // Regenerate every hour
 
@@ -8,11 +9,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const db = createServerClient()
 
   // Fetch all published blog posts
-  const { data: posts } = await db
+  const { data: postsRaw } = await db
     .from('posts')
     .select('slug, published_at, updated_at')
     .eq('status', 'published')
     .order('published_at', { ascending: false })
+  const posts = postsRaw as Post[] | null
 
   const now = new Date().toISOString()
 

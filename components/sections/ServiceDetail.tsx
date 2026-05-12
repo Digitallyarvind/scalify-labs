@@ -61,8 +61,8 @@ export function ServiceDetail({ service, relatedServices }: Props) {
             <div className="sticky top-24 space-y-4">
               {/* Price card */}
               <div className="bg-navy text-white rounded-2xl p-6">
-                <div className="font-bold text-base mb-1">{service.ct}</div>
-                <div className="text-white/44 text-sm mb-4">{service.cs}</div>
+                <div className="font-bold text-base mb-1">Get Started Today</div>
+                <div className="text-white/44 text-sm mb-4">Book a free consultation with our team</div>
                 <div className="bg-white/7 rounded-xl p-4 text-center mb-5">
                   <div className="font-mono text-[0.67rem] text-white/36 uppercase tracking-wider mb-1">Starting from</div>
                   <div className="font-sans font-extrabold text-4xl text-saffron tracking-tight">{service.price}</div>

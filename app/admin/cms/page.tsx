@@ -1,6 +1,7 @@
 import { createServerClient } from '@/lib/supabase'
 import { CMSManager } from '@/components/admin/CMSManager'
 import { SERVICES } from '@/lib/data'
+import type { Page } from '@/types/database'
 
 export const revalidate = 0
 
@@ -18,7 +19,8 @@ const DEFAULT_PAGES = [
 
 export default async function CMSPage() {
   const db = createServerClient()
-  const { data: pages } = await db.from('pages').select('*').order('type').order('title')
+  const { data: pagesRaw } = await db.from('pages').select('*').order('type').order('title')
+  const pages = pagesRaw as Page[] | null
 
   return <CMSManager initialPages={pages || []} defaultPages={DEFAULT_PAGES} />
 }
