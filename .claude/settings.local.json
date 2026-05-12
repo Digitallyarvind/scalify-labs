@@ -11,7 +11,12 @@
       "Bash(vercel whoami *)",
       "Bash(vercel deploy *)",
       "Bash(npm run *)",
-      "Bash(git add *)"
+      "Bash(git add *)",
+      "Bash(vercel env *)",
+      "mcp__claude_ai_Supabase__apply_migration",
+      "mcp__claude_ai_Supabase__execute_sql",
+      "Skill(claude-api)",
+      "Skill(claude-api:*)"
     ]
   }
 }
