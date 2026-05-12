@@ -1,154 +1,541 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { SERVICES } from '@/lib/data'
+import {
+  TrendingUp, Crosshair, PlayCircle, MapPin,
+  Search, Star, FileText,
+  MessageCircle, Smartphone, BrainCircuit,
+  Palette, Video, LayoutGrid, Users,
+  GraduationCap, HeartPulse, Building2, Sofa, ShoppingBag,
+  ChevronDown, X, Menu, ArrowRight, Zap, Rocket,
+} from 'lucide-react'
+
+// ─── MEGA MENU DATA ──────────────────────────────────────────────────────────
+
+const SERVICES = [
+  {
+    group: 'Advertising',
+    accent: { label: 'bg-blue-50 text-blue-700', icon: 'bg-blue-100 text-blue-600', dot: 'bg-blue-500' },
+    items: [
+      { icon: TrendingUp, name: 'Google Ads', desc: 'Search, Display & Shopping campaigns', href: '/services/google-ads' },
+      { icon: Crosshair, name: 'Meta Ads', desc: 'Facebook & Instagram performance ads', href: '/services/meta-ads' },
+      { icon: PlayCircle, name: 'YouTube Ads', desc: 'Video ads that convert viewers', href: '#' },
+      { icon: MapPin, name: 'Local Ads', desc: 'Hyperlocal targeting for Indian cities', href: '#' },
+    ],
+  },
+  {
+    group: 'Organic Growth',
+    accent: { label: 'bg-emerald-50 text-emerald-700', icon: 'bg-emerald-100 text-emerald-600', dot: 'bg-emerald-500' },
+    items: [
+      { icon: Search, name: 'SEO', desc: 'Rank page 1 and grow organic traffic', href: '/services/seo' },
+      { icon: Star, name: 'Local SEO & GMB', desc: 'Dominate Google Maps in your city', href: '/services/gmb' },
+      { icon: FileText, name: 'Blog SEO', desc: 'Long-form content that ranks & converts', href: '#' },
+    ],
+  },
+  {
+    group: 'Automation',
+    accent: { label: 'bg-violet-50 text-violet-700', icon: 'bg-violet-100 text-violet-600', dot: 'bg-violet-500' },
+    items: [
+      { icon: MessageCircle, name: 'WhatsApp Automation', desc: '98% open-rate nurture sequences', href: '/services/whatsapp-marketing' },
+      { icon: Smartphone, name: 'RCS Messaging', desc: 'Rich media messages at scale', href: '/services/rcs-messaging' },
+      { icon: BrainCircuit, name: 'AI Chatbots', desc: '24/7 lead qualification on autopilot', href: '/services/ai-systems' },
+    ],
+  },
+  {
+    group: 'Creative Services',
+    accent: { label: 'bg-orange-50 text-orange-700', icon: 'bg-orange-100 text-orange-600', dot: 'bg-orange-500' },
+    items: [
+      { icon: Palette, name: 'Ad Creatives', desc: 'Scroll-stopping visuals for every platform', href: '#' },
+      { icon: Video, name: 'Video Editing', desc: 'Reels, brand films & ad videos', href: '#' },
+      { icon: LayoutGrid, name: 'Social Media Content', desc: 'Consistent content calendar execution', href: '#' },
+      { icon: Users, name: 'Influencer Marketing', desc: 'Local & regional creator partnerships', href: '#' },
+    ],
+  },
+]
+
+const INDUSTRIES = [
+  { icon: GraduationCap, name: 'Education', desc: 'Coaching institutes, schools & EdTech', href: '#', accent: 'bg-blue-50 text-blue-600' },
+  { icon: HeartPulse, name: 'Doctors & Clinics', desc: 'Healthcare & wellness providers', href: '#', accent: 'bg-red-50 text-red-600' },
+  { icon: Building2, name: 'Real Estate', desc: 'Builders, brokers & property developers', href: '#', accent: 'bg-emerald-50 text-emerald-600' },
+  { icon: Sofa, name: 'Home Furnishing', desc: 'Furniture, interior & décor brands', href: '#', accent: 'bg-amber-50 text-amber-600' },
+  { icon: ShoppingBag, name: 'Local Businesses', desc: 'Retail, restaurants & service providers', href: '#', accent: 'bg-purple-50 text-purple-600' },
+]
+
+// ─── COMPONENT ───────────────────────────────────────────────────────────────
 
 export function Navbar() {
-  const [scrolled, setScrolled] = useState(false)
-  const [mobileOpen, setMobileOpen] = useState(false)
   const pathname = usePathname()
+  const [scrolled, setScrolled] = useState(false)
+  const [activeMenu, setActiveMenu] = useState<'services' | 'industries' | null>(null)
+  const [mobileOpen, setMobileOpen] = useState(false)
+  const [mobileSection, setMobileSection] = useState<'services' | 'industries' | null>(null)
+  const [announcementVisible, setAnnouncementVisible] = useState(true)
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  // Don't show public navbar in admin
+  // Hide on admin pages
   if (pathname.startsWith('/admin')) return null
 
+  // Scroll detection
   useEffect(() => {
-    const handler = () => setScrolled(window.scrollY > 20)
-    window.addEventListener('scroll', handler, { passive: true })
-    return () => window.removeEventListener('scroll', handler)
+    const onScroll = () => setScrolled(window.scrollY > 12)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  // Close mobile on route change
   useEffect(() => {
     setMobileOpen(false)
+    setMobileSection(null)
   }, [pathname])
+
+  // Lock body scroll when mobile menu open
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? 'hidden' : ''
+    return () => { document.body.style.overflow = '' }
+  }, [mobileOpen])
+
+  function openMenu(name: 'services' | 'industries') {
+    if (closeTimer.current) clearTimeout(closeTimer.current)
+    setActiveMenu(name)
+  }
+  function scheduleClose() {
+    closeTimer.current = setTimeout(() => setActiveMenu(null), 120)
+  }
+  function cancelClose() {
+    if (closeTimer.current) clearTimeout(closeTimer.current)
+  }
+
+  const isActive = (href: string) => pathname === href || pathname.startsWith(href + '/')
 
   return (
     <>
-      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-navy/95 backdrop-blur-md shadow-[0_1px_0_rgba(255,255,255,0.06)]' : ''}`}>
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="flex items-center justify-between h-16">
-            {/* Logo */}
-            <Link href="/" className="flex items-center gap-2.5 flex-shrink-0">
-              <div className="w-8 h-8 bg-saffron rounded-lg flex items-center justify-center text-white font-extrabold text-sm">S</div>
-              <span className="text-white font-extrabold text-[0.95rem] tracking-tight">
-                Scalify<em className="not-italic text-saffron">Labs</em>
+      {/* ── Announcement Bar ────────────────────────────────────────────── */}
+      {announcementVisible && (
+        <div className="relative bg-navy text-white text-center text-xs sm:text-sm py-2.5 px-4 flex items-center justify-center gap-3">
+          <Rocket className="w-3.5 h-3.5 text-saffron shrink-0" />
+          <span>
+            <span className="font-semibold text-white">Applications Open</span>
+            {' '}for{' '}
+            <Link
+              href="/super-30"
+              className="font-bold text-saffron underline underline-offset-2 hover:text-orange-300 transition-colors"
+            >
+              Super 30 Growth Program
+            </Link>
+            {' '}— Only 30 seats per batch
+          </span>
+          <button
+            onClick={() => setAnnouncementVisible(false)}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-white/50 hover:text-white transition-colors p-1"
+            aria-label="Close announcement"
+          >
+            <X className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      )}
+
+      {/* ── Main Navbar ─────────────────────────────────────────────────── */}
+      <nav
+        className={`sticky top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          scrolled
+            ? 'bg-white/90 backdrop-blur-xl shadow-[0_1px_20px_rgba(11,15,30,0.08)] border-b border-slate-100'
+            : 'bg-white border-b border-slate-100'
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="flex items-center justify-between h-[64px]">
+
+            {/* ── Logo ── */}
+            <Link href="/" className="flex items-center gap-2.5 shrink-0 group">
+              <div className="w-8 h-8 bg-saffron rounded-[9px] flex items-center justify-center shadow-[0_2px_8px_rgba(255,101,0,0.35)] group-hover:shadow-[0_4px_12px_rgba(255,101,0,0.45)] transition-shadow">
+                <span className="text-white font-extrabold text-sm tracking-tighter">S</span>
+              </div>
+              <span className="font-extrabold text-[1.05rem] tracking-tight text-navy leading-none">
+                Scalify<span className="text-saffron">Labs</span>
               </span>
             </Link>
 
-            {/* Desktop Nav */}
-            <div className="hidden md:flex items-center gap-1">
-              <Link href="/" className={`text-sm font-semibold px-3 py-1.5 rounded-md transition-colors ${pathname === '/' ? 'text-saffron' : 'text-white/70 hover:text-white hover:bg-white/7'}`}>
+            {/* ── Desktop Nav ── */}
+            <div className="hidden lg:flex items-center gap-0.5">
+
+              {/* Home */}
+              <Link
+                href="/"
+                className={`relative px-3.5 py-2 text-[0.845rem] font-semibold rounded-lg transition-all duration-150 ${
+                  isActive('/') && pathname === '/'
+                    ? 'text-navy bg-slate-50'
+                    : 'text-slate-600 hover:text-navy hover:bg-slate-50'
+                }`}
+              >
                 Home
+                {pathname === '/' && (
+                  <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-saffron rounded-full" />
+                )}
               </Link>
 
-              {/* Services dropdown */}
-              <div className="relative group">
-                <button className="text-sm font-semibold px-3 py-1.5 rounded-md text-white/70 hover:text-white hover:bg-white/7 transition-colors flex items-center gap-1">
+              {/* Services */}
+              <div
+                className="relative"
+                onMouseEnter={() => openMenu('services')}
+                onMouseLeave={scheduleClose}
+              >
+                <button
+                  className={`flex items-center gap-1 px-3.5 py-2 text-[0.845rem] font-semibold rounded-lg transition-all duration-150 ${
+                    activeMenu === 'services' ? 'text-navy bg-slate-50' : 'text-slate-600 hover:text-navy hover:bg-slate-50'
+                  }`}
+                >
                   Services
-                  <svg className="w-3 h-3 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
+                  <ChevronDown
+                    className={`w-3.5 h-3.5 opacity-60 transition-transform duration-200 ${activeMenu === 'services' ? 'rotate-180' : ''}`}
+                  />
                 </button>
-                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-white border border-cream-300 rounded-xl p-2 w-60 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50">
-                  {SERVICES.map(s => (
+
+                {/* Services Mega Menu */}
+                <div
+                  className={`absolute top-[calc(100%+8px)] left-1/2 -translate-x-1/2 w-[780px] bg-white rounded-2xl shadow-[0_8px_40px_rgba(11,15,30,0.12)] border border-slate-100 p-5 transition-all duration-200 origin-top ${
+                    activeMenu === 'services'
+                      ? 'opacity-100 scale-100 pointer-events-auto translate-y-0'
+                      : 'opacity-0 scale-[0.97] pointer-events-none -translate-y-1'
+                  }`}
+                  onMouseEnter={cancelClose}
+                  onMouseLeave={scheduleClose}
+                >
+                  {/* Arrow */}
+                  <div className="absolute -top-[6px] left-1/2 -translate-x-1/2 w-3 h-3 bg-white border-t border-l border-slate-100 rotate-45" />
+
+                  <div className="grid grid-cols-4 gap-4">
+                    {SERVICES.map((group) => (
+                      <div key={group.group}>
+                        <div className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[0.7rem] font-bold uppercase tracking-wider mb-3 ${group.accent.label}`}>
+                          <span className={`w-1.5 h-1.5 rounded-full ${group.accent.dot}`} />
+                          {group.group}
+                        </div>
+                        <div className="space-y-0.5">
+                          {group.items.map((item) => (
+                            <Link
+                              key={item.name}
+                              href={item.href}
+                              className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-slate-50 transition-colors group/item"
+                            >
+                              <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 mt-0.5 transition-transform group-hover/item:scale-110 ${group.accent.icon}`}>
+                                <item.icon className="w-3.5 h-3.5" />
+                              </div>
+                              <div className="min-w-0">
+                                <p className="text-[0.82rem] font-semibold text-navy leading-tight group-hover/item:text-saffron transition-colors">{item.name}</p>
+                                <p className="text-[0.72rem] text-slate-500 leading-snug mt-0.5 line-clamp-1">{item.desc}</p>
+                              </div>
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Footer CTA */}
+                  <div className="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between">
+                    <p className="text-xs text-slate-500 flex items-center gap-1.5">
+                      <Zap className="w-3 h-3 text-saffron" />
+                      All services include transparent pricing &amp; weekly reports
+                    </p>
                     <Link
-                      key={s.slug}
-                      href={`/services/${s.slug}`}
-                      className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-navy text-sm font-medium hover:bg-cream transition-colors"
+                      href="/contact"
+                      className="flex items-center gap-1 text-xs font-semibold text-saffron hover:gap-2 transition-all"
                     >
-                      <span className="text-base w-5 text-center">{s.icon}</span>
-                      {s.title}
+                      View all services <ArrowRight className="w-3 h-3" />
                     </Link>
-                  ))}
+                  </div>
                 </div>
               </div>
 
-              <Link href="/super-30" className={`text-sm font-semibold px-3 py-1.5 rounded-md transition-colors ${pathname === '/super-30' ? 'text-saffron' : 'text-white/70 hover:text-white hover:bg-white/7'}`}>
+              {/* Lead to Revenue */}
+              <Link
+                href="/services/lead-to-revenue"
+                className={`px-3.5 py-2 text-[0.845rem] font-semibold rounded-lg transition-all duration-150 ${
+                  isActive('/services/lead-to-revenue')
+                    ? 'text-navy bg-slate-50'
+                    : 'text-slate-600 hover:text-navy hover:bg-slate-50'
+                }`}
+              >
+                Lead to Revenue
+              </Link>
+
+              {/* Industries */}
+              <div
+                className="relative"
+                onMouseEnter={() => openMenu('industries')}
+                onMouseLeave={scheduleClose}
+              >
+                <button
+                  className={`flex items-center gap-1 px-3.5 py-2 text-[0.845rem] font-semibold rounded-lg transition-all duration-150 ${
+                    activeMenu === 'industries' ? 'text-navy bg-slate-50' : 'text-slate-600 hover:text-navy hover:bg-slate-50'
+                  }`}
+                >
+                  Industries
+                  <ChevronDown
+                    className={`w-3.5 h-3.5 opacity-60 transition-transform duration-200 ${activeMenu === 'industries' ? 'rotate-180' : ''}`}
+                  />
+                </button>
+
+                {/* Industries Mega Menu */}
+                <div
+                  className={`absolute top-[calc(100%+8px)] left-1/2 -translate-x-1/2 w-[420px] bg-white rounded-2xl shadow-[0_8px_40px_rgba(11,15,30,0.12)] border border-slate-100 p-4 transition-all duration-200 origin-top ${
+                    activeMenu === 'industries'
+                      ? 'opacity-100 scale-100 pointer-events-auto translate-y-0'
+                      : 'opacity-0 scale-[0.97] pointer-events-none -translate-y-1'
+                  }`}
+                  onMouseEnter={cancelClose}
+                  onMouseLeave={scheduleClose}
+                >
+                  <div className="absolute -top-[6px] left-1/2 -translate-x-1/2 w-3 h-3 bg-white border-t border-l border-slate-100 rotate-45" />
+                  <p className="text-[0.68rem] font-bold uppercase tracking-widest text-slate-400 mb-3 px-1">We serve</p>
+                  <div className="space-y-0.5">
+                    {INDUSTRIES.map((ind) => (
+                      <Link
+                        key={ind.name}
+                        href={ind.href}
+                        className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-50 transition-colors group/ind"
+                      >
+                        <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-transform group-hover/ind:scale-110 ${ind.accent}`}>
+                          <ind.icon className="w-4.5 h-4.5 w-[18px] h-[18px]" />
+                        </div>
+                        <div>
+                          <p className="text-[0.83rem] font-semibold text-navy group-hover/ind:text-saffron transition-colors">{ind.name}</p>
+                          <p className="text-[0.72rem] text-slate-500 leading-tight">{ind.desc}</p>
+                        </div>
+                        <ArrowRight className="w-3.5 h-3.5 text-slate-300 ml-auto group-hover/ind:text-saffron group-hover/ind:translate-x-0.5 transition-all" />
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Super 30 */}
+              <Link
+                href="/super-30"
+                className={`px-3.5 py-2 text-[0.845rem] font-semibold rounded-lg transition-all duration-150 ${
+                  isActive('/super-30')
+                    ? 'text-navy bg-slate-50'
+                    : 'text-slate-600 hover:text-navy hover:bg-slate-50'
+                }`}
+              >
                 Super 30
               </Link>
-              <Link href="/blog" className={`text-sm font-semibold px-3 py-1.5 rounded-md transition-colors ${pathname.startsWith('/blog') ? 'text-saffron' : 'text-white/70 hover:text-white hover:bg-white/7'}`}>
-                Blog
+
+              {/* Why Scalify Labs */}
+              <Link
+                href="/contact"
+                className={`px-3.5 py-2 text-[0.845rem] font-semibold rounded-lg transition-all duration-150 ${
+                  isActive('/why-scalify')
+                    ? 'text-navy bg-slate-50'
+                    : 'text-slate-600 hover:text-navy hover:bg-slate-50'
+                }`}
+              >
+                Why Us
               </Link>
 
-              {/* Cities dropdown */}
-              <div className="relative group">
-                <button className="text-sm font-semibold px-3 py-1.5 rounded-md text-white/70 hover:text-white hover:bg-white/7 transition-colors flex items-center gap-1">
-                  Cities
-                  <svg className="w-3 h-3 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-                <div className="absolute top-full right-0 mt-2 bg-white border border-cream-300 rounded-xl p-2 w-44 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50">
-                  {['ranchi','jamshedpur','dhanbad','bokaro','patna','lucknow','bhopal','raipur','jaipur'].map(city => (
-                    <Link
-                      key={city}
-                      href={`/cities/${city}`}
-                      className="block px-3 py-2 rounded-lg text-navy text-sm font-medium hover:bg-cream capitalize transition-colors"
-                    >
-                      {city.charAt(0).toUpperCase() + city.slice(1)}
-                    </Link>
-                  ))}
-                </div>
-              </div>
+              {/* Insights (Blog) */}
+              <Link
+                href="/blog"
+                className={`px-3.5 py-2 text-[0.845rem] font-semibold rounded-lg transition-all duration-150 ${
+                  isActive('/blog')
+                    ? 'text-navy bg-slate-50'
+                    : 'text-slate-600 hover:text-navy hover:bg-slate-50'
+                }`}
+              >
+                Insights
+              </Link>
 
-              <Link href="/contact" className={`text-sm font-semibold px-3 py-1.5 rounded-md transition-colors ${pathname === '/contact' ? 'text-saffron' : 'text-white/70 hover:text-white hover:bg-white/7'}`}>
+              {/* Contact */}
+              <Link
+                href="/contact"
+                className={`px-3.5 py-2 text-[0.845rem] font-semibold rounded-lg transition-all duration-150 ${
+                  isActive('/contact')
+                    ? 'text-navy bg-slate-50'
+                    : 'text-slate-600 hover:text-navy hover:bg-slate-50'
+                }`}
+              >
                 Contact
-              </Link>
-              <Link href="/contact" className="ml-2 bg-saffron text-white font-bold text-sm px-4 py-2 rounded-lg hover:bg-saffron-dark transition-all hover:-translate-y-0.5 hover:shadow-[0_4px_14px_rgba(255,101,0,0.3)]">
-                Free Call
               </Link>
             </div>
 
-            {/* Hamburger */}
+            {/* ── Right CTAs ── */}
+            <div className="hidden lg:flex items-center gap-2.5">
+              {/* Login */}
+              <Link
+                href="/admin"
+                className="px-4 py-2 text-[0.83rem] font-semibold text-navy border border-slate-200 rounded-full hover:border-navy hover:bg-slate-50 transition-all duration-150"
+              >
+                Login
+              </Link>
+
+              {/* Apply CTA */}
+              <Link
+                href="/super-30"
+                className="flex items-center gap-1.5 px-4 py-2 text-[0.83rem] font-bold text-white bg-saffron rounded-full shadow-[0_2px_10px_rgba(255,101,0,0.28)] hover:bg-saffron-dark hover:shadow-[0_4px_16px_rgba(255,101,0,0.38)] hover:-translate-y-px transition-all duration-150"
+              >
+                <Rocket className="w-3.5 h-3.5" />
+                Apply for Super 30
+              </Link>
+            </div>
+
+            {/* ── Mobile Hamburger ── */}
             <button
-              className="md:hidden text-white p-1"
+              className="lg:hidden flex items-center justify-center w-10 h-10 rounded-xl text-navy hover:bg-slate-50 transition-colors"
               onClick={() => setMobileOpen(true)}
               aria-label="Open menu"
             >
-              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
+              <Menu className="w-5 h-5" />
             </button>
           </div>
         </div>
       </nav>
 
-      {/* Mobile Menu */}
-      {mobileOpen && (
-        <div className="fixed inset-0 z-50 bg-navy overflow-y-auto">
-          <div className="flex items-center justify-between p-6 border-b border-white/10">
-            <Link href="/" className="flex items-center gap-2.5">
-              <div className="w-8 h-8 bg-saffron rounded-lg flex items-center justify-center text-white font-extrabold text-sm">S</div>
-              <span className="text-white font-extrabold">ScalifyLabs</span>
+      {/* ── Mobile Menu Overlay ─────────────────────────────────────────── */}
+      {/* Backdrop */}
+      <div
+        className={`lg:hidden fixed inset-0 bg-navy/40 backdrop-blur-sm z-[60] transition-opacity duration-300 ${
+          mobileOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
+        onClick={() => setMobileOpen(false)}
+      />
+
+      {/* Drawer */}
+      <div
+        className={`lg:hidden fixed top-0 right-0 h-full w-[min(340px,95vw)] bg-white z-[70] shadow-2xl flex flex-col transition-transform duration-300 ease-out ${
+          mobileOpen ? 'translate-x-0' : 'translate-x-full'
+        }`}
+      >
+        {/* Drawer header */}
+        <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100 shrink-0">
+          <Link href="/" onClick={() => setMobileOpen(false)} className="flex items-center gap-2">
+            <div className="w-7 h-7 bg-saffron rounded-lg flex items-center justify-center">
+              <span className="text-white font-extrabold text-xs">S</span>
+            </div>
+            <span className="font-extrabold text-[0.95rem] text-navy tracking-tight">
+              Scalify<span className="text-saffron">Labs</span>
+            </span>
+          </Link>
+          <button
+            onClick={() => setMobileOpen(false)}
+            className="w-8 h-8 flex items-center justify-center rounded-lg text-slate-500 hover:bg-slate-50 transition-colors"
+          >
+            <X className="w-4.5 h-4.5 w-[18px] h-[18px]" />
+          </button>
+        </div>
+
+        {/* Drawer body — scrollable */}
+        <div className="flex-1 overflow-y-auto">
+          <div className="px-4 py-3 space-y-0.5">
+            <Link href="/" onClick={() => setMobileOpen(false)} className="flex items-center justify-between px-3 py-2.5 rounded-xl text-[0.9rem] font-semibold text-navy hover:bg-slate-50 transition-colors">
+              Home
             </Link>
-            <button onClick={() => setMobileOpen(false)} className="text-white text-2xl p-1">✕</button>
-          </div>
-          <div className="p-6 flex flex-col gap-1">
+
+            {/* Services accordion */}
+            <div>
+              <button
+                onClick={() => setMobileSection(mobileSection === 'services' ? null : 'services')}
+                className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[0.9rem] font-semibold text-navy hover:bg-slate-50 transition-colors"
+              >
+                Services
+                <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${mobileSection === 'services' ? 'rotate-180' : ''}`} />
+              </button>
+              <div className={`overflow-hidden transition-all duration-300 ${mobileSection === 'services' ? 'max-h-[800px] opacity-100' : 'max-h-0 opacity-0'}`}>
+                <div className="px-2 pb-2 space-y-4 pt-2">
+                  {SERVICES.map((group) => (
+                    <div key={group.group}>
+                      <p className={`text-[0.68rem] font-bold uppercase tracking-wider px-2 mb-1.5 ${group.accent.label.split(' ')[1]}`}>
+                        {group.group}
+                      </p>
+                      {group.items.map((item) => (
+                        <Link
+                          key={item.name}
+                          href={item.href}
+                          onClick={() => setMobileOpen(false)}
+                          className="flex items-center gap-2.5 px-2 py-2 rounded-lg text-[0.83rem] font-medium text-slate-700 hover:bg-slate-50 hover:text-navy transition-colors"
+                        >
+                          <div className={`w-6 h-6 rounded-md flex items-center justify-center shrink-0 ${group.accent.icon}`}>
+                            <item.icon className="w-3 h-3" />
+                          </div>
+                          {item.name}
+                        </Link>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <Link href="/services/lead-to-revenue" onClick={() => setMobileOpen(false)} className="flex items-center justify-between px-3 py-2.5 rounded-xl text-[0.9rem] font-semibold text-navy hover:bg-slate-50 transition-colors">
+              Lead to Revenue
+            </Link>
+
+            {/* Industries accordion */}
+            <div>
+              <button
+                onClick={() => setMobileSection(mobileSection === 'industries' ? null : 'industries')}
+                className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[0.9rem] font-semibold text-navy hover:bg-slate-50 transition-colors"
+              >
+                Industries
+                <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${mobileSection === 'industries' ? 'rotate-180' : ''}`} />
+              </button>
+              <div className={`overflow-hidden transition-all duration-300 ${mobileSection === 'industries' ? 'max-h-[400px] opacity-100' : 'max-h-0 opacity-0'}`}>
+                <div className="px-2 pb-2 pt-1 space-y-0.5">
+                  {INDUSTRIES.map((ind) => (
+                    <Link
+                      key={ind.name}
+                      href={ind.href}
+                      onClick={() => setMobileOpen(false)}
+                      className="flex items-center gap-2.5 px-2 py-2 rounded-lg text-[0.83rem] font-medium text-slate-700 hover:bg-slate-50 hover:text-navy transition-colors"
+                    >
+                      <div className={`w-6 h-6 rounded-md flex items-center justify-center shrink-0 ${ind.accent}`}>
+                        <ind.icon className="w-3 h-3" />
+                      </div>
+                      {ind.name}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+
             {[
-              { href: '/', label: 'Home' },
-              { href: '/super-30', label: '🎓 Super 30' },
-              { href: '/blog', label: '📝 Blog' },
+              { href: '/super-30', label: 'Super 30' },
+              { href: '/contact', label: 'Why Us' },
+              { href: '/blog', label: 'Insights' },
               { href: '/contact', label: 'Contact' },
             ].map(link => (
-              <Link key={link.href} href={link.href} className="text-white/80 font-semibold text-base py-3 border-b border-white/7 hover:text-saffron transition-colors">
+              <Link
+                key={link.href + link.label}
+                href={link.href}
+                onClick={() => setMobileOpen(false)}
+                className="flex items-center px-3 py-2.5 rounded-xl text-[0.9rem] font-semibold text-navy hover:bg-slate-50 transition-colors"
+              >
                 {link.label}
               </Link>
             ))}
-            <div className="mt-3 mb-1">
-              <div className="font-mono text-[0.67rem] text-white/40 uppercase tracking-wider mb-3">Services</div>
-              {SERVICES.map(s => (
-                <Link key={s.slug} href={`/services/${s.slug}`} className="flex items-center gap-2 text-white/70 text-sm py-2.5 border-b border-white/5 hover:text-saffron transition-colors">
-                  <span>{s.icon}</span> {s.title}
-                </Link>
-              ))}
-            </div>
-            <Link href="/contact" className="mt-4 bg-saffron text-white font-bold text-base px-5 py-3 rounded-xl text-center hover:bg-saffron-dark transition-colors">
-              Book Free Strategy Call →
-            </Link>
           </div>
         </div>
-      )}
+
+        {/* Drawer footer CTAs */}
+        <div className="shrink-0 px-4 py-4 border-t border-slate-100 space-y-2.5">
+          <Link
+            href="/super-30"
+            onClick={() => setMobileOpen(false)}
+            className="flex items-center justify-center gap-2 w-full py-3 text-[0.9rem] font-bold text-white bg-saffron rounded-xl shadow-[0_2px_10px_rgba(255,101,0,0.25)] hover:bg-saffron-dark transition-all"
+          >
+            <Rocket className="w-4 h-4" />
+            Apply for Super 30
+          </Link>
+          <Link
+            href="/admin"
+            onClick={() => setMobileOpen(false)}
+            className="flex items-center justify-center w-full py-2.5 text-[0.87rem] font-semibold text-navy border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors"
+          >
+            Login
+          </Link>
+        </div>
+      </div>
     </>
   )
 }
