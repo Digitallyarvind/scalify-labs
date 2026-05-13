@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation'
 import {
   TrendingUp, Crosshair, PlayCircle, MapPin,
   Search, Star, FileText,
-  MessageCircle, Smartphone, BrainCircuit, PhoneCall,
+  MessageCircle, Smartphone, BrainCircuit, PhoneCall, Monitor,
   Palette, Video, LayoutGrid, Users,
   GraduationCap, HeartPulse, Building2, Sofa, ShoppingBag,
   ChevronDown, X, Menu, ArrowRight, Zap, Rocket,
@@ -29,9 +29,9 @@ const SERVICES = [
     group: 'Organic Growth',
     accent: { label: 'bg-emerald-50 text-emerald-700', icon: 'bg-emerald-100 text-emerald-600', dot: 'bg-emerald-500' },
     items: [
+      { icon: Monitor, name: 'Website Development', desc: 'Growth websites with leads & automation', href: '/services/website-development' },
       { icon: Search, name: 'SEO', desc: 'Rank page 1 and grow organic traffic', href: '/services/seo' },
       { icon: Star, name: 'Local SEO & GMB', desc: 'Dominate Google Maps in your city', href: '/services/gmb' },
-      { icon: FileText, name: 'Blog SEO', desc: 'Long-form content that ranks & converts', href: '#' },
     ],
   },
   {
