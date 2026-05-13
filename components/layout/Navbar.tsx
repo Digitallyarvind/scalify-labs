@@ -31,7 +31,7 @@ const SERVICES = [
       { icon: Monitor, name: 'Website Development', desc: 'Growth websites with leads & automation', href: '/services/website-development' },
       { icon: Search, name: 'SEO', desc: 'Rank page 1 and grow organic traffic', href: '/services/seo' },
       { icon: Star, name: 'Local SEO & GMB', desc: 'Dominate Google Maps in your city', href: '/services/gmb' },
-      { icon: Database, name: 'Lead Management', desc: 'CRM setup, automation & pipeline control', href: '/services/lead-to-revenue' },
+      { icon: Database, name: 'Lead Management', desc: 'CRM setup, automation & pipeline control', href: '/services/lead-management' },
     ],
   },
   {
@@ -251,6 +251,19 @@ export function Navbar() {
                 </div>
               </div>
 
+              {/* Lead to Revenue — Featured */}
+              <Link
+                href="/services/lead-to-revenue"
+                className={`relative flex items-center gap-1.5 px-3.5 py-2 text-[0.845rem] font-semibold rounded-lg transition-all duration-150 ${
+                  isActive('/services/lead-to-revenue')
+                    ? 'text-saffron bg-saffron/8'
+                    : 'text-slate-600 hover:text-saffron hover:bg-saffron/5'
+                }`}
+              >
+                Lead to Revenue
+                <span className="bg-saffron text-white text-[0.55rem] font-bold px-1.5 py-0.5 rounded-full leading-none">NEW</span>
+              </Link>
+
               {/* Industries */}
               <div
                 className="relative"
@@ -456,6 +469,16 @@ export function Navbar() {
                 </div>
               </div>
             </div>
+
+            {/* Lead to Revenue — Featured Mobile */}
+            <Link
+              href="/services/lead-to-revenue"
+              onClick={() => setMobileOpen(false)}
+              className="flex items-center justify-between px-3 py-2.5 rounded-xl text-[0.9rem] font-semibold text-saffron bg-saffron/5 border border-saffron/15 hover:bg-saffron/10 transition-colors"
+            >
+              <span>Lead to Revenue</span>
+              <span className="bg-saffron text-white text-[0.55rem] font-bold px-1.5 py-0.5 rounded-full">NEW</span>
+            </Link>
 
             {/* Industries accordion */}
             <div>
