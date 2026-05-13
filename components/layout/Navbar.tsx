@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation'
 import {
   TrendingUp, Crosshair, PlayCircle, MapPin,
   Search, Star, FileText,
-  MessageCircle, Smartphone, BrainCircuit,
+  MessageCircle, Smartphone, BrainCircuit, PhoneCall,
   Palette, Video, LayoutGrid, Users,
   GraduationCap, HeartPulse, Building2, Sofa, ShoppingBag,
   ChevronDown, X, Menu, ArrowRight, Zap, Rocket,
@@ -40,6 +40,7 @@ const SERVICES = [
     items: [
       { icon: MessageCircle, name: 'WhatsApp Automation', desc: '98% open-rate nurture sequences', href: '/services/whatsapp-marketing' },
       { icon: Smartphone, name: 'RCS Messaging', desc: 'Rich media messages at scale', href: '/services/rcs-messaging' },
+      { icon: PhoneCall, name: 'OBD Voice Calls', desc: 'Bulk voice campaigns with multi-channel flows', href: '/services/obd' },
 
       { icon: BrainCircuit, name: 'AI Chatbots', desc: '24/7 lead qualification on autopilot', href: '/services/ai-systems' },
     ],
