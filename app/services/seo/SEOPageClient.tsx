@@ -26,7 +26,7 @@ const WHO_IT_SERVES = [
 ]
 
 const SERVICES = [
-  { icon: Zap, name: 'Technical SEO', desc: 'Improve crawlability, indexing, page speed, and site structure for peak search performance', color: 'bg-blue-100 text-blue-600' },
+  { icon: Zap, name: 'Technical SEO', desc: 'Improve crawlability, indexing, page speed, site structure, and schema markup for peak search performance', color: 'bg-blue-100 text-blue-600' },
   { icon: FileText, name: 'On-Page SEO', desc: 'Optimize page titles, meta descriptions, headings, and content for target keywords', color: 'bg-indigo-100 text-indigo-600' },
   { icon: Search, name: 'Keyword Research', desc: 'Identify high-intent, high-volume keyword opportunities aligned with business goals', color: 'bg-violet-100 text-violet-600' },
   { icon: BookOpen, name: 'Content & Blog SEO', desc: 'Build long-term traffic pipelines through SEO-optimized articles and content systems', color: 'bg-emerald-100 text-emerald-600' },
@@ -36,6 +36,8 @@ const SERVICES = [
   { icon: BarChart3, name: 'SEO Reporting', desc: 'Monthly ranking, traffic, and performance reports with actionable insights', color: 'bg-amber-100 text-amber-600' },
   { icon: Target, name: 'SEO Content Strategy', desc: 'Keyword cluster planning and topical authority maps for sustained ranking growth', color: 'bg-rose-100 text-rose-600' },
   { icon: TrendingUp, name: 'Organic Growth Planning', desc: 'Long-term SEO execution roadmaps tied to business growth milestones', color: 'bg-teal-100 text-teal-600' },
+  { icon: Layers, name: 'Schema Markup Optimization', desc: 'Structured data for rich snippets, FAQs, reviews, and AI-readable content signals', color: 'bg-purple-100 text-purple-600' },
+  { icon: Globe, name: 'AEO & GEO Optimization', desc: 'Answer Engine & Generative Engine Optimization for visibility in AI search results like ChatGPT, Perplexity, and Google AI Overviews', color: 'bg-sky-100 text-sky-600' },
 ]
 
 const WHY_INVEST = [
@@ -64,7 +66,7 @@ const PRICING_PLANS = [
     period: '/month',
     best: 'Small businesses & early-stage websites',
     highlight: false,
-    features: ['Basic Technical SEO', 'On-Page Optimization (5 pages)', 'Keyword Tracking (30 keywords)', 'Monthly Performance Report', 'Foundational SEO Setup'],
+    features: ['Basic Technical SEO', 'On-Page Optimization (5 pages)', '5 Blog Articles/Month', 'Keyword Tracking (30 keywords)', 'Monthly Performance Report'],
   },
   {
     name: 'Growth SEO',
@@ -73,7 +75,7 @@ const PRICING_PLANS = [
     best: 'Businesses focused on traffic growth',
     highlight: true,
     badge: 'Most Popular',
-    features: ['Advanced Technical SEO', 'Content & Blog SEO (2 articles/month)', 'Competitor Gap Analysis', 'Full SEO Strategy', 'Monthly Optimization Reviews', 'Growth Reporting (50+ keywords)'],
+    features: ['Advanced Technical SEO', '10 Blog Articles/Month', 'Competitor Gap Analysis', 'Full SEO Strategy', 'Monthly Optimization Reviews', 'Growth Reporting (50+ keywords)'],
   },
   {
     name: 'Authority SEO',
@@ -81,7 +83,7 @@ const PRICING_PLANS = [
     period: '/month',
     best: 'Brands building large-scale organic presence',
     highlight: false,
-    features: ['Advanced SEO Systems', 'Content Authority Planning', '4+ SEO Articles/Month', 'Advanced Reporting (100+ keywords)', 'Multi-Page Optimization', 'Dedicated SEO Strategy Sessions'],
+    features: ['Advanced SEO Systems', '20 Blog Articles/Month', 'AEO & GEO / AI Search Optimization', 'Advanced Reporting (100+ keywords)', 'Schema Markup & Rich Results', 'Dedicated SEO Strategy Sessions'],
   },
 ]
 
@@ -96,8 +98,9 @@ const WHY_CARDS = [
 
 const FAQ_ITEMS = [
   { q: 'How long does SEO take to show results?', a: 'Initial technical improvements and on-page optimization show measurable results in 4–8 weeks. Keyword ranking improvements typically appear in 3–4 months for moderate competition keywords. Significant organic traffic growth is usually visible in 6–12 months. SEO is a compounding investment — results accelerate over time.' },
-  { q: 'Is blog content creation included in SEO packages?', a: 'Content creation is included in our Growth SEO (₹25,000/month) and Authority SEO (₹50,000/month) packages, with 2 and 4+ SEO-optimized articles per month respectively. Starter SEO focuses on technical and on-page optimization; content creation can be added as an upgrade.' },
-  { q: 'Do you handle technical SEO?', a: 'Yes. All our packages include technical SEO — covering crawlability, indexing, page speed, Core Web Vitals, schema markup, mobile usability, and site architecture. Technical SEO forms the foundation before on-page and content work begins.' },
+  { q: 'How many blog articles are included per month?', a: 'All three plans include blog content: Starter SEO includes 5 blog articles/month, Growth SEO includes 10 blog articles/month, and Authority SEO includes 20 blog articles/month. All articles are SEO-optimized for target keywords, search intent, internal linking, and schema markup where applicable.' },
+  { q: 'Do you handle technical SEO and schema markup?', a: 'Yes. All our packages include technical SEO — crawlability, indexing, page speed, Core Web Vitals, mobile usability, and site architecture. Schema markup (structured data for FAQs, reviews, articles, local business, events) is included to improve rich snippet eligibility and AI-readability in Google AI Overviews, Perplexity, and ChatGPT.' },
+  { q: 'What is AEO and GEO — do you optimize for AI search?', a: 'AEO (Answer Engine Optimization) helps your content appear as answers in AI tools like ChatGPT, Perplexity, and Google AI Overviews. GEO (Generative Engine Optimization) structures your content for AI models to cite and reference your brand. Both are part of our Authority SEO plan and increasingly important as 20–30% of searches are now influenced by AI-generated answers.' },
   { q: 'Can SEO generate business leads?', a: 'Yes. SEO targets high-intent keywords where searchers are actively looking for your products or services. Well-ranked pages consistently generate inbound enquiries, contact form fills, phone calls, and signups — often at a much lower cost per lead than paid advertising.' },
   { q: 'What reports will I receive?', a: 'You receive a monthly SEO performance report covering: keyword rankings (position changes), organic traffic (sessions, users, conversions), top-performing pages, content published, technical fixes completed, and next month\'s optimization priorities. Growth and Authority plans include advanced analytics dashboards.' },
   { q: 'Which types of businesses benefit most from SEO?', a: 'Businesses with active websites that want long-term inbound traffic benefit most — SaaS companies, ecommerce brands, education platforms, service businesses, healthcare providers, real estate companies, and content websites. SEO is most effective when there\'s an existing online presence to optimize and grow.' },
@@ -249,7 +252,7 @@ export default function SEOPageClient() {
                 </button>
               </div>
               <div className="grid grid-cols-2 gap-2">
-                {['Technical SEO', 'Content & Blog SEO', 'Keyword Strategy', 'On-Page Optimization', 'SEO Reporting', 'Organic Growth Systems'].map(t => (
+                {['Technical SEO', 'Content & Blog SEO', 'Keyword Strategy', 'On-Page Optimization', 'Schema & Rich Results', 'AEO & AI Search Visibility', 'SEO Reporting', 'Organic Growth Systems'].map(t => (
                   <div key={t} className="flex items-center gap-2 text-sm text-slate-700">
                     <CheckCircle className="w-4 h-4 text-blue-500 shrink-0" />{t}
                   </div>
@@ -439,7 +442,7 @@ export default function SEOPageClient() {
             <p className="text-xs font-bold text-blue-600 uppercase tracking-widest mb-3">Full Scope</p>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-navy">SEO Services Included</h2>
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {SERVICES.map(s => (
               <div key={s.name} className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 hover:shadow-md hover:-translate-y-1 transition-all duration-200">
                 <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 ${s.color}`}><s.icon className="w-5 h-5" /></div>
