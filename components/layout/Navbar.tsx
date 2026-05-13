@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
-  TrendingUp, Crosshair, Layers,
+  TrendingUp, Crosshair, Layers, Mail,
   Search, Star, Database,
   MessageCircle, Smartphone, BrainCircuit, PhoneCall, Monitor,
   Palette, Video, LayoutGrid, Users,
@@ -22,6 +22,7 @@ const SERVICES = [
       { icon: TrendingUp, name: 'Google Ads', desc: 'Search, Display & Shopping campaigns', href: '/services/google-ads' },
       { icon: Crosshair, name: 'Meta Ads', desc: 'Facebook & Instagram performance ads', href: '/services/meta-ads' },
       { icon: Layers, name: 'Specialized Platforms', desc: 'LinkedIn, Quora, Truecaller & native ads', href: '/services/specialized-ads' },
+      { icon: Mail, name: 'Email Marketing', desc: 'Bulk outreach, SMTP & nurturing systems', href: '/services/email-marketing' },
     ],
   },
   {
