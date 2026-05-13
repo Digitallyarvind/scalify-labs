@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
-  TrendingUp, Crosshair, PlayCircle, MapPin,
+  TrendingUp, Crosshair, Layers,
   Search, Star, FileText,
   MessageCircle, Smartphone, BrainCircuit, PhoneCall, Monitor,
   Palette, Video, LayoutGrid, Users,
@@ -21,8 +21,7 @@ const SERVICES = [
     items: [
       { icon: TrendingUp, name: 'Google Ads', desc: 'Search, Display & Shopping campaigns', href: '/services/google-ads' },
       { icon: Crosshair, name: 'Meta Ads', desc: 'Facebook & Instagram performance ads', href: '/services/meta-ads' },
-      { icon: PlayCircle, name: 'YouTube Ads', desc: 'Video ads that convert viewers', href: '#' },
-      { icon: MapPin, name: 'Local Ads', desc: 'Hyperlocal targeting for Indian cities', href: '#' },
+      { icon: Layers, name: 'Specialized Platforms', desc: 'LinkedIn, Quora, Truecaller & native ads', href: '/services/specialized-ads' },
     ],
   },
   {
