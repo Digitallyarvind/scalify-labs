@@ -42,7 +42,7 @@ const SERVICES = [
       { icon: Smartphone, name: 'RCS Messaging', desc: 'Rich media messages at scale', href: '/services/rcs-messaging' },
       { icon: PhoneCall, name: 'OBD Voice Calls', desc: 'Bulk voice campaigns with multi-channel flows', href: '/services/obd' },
 
-      { icon: BrainCircuit, name: 'AI Chatbots', desc: '24/7 lead qualification on autopilot', href: '/services/ai-systems' },
+      { icon: BrainCircuit, name: 'AI Calling & Agents', desc: 'AI voice agents for automated customer calls', href: '/services/ai-calling' },
     ],
   },
   {
