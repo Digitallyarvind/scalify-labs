@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { SITE } from '@/lib/data'
 import { Super30Form } from '@/components/sections/Super30Form'
 import {
@@ -631,8 +632,8 @@ export default function Super30PageClient({ batch, seatsLeft }: Props) {
               <div className="bg-gradient-to-br from-[#081B4B] to-[#0d2060] rounded-3xl border border-white/10 p-8 text-white relative overflow-hidden">
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_80%_20%,rgba(255,199,44,0.08),transparent_60%)]" />
                 <div className="relative flex flex-col items-center text-center">
-                  <div className="w-28 h-28 rounded-3xl bg-gradient-to-br from-saffron to-orange-600 flex items-center justify-center text-white font-extrabold text-5xl mb-5 shadow-xl shadow-saffron/25">
-                    A
+                  <div className="w-28 h-28 rounded-3xl overflow-hidden relative mb-5 shadow-xl shadow-saffron/25 border-2 border-saffron/30">
+                    <Image src="/founder.jpg" alt="Arvind Gupta" fill className="object-cover object-top" sizes="112px" />
                   </div>
                   <h3 className="font-extrabold text-xl text-white mb-1">Arvind Gupta</h3>
                   <p className="text-[#FFC72C] font-mono text-sm mb-1">Founder, Scalify Labs</p>

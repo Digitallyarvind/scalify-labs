@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import {
   ArrowRight, PhoneCall, CheckCircle2, Zap, Database, BrainCircuit,
   TrendingUp, BarChart3, GitBranch, Globe, Search, MessageSquare,
@@ -253,8 +254,8 @@ function FounderVisual() {
         {/* Founder card */}
         <div className="relative bg-gradient-to-r from-saffron/10 to-blue-500/10 rounded-2xl p-4 border border-white/10">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-saffron to-orange-600 flex items-center justify-center text-white font-extrabold text-xl shrink-0 shadow-lg shadow-saffron/25">
-              A
+            <div className="w-12 h-12 rounded-xl overflow-hidden relative shrink-0 shadow-lg shadow-saffron/25 border border-saffron/30">
+              <Image src="/founder.jpg" alt="Arvind Gupta" fill className="object-cover object-top" sizes="48px" />
             </div>
             <div className="flex-1 min-w-0">
               <div className="text-white font-bold text-sm">Arvind Gupta</div>
@@ -618,8 +619,8 @@ export default function WhyScalifyPageClient() {
 
           {/* Founder highlight */}
           <div className="mt-6 bg-gradient-to-r from-saffron/10 via-saffron/5 to-transparent border border-saffron/20 rounded-2xl p-6 flex flex-col sm:flex-row items-start sm:items-center gap-5">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-saffron to-orange-600 flex items-center justify-center text-white font-extrabold text-2xl shadow-lg shadow-saffron/30 shrink-0">
-              A
+            <div className="w-16 h-16 rounded-2xl overflow-hidden relative shadow-lg shadow-saffron/30 shrink-0 border-2 border-saffron/30">
+              <Image src="/founder.jpg" alt="Arvind Gupta" fill className="object-cover object-top" sizes="64px" />
             </div>
             <div className="flex-1">
               <div className="flex items-center gap-2 flex-wrap mb-1">

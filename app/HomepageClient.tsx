@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import {
   ArrowRight, CheckCircle2, PhoneCall, MessageSquare,
   TrendingUp, Search, Database, BrainCircuit, BarChart3,
@@ -15,40 +16,31 @@ function FounderHeroCard() {
   return (
     <div className="relative max-w-sm mx-auto lg:mx-0">
       {/* Portrait container */}
-      <div className="relative rounded-3xl overflow-hidden bg-gradient-to-b from-[#1a2a46] to-navy shadow-2xl">
-        {/* Background texture */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_60%_10%,rgba(255,101,0,0.07),transparent_55%)]" />
-
-        {/* Portrait area */}
-        <div className="relative pt-10 pb-24 flex justify-center items-center min-h-[380px]">
-          {/* Outer glow ring */}
-          <div className="relative">
-            <div className="w-52 h-52 rounded-full bg-gradient-to-br from-saffron/15 to-blue-500/10 flex items-center justify-center border border-saffron/15">
-              {/* Avatar */}
-              <div className="w-40 h-40 rounded-full bg-gradient-to-br from-saffron via-orange-500 to-orange-600 flex items-center justify-center shadow-xl shadow-saffron/25">
-                <span className="text-white font-extrabold text-6xl select-none">A</span>
-              </div>
-            </div>
-            {/* Replace the above avatar block with <Image src="/founder.jpg" ...> when photo is available */}
-          </div>
-        </div>
-
-        {/* Name strip */}
-        <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-navy to-transparent p-6 text-center">
+      <div className="relative rounded-3xl overflow-hidden shadow-2xl aspect-[3/4]">
+        <Image
+          src="/founder.jpg"
+          alt="Arvind Gupta, Founder Scalify Labs"
+          fill
+          className="object-cover object-top"
+          priority
+          sizes="(max-width: 1024px) 100vw, 480px"
+        />
+        {/* Bottom name gradient overlay */}
+        <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/75 via-black/30 to-transparent p-6">
           <p className="text-white font-bold text-lg">Arvind Gupta</p>
           <p className="text-saffron font-mono text-xs tracking-wide">Founder & Growth Strategist · Scalify Labs</p>
         </div>
       </div>
 
-      {/* Floating chips — very subtle */}
-      <div className="absolute top-5 -right-4 bg-emerald-500 text-white text-[0.65rem] font-bold px-3 py-1.5 rounded-full shadow-md flex items-center gap-1.5">
+      {/* Floating chips */}
+      <div className="absolute top-5 -right-4 bg-emerald-500 text-white text-[0.65rem] font-bold px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5">
         <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse inline-block" />
         Lead Captured
       </div>
-      <div className="absolute top-20 -left-5 bg-white/95 text-slate-700 text-[0.65rem] font-semibold px-3 py-1.5 rounded-xl shadow-lg border border-slate-100 flex items-center gap-1.5">
+      <div className="absolute top-24 -left-5 bg-white text-slate-700 text-[0.65rem] font-semibold px-3 py-1.5 rounded-xl shadow-xl border border-slate-100 flex items-center gap-1.5">
         <TrendingUp className="w-3 h-3 text-saffron" /> Revenue +28%
       </div>
-      <div className="absolute bottom-20 -right-5 bg-white/95 text-slate-700 text-[0.65rem] font-semibold px-3 py-1.5 rounded-xl shadow-lg border border-slate-100 flex items-center gap-1.5">
+      <div className="absolute bottom-24 -right-5 bg-white text-slate-700 text-[0.65rem] font-semibold px-3 py-1.5 rounded-xl shadow-xl border border-slate-100 flex items-center gap-1.5">
         <CheckCircle2 className="w-3 h-3 text-emerald-500" /> CRM Active
       </div>
     </div>
@@ -393,19 +385,18 @@ export default function HomepageClient() {
 
             {/* Founder image */}
             <div className="relative">
-              <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-slate-100 to-slate-200 shadow-xl min-h-[480px] flex items-end justify-center">
-                <div className="absolute inset-0 bg-gradient-to-br from-[#1a2a46] to-navy opacity-90" />
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_30%,rgba(255,101,0,0.08),transparent_55%)]" />
-                <div className="relative z-10 text-center pb-8">
-                  <div className="w-44 h-44 rounded-full bg-gradient-to-br from-saffron via-orange-500 to-orange-600 flex items-center justify-center text-white font-extrabold text-7xl mx-auto mb-6 shadow-2xl shadow-saffron/20">
-                    A
-                  </div>
-                  {/* Replace with actual Image component when photo is available */}
-                  <div className="text-center">
-                    <p className="text-white font-bold text-xl">Arvind Gupta</p>
-                    <p className="text-saffron font-mono text-sm">Founder, Scalify Labs</p>
-                    <p className="text-white/40 text-xs mt-1 font-mono">15+ Years · Ranchi, Jharkhand</p>
-                  </div>
+              <div className="relative rounded-3xl overflow-hidden shadow-xl aspect-[3/4]">
+                <Image
+                  src="/founder.jpg"
+                  alt="Arvind Gupta, Founder Scalify Labs"
+                  fill
+                  className="object-cover object-top"
+                  sizes="420px"
+                />
+                {/* Bottom overlay with name */}
+                <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent p-6">
+                  <p className="text-white font-bold text-base">Arvind Gupta</p>
+                  <p className="text-saffron font-mono text-xs">Founder, Scalify Labs · 15+ Years</p>
                 </div>
               </div>
               {/* Years badge */}

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import { submitLead } from '@/lib/actions'
 import {
   PhoneCall, Mail, MessageSquare, Calendar, ArrowRight, CheckCircle2,
@@ -554,8 +555,8 @@ export default function ContactPageClient() {
               <div className="relative bg-gradient-to-br from-[#0d1526] to-navy rounded-2xl p-6 border border-white/10 overflow-hidden">
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_80%_20%,rgba(255,101,0,0.08),transparent_60%)]" />
                 <div className="relative flex items-start gap-4">
-                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-saffron to-orange-600 flex items-center justify-center text-white font-extrabold text-xl shrink-0 shadow-lg shadow-saffron/30">
-                    A
+                  <div className="w-14 h-14 rounded-2xl overflow-hidden relative shrink-0 shadow-lg shadow-saffron/30 border-2 border-saffron/30">
+                    <Image src="/founder.jpg" alt="Arvind Gupta" fill className="object-cover object-top" sizes="56px" />
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1 flex-wrap">
