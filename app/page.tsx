@@ -1,25 +1,41 @@
 import type { Metadata } from 'next'
-import { Hero } from '@/components/sections/Hero'
-import { ServicesGrid } from '@/components/sections/ServicesGrid'
-import { WhyUs } from '@/components/sections/WhyUs'
-import { Process } from '@/components/sections/Process'
-import { Super30Banner } from '@/components/sections/Super30Banner'
-import { Testimonials } from '@/components/sections/Testimonials'
-import { CTABanner } from '@/components/sections/CTABanner'
+import HomepageClient from './HomepageClient'
 import { SITE } from '@/lib/data'
 
 export const metadata: Metadata = {
-  title: `${SITE.name} — Digital Marketing Agency Ranchi | SEO, Google Ads, Meta Ads`,
-  description: `${SITE.name} is Ranchi's leading digital marketing agency. Expert SEO, Google Ads, Meta Ads, WhatsApp Marketing, and AI systems for Indian businesses. 200+ clients. 7+ years. Free strategy call.`,
+  title: 'Scalify Labs | AI-Powered Digital Growth & Lead Generation Systems',
+  description:
+    'Scalify Labs helps businesses grow through SEO, Google Ads, CRM automation, WhatsApp marketing, AI workflows, and lead-to-revenue systems designed for scalable business growth. Digital Marketing Agency in Ranchi, Jharkhand.',
+  keywords: [
+    'Digital Marketing Agency in Ranchi',
+    'SEO Services in Ranchi',
+    'Google Ads Agency Ranchi',
+    'CRM Automation Services India',
+    'WhatsApp Marketing Services',
+    'AI Marketing Agency India',
+    'Lead Generation Company Ranchi',
+    'Local SEO Services Jharkhand',
+    'Growth Marketing Agency India',
+    'Lead to Revenue System',
+    'Performance Marketing Agency',
+    'Website Development Company Ranchi',
+    'AI Automation Services India',
+  ],
   alternates: { canonical: SITE.url },
   openGraph: {
-    title: `${SITE.name} — Digital Marketing Agency Ranchi`,
-    description: 'Ranchi\'s leading digital marketing agency. SEO, Google Ads, Meta Ads, WhatsApp Marketing, AI Systems. 200+ clients. Free strategy call.',
+    title: 'Scalify Labs | AI-Powered Growth & Lead Generation Systems',
+    description: 'Connected growth infrastructure for Indian businesses — SEO, Google Ads, CRM automation, WhatsApp marketing, AI workflows, and lead-to-revenue systems.',
     url: SITE.url,
+    siteName: SITE.name,
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Scalify Labs | AI-Powered Digital Growth Systems',
+    description: 'We build connected growth systems — not just campaigns. SEO · Google Ads · CRM · WhatsApp · AI Workflows. Based in Ranchi, Jharkhand.',
   },
 }
 
-// Structured data for homepage
 function HomeSchema() {
   const schema = {
     '@context': 'https://schema.org',
@@ -30,6 +46,9 @@ function HomeSchema() {
         name: SITE.name,
         url: SITE.url,
         logo: `${SITE.url}/logo.png`,
+        description: 'AI-powered growth infrastructure company combining SEO, Google Ads, CRM automation, WhatsApp marketing, and AI workflows for scalable business growth.',
+        foundingLocation: { '@type': 'Place', name: 'Ranchi, Jharkhand, India' },
+        founder: { '@type': 'Person', name: SITE.founder },
         contactPoint: {
           '@type': 'ContactPoint',
           telephone: SITE.phone,
@@ -53,21 +72,17 @@ function HomeSchema() {
         '@type': 'LocalBusiness',
         '@id': `${SITE.url}/#localbusiness`,
         name: SITE.name,
-        image: `${SITE.url}/og-image.jpg`,
         priceRange: '₹₹',
         telephone: SITE.phone,
         email: SITE.email,
         address: {
           '@type': 'PostalAddress',
+          streetAddress: 'Ranchi',
           addressLocality: 'Ranchi',
           addressRegion: 'Jharkhand',
           addressCountry: 'IN',
         },
-        geo: {
-          '@type': 'GeoCoordinates',
-          latitude: 23.3441,
-          longitude: 85.3096,
-        },
+        geo: { '@type': 'GeoCoordinates', latitude: 23.3441, longitude: 85.3096 },
         url: SITE.url,
         openingHoursSpecification: {
           '@type': 'OpeningHoursSpecification',
@@ -79,30 +94,14 @@ function HomeSchema() {
     ],
   }
 
-  return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-    />
-  )
+  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
 }
 
 export default function HomePage() {
   return (
     <>
       <HomeSchema />
-      <Hero />
-      <ServicesGrid />
-      <WhyUs />
-      <Process />
-      <Super30Banner />
-      <Testimonials />
-      <CTABanner
-        title="Ready to Scale Your Business?"
-        subtitle="Join 200+ businesses that trust Scalify Labs for their digital growth. First strategy call is always free."
-        primaryCTA={{ label: 'Book Free Strategy Call →', href: '/contact' }}
-        secondaryCTA={{ label: 'Read Our Blog', href: '/blog' }}
-      />
+      <HomepageClient />
     </>
   )
 }
