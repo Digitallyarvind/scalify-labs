@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
   TrendingUp, Crosshair, Layers,
-  Search, Star, FileText,
+  Search, Star, Database,
   MessageCircle, Smartphone, BrainCircuit, PhoneCall, Monitor,
   Palette, Video, LayoutGrid, Users,
   GraduationCap, HeartPulse, Building2, Sofa, ShoppingBag,
@@ -31,6 +31,7 @@ const SERVICES = [
       { icon: Monitor, name: 'Website Development', desc: 'Growth websites with leads & automation', href: '/services/website-development' },
       { icon: Search, name: 'SEO', desc: 'Rank page 1 and grow organic traffic', href: '/services/seo' },
       { icon: Star, name: 'Local SEO & GMB', desc: 'Dominate Google Maps in your city', href: '/services/gmb' },
+      { icon: Database, name: 'Lead Management', desc: 'CRM setup, automation & pipeline control', href: '/services/lead-to-revenue' },
     ],
   },
   {
@@ -250,18 +251,6 @@ export function Navbar() {
                 </div>
               </div>
 
-              {/* Lead to Revenue */}
-              <Link
-                href="/services/lead-to-revenue"
-                className={`px-3.5 py-2 text-[0.845rem] font-semibold rounded-lg transition-all duration-150 ${
-                  isActive('/services/lead-to-revenue')
-                    ? 'text-navy bg-slate-50'
-                    : 'text-slate-600 hover:text-navy hover:bg-slate-50'
-                }`}
-              >
-                Lead to Revenue
-              </Link>
-
               {/* Industries */}
               <div
                 className="relative"
@@ -326,7 +315,7 @@ export function Navbar() {
 
               {/* Why Scalify Labs */}
               <Link
-                href="/contact"
+                href="/why-scalify"
                 className={`px-3.5 py-2 text-[0.845rem] font-semibold rounded-lg transition-all duration-150 ${
                   isActive('/why-scalify')
                     ? 'text-navy bg-slate-50'
@@ -468,10 +457,6 @@ export function Navbar() {
               </div>
             </div>
 
-            <Link href="/services/lead-to-revenue" onClick={() => setMobileOpen(false)} className="flex items-center justify-between px-3 py-2.5 rounded-xl text-[0.9rem] font-semibold text-navy hover:bg-slate-50 transition-colors">
-              Lead to Revenue
-            </Link>
-
             {/* Industries accordion */}
             <div>
               <button
@@ -502,7 +487,7 @@ export function Navbar() {
 
             {[
               { href: '/super-30', label: 'Super 30' },
-              { href: '/contact', label: 'Why Us' },
+              { href: '/why-scalify', label: 'Why Us' },
               { href: '/blog', label: 'Insights' },
               { href: '/contact', label: 'Contact' },
             ].map(link => (
