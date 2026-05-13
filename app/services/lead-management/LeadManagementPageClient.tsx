@@ -249,7 +249,7 @@ export default function LeadManagementPageClient() {
                   <ArrowRight className="w-4 h-4" />
                 </button>
                 <a
-                  href="https://wa.me/91XXXXXXXXXX?text=Hi%2C%20I%27d%20like%20to%20know%20about%20CRM%20setup%20for%20my%20business"
+                  href="https://wa.me/918788424727?text=Hi%2C%20I%27d%20like%20to%20know%20about%20CRM%20setup%20for%20my%20business"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 bg-white/10 border border-white/20 text-white font-semibold px-6 py-3.5 rounded-xl hover:bg-white/15 transition-all text-sm"

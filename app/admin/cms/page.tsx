@@ -9,7 +9,7 @@ export const revalidate = 0
 const DEFAULT_PAGES = [
   { title: 'Home', slug: '/', type: 'home' as const, status: 'published' as const, content: '## Welcome to Scalify Labs\n\nRanchi\'s leading digital marketing agency.' },
   { title: 'About Us', slug: '/about', type: 'info' as const, status: 'published' as const, content: '## About Scalify Labs\n\nFounded by Arvind Gupta in Ranchi, Jharkhand.' },
-  { title: 'Contact', slug: '/contact', type: 'info' as const, status: 'published' as const, content: '## Contact Scalify Labs\n\nPhone: +91 XXXXX XXXXX\nEmail: hello@scalifylabs.com' },
+  { title: 'Contact', slug: '/contact', type: 'info' as const, status: 'published' as const, content: '## Contact Scalify Labs\n\nPhone: +91 87884 24727\nEmail: hello@scalifylabs.com' },
   { title: 'Super 30', slug: '/super-30', type: 'course' as const, status: 'published' as const, content: '## Super 30 Digital Marketing Programme\n\nOnly 30 seats. ₹12,000 all-inclusive.' },
   ...SERVICES.map(s => ({
     title: s.title, slug: `/services/${s.slug}`, type: 'service' as const, status: 'published' as const, content: s.body,

@@ -727,7 +727,7 @@ export default function LeadToRevenuePageClient() {
                 ))}
               </div>
               <div className="flex gap-3">
-                <a href={`https://wa.me/91XXXXXXXXXX?text=Hi%2C%20I%27d%20like%20to%20build%20a%20Lead%20to%20Revenue%20system`}
+                <a href={`https://wa.me/918788424727?text=Hi%2C%20I%27d%20like%20to%20build%20a%20Lead%20to%20Revenue%20system`}
                   target="_blank" rel="noopener noreferrer"
                   className="flex items-center gap-2 bg-[#25D366]/15 border border-[#25D366]/30 text-[#25D366] font-semibold px-5 py-3 rounded-xl hover:bg-[#25D366]/22 transition-all text-sm">
                   <MessageSquare className="w-4 h-4" /> WhatsApp Us

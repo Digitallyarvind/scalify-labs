@@ -19,7 +19,7 @@ const SERVICES = [
     group: 'Advertising',
     accent: { label: 'bg-blue-50 text-blue-700', icon: 'bg-blue-100 text-blue-600', dot: 'bg-blue-500' },
     items: [
-      { icon: TrendingUp, name: 'Google Ads', desc: 'Search, Display & Shopping campaigns', href: '/services/google-ads' },
+      { icon: TrendingUp, name: 'Google Ads', desc: 'Search, Display & Shopping campaigns', href: '/services/google-ads-services' },
       { icon: Crosshair, name: 'Meta Ads', desc: 'Facebook & Instagram performance ads', href: '/services/meta-ads' },
       { icon: Layers, name: 'Specialized Platforms', desc: 'LinkedIn, Quora, Truecaller & native ads', href: '/services/specialized-ads' },
       { icon: Mail, name: 'Email Marketing', desc: 'Bulk outreach, SMTP & nurturing systems', href: '/services/email-marketing' },
@@ -30,16 +30,16 @@ const SERVICES = [
     accent: { label: 'bg-emerald-50 text-emerald-700', icon: 'bg-emerald-100 text-emerald-600', dot: 'bg-emerald-500' },
     items: [
       { icon: Monitor, name: 'Website Development', desc: 'Growth websites with leads & automation', href: '/services/website-development' },
-      { icon: Search, name: 'SEO', desc: 'Rank page 1 and grow organic traffic', href: '/services/seo' },
+      { icon: Search, name: 'SEO', desc: 'Rank page 1 and grow organic traffic', href: '/services/affordable-seo-services' },
       { icon: Star, name: 'Local SEO & GMB', desc: 'Dominate Google Maps in your city', href: '/services/gmb' },
       { icon: Database, name: 'Lead Management', desc: 'CRM setup, automation & pipeline control', href: '/services/lead-management' },
     ],
   },
   {
-    group: 'Automation',
+    group: 'Communication',
     accent: { label: 'bg-violet-50 text-violet-700', icon: 'bg-violet-100 text-violet-600', dot: 'bg-violet-500' },
     items: [
-      { icon: MessageCircle, name: 'WhatsApp Automation', desc: '98% open-rate nurture sequences', href: '/services/whatsapp-marketing' },
+      { icon: MessageCircle, name: 'WhatsApp Automation', desc: '98% open-rate nurture sequences', href: '/services/whatsapp-marketing-agency' },
       { icon: Smartphone, name: 'RCS Messaging', desc: 'Rich media messages at scale', href: '/services/rcs-messaging' },
       { icon: PhoneCall, name: 'OBD Voice Calls', desc: 'Bulk voice campaigns with multi-channel flows', href: '/services/obd' },
 
@@ -243,7 +243,7 @@ export function Navbar() {
                       All services include transparent pricing &amp; weekly reports
                     </p>
                     <Link
-                      href="/contact"
+                      href="/contact-scalifylabs"
                       className="flex items-center gap-1 text-xs font-semibold text-saffron hover:gap-2 transition-all"
                     >
                       View all services <ArrowRight className="w-3 h-3" />
@@ -353,7 +353,7 @@ export function Navbar() {
 
               {/* Contact */}
               <Link
-                href="/contact"
+                href="/contact-scalifylabs"
                 className={`px-3.5 py-2 text-[0.845rem] font-semibold rounded-lg transition-all duration-150 ${
                   isActive('/contact')
                     ? 'text-navy bg-slate-50'
@@ -366,21 +366,11 @@ export function Navbar() {
 
             {/* ── Right CTAs ── */}
             <div className="hidden lg:flex items-center gap-2.5">
-              {/* Login */}
               <Link
                 href="/admin"
                 className="px-4 py-2 text-[0.83rem] font-semibold text-navy border border-slate-200 rounded-full hover:border-navy hover:bg-slate-50 transition-all duration-150"
               >
-                Login
-              </Link>
-
-              {/* Apply CTA */}
-              <Link
-                href="/super-30"
-                className="flex items-center gap-1.5 px-4 py-2 text-[0.83rem] font-bold text-white bg-saffron rounded-full shadow-[0_2px_10px_rgba(255,101,0,0.28)] hover:bg-saffron-dark hover:shadow-[0_4px_16px_rgba(255,101,0,0.38)] hover:-translate-y-px transition-all duration-150"
-              >
-                <Rocket className="w-3.5 h-3.5" />
-                Apply for Super 30
+                Super 30 Login
               </Link>
             </div>
 
@@ -513,7 +503,7 @@ export function Navbar() {
               { href: '/super-30', label: 'Super 30' },
               { href: '/why-scalify', label: 'Why Us' },
               { href: '/blog', label: 'Insights' },
-              { href: '/contact', label: 'Contact' },
+              { href: '/contact-scalifylabs', label: 'Contact' },
             ].map(link => (
               <Link
                 key={link.href + link.label}
@@ -530,19 +520,11 @@ export function Navbar() {
         {/* Drawer footer CTAs */}
         <div className="shrink-0 px-4 py-4 border-t border-slate-100 space-y-2.5">
           <Link
-            href="/super-30"
-            onClick={() => setMobileOpen(false)}
-            className="flex items-center justify-center gap-2 w-full py-3 text-[0.9rem] font-bold text-white bg-saffron rounded-xl shadow-[0_2px_10px_rgba(255,101,0,0.25)] hover:bg-saffron-dark transition-all"
-          >
-            <Rocket className="w-4 h-4" />
-            Apply for Super 30
-          </Link>
-          <Link
             href="/admin"
             onClick={() => setMobileOpen(false)}
-            className="flex items-center justify-center w-full py-2.5 text-[0.87rem] font-semibold text-navy border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors"
+            className="flex items-center justify-center w-full py-3 text-[0.9rem] font-semibold text-navy border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors"
           >
-            Login
+            Super 30 Login
           </Link>
         </div>
       </div>

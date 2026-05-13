@@ -24,7 +24,7 @@ export function WhyUs() {
               Every campaign, every strategy is made with your bottom line in mind.
             </p>
             <Link
-              href="/contact"
+              href="/contact-scalifylabs"
               className="inline-flex bg-navy text-white font-bold text-sm px-6 py-3 rounded-xl hover:-translate-y-0.5 hover:shadow-lg transition-all"
             >
               Talk to Arvind Gupta →

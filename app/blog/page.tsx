@@ -297,7 +297,7 @@ export default async function BlogPage({
                     Book a free 30-minute call with Arvind Gupta. Get a custom digital growth plan for your business — no pitch, just strategy.
                   </p>
                   <Link
-                    href="/contact"
+                    href="/contact-scalifylabs"
                     className="block w-full bg-saffron text-white font-bold text-xs py-2.5 rounded-lg text-center hover:bg-saffron-dark transition-colors"
                   >
                     Book Free Call →

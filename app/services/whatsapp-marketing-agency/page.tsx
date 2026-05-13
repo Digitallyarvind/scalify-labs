@@ -18,13 +18,13 @@ export const metadata: Metadata = {
     'WhatsApp marketing company India',
     'WhatsApp automation Ranchi',
   ],
-  alternates: { canonical: `${SITE.url}/services/whatsapp-marketing` },
+  alternates: { canonical: `${SITE.url}/services/whatsapp-marketing-agency` },
   openGraph: {
     title: 'WhatsApp API Marketing & Automation | WATI, Interakt, AiSensy | Scalify Labs',
     description:
       'Complete WhatsApp automation systems using official API platforms. Campaign management, workflow design, lead nurturing, chatbot flows. Agency management ₹10,000/month.',
     type: 'website',
-    url: `${SITE.url}/services/whatsapp-marketing`,
+    url: `${SITE.url}/services/whatsapp-marketing-agency`,
     siteName: SITE.name,
   },
   twitter: {
@@ -55,7 +55,7 @@ const schema = {
     description: 'Platform subscription and Meta conversation charges billed separately.',
   },
   areaServed: { '@type': 'Country', name: 'India' },
-  url: `${SITE.url}/services/whatsapp-marketing`,
+  url: `${SITE.url}/services/whatsapp-marketing-agency`,
 }
 
 export default function WhatsAppMarketingPage() {

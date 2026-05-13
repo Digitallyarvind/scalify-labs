@@ -18,13 +18,13 @@ export const metadata: Metadata = {
     'SEO agency Ranchi',
     'organic traffic growth India',
   ],
-  alternates: { canonical: `${SITE.url}/services/seo` },
+  alternates: { canonical: `${SITE.url}/services/affordable-seo-services` },
   openGraph: {
     title: 'SEO Services in India | Technical SEO & Organic Growth | Scalify Labs',
     description:
       'Scale your business with technical SEO, content optimization, keyword strategy, and search visibility systems designed for long-term organic growth.',
     type: 'website',
-    url: `${SITE.url}/services/seo`,
+    url: `${SITE.url}/services/affordable-seo-services`,
     siteName: SITE.name,
   },
   twitter: {
@@ -48,7 +48,7 @@ const schema = {
     { '@type': 'Offer', name: 'Authority SEO', price: '50000', priceCurrency: 'INR', priceSpecification: { '@type': 'UnitPriceSpecification', unitText: 'per month' } },
   ],
   areaServed: { '@type': 'Country', name: 'India' },
-  url: `${SITE.url}/services/seo`,
+  url: `${SITE.url}/services/affordable-seo-services`,
 }
 
 export default function SEOServicesPage() {

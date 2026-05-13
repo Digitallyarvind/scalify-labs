@@ -16,11 +16,11 @@ export const metadata: Metadata = {
     'growth systems consultation Jharkhand',
     'digital marketing agency contact Ranchi',
   ],
-  alternates: { canonical: `${SITE.url}/contact` },
+  alternates: { canonical: `${SITE.url}/contact-scalifylabs` },
   openGraph: {
     title: 'Contact Scalify Labs | Start a Growth Systems Conversation',
     description: 'Book a free strategy call with the Scalify Labs team. SEO, ads, CRM, WhatsApp automation, AI workflows — connected growth infrastructure for your business.',
-    url: `${SITE.url}/contact`,
+    url: `${SITE.url}/contact-scalifylabs`,
     siteName: SITE.name,
     type: 'website',
   },
@@ -37,7 +37,7 @@ export default function ContactPage() {
     '@type': 'ContactPage',
     name: `Contact ${SITE.name}`,
     description: 'Book a free growth strategy consultation with Scalify Labs. CRM automation, SEO, Google Ads, WhatsApp marketing, AI workflows.',
-    url: `${SITE.url}/contact`,
+    url: `${SITE.url}/contact-scalifylabs`,
     mainEntity: {
       '@type': 'Organization',
       name: SITE.name,

@@ -462,9 +462,10 @@ export const SITE = {
   description: 'Scalify Labs is Ranchi\'s leading digital marketing agency. SEO, Google Ads, Meta Ads, WhatsApp Marketing, AI Systems for Indian businesses.',
   url: 'https://scalifylabs.com',
   founder: 'Arvind Gupta',
-  phone: '+91 XXXXX XXXXX',
+  phone: '+91 87884 24727',
+  whatsapp: '918788424727',
   email: 'hello@scalifylabs.com',
-  address: 'Ranchi, Jharkhand, India',
+  address: 'Lane No 5, Kamlesh Dubey Chowk, Pirra, Ratu, Ranchi 835222',
   city: 'Ranchi',
   state: 'Jharkhand',
 }

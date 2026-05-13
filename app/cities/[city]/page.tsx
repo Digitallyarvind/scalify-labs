@@ -182,7 +182,7 @@ export default function CityPage({ params }: Props) {
       <CTABanner
         title={`Ready to Grow Your ${city.name} Business?`}
         subtitle="Book a free 30-minute strategy call with Arvind Gupta. No obligations."
-        primaryCTA={{ label: 'Book Free Strategy Call →', href: '/contact' }}
+        primaryCTA={{ label: 'Book Free Strategy Call →', href: '/contact-scalifylabs' }}
       />
     </>
   )

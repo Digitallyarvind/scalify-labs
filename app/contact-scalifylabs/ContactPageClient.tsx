@@ -355,7 +355,7 @@ const CONTACT_METHODS = [
     title: 'WhatsApp Consultation',
     desc: 'Quick discussions for ads, CRM, SEO, automation, and growth systems on the most responsive channel.',
     cta: 'Start WhatsApp Chat',
-    href: `https://wa.me/91XXXXXXXXXX?text=Hi%2C%20I%27d%20like%20to%20consult%20about%20growing%20my%20business`,
+    href: `https://wa.me/918788424727?text=Hi%2C%20I%27d%20like%20to%20consult%20about%20growing%20my%20business`,
     color: 'bg-green-50 text-green-600',
     border: 'border-green-100',
     external: true,
@@ -463,7 +463,7 @@ export default function ContactPageClient() {
                   Book Free Strategy Call
                 </a>
                 <a
-                  href={`https://wa.me/91XXXXXXXXXX?text=Hi%2C%20I%27d%20like%20to%20discuss%20growing%20my%20business`}
+                  href={`https://wa.me/918788424727?text=Hi%2C%20I%27d%20like%20to%20discuss%20growing%20my%20business`}
                   target="_blank" rel="noopener noreferrer"
                   className="flex items-center gap-2 bg-[#25D366]/15 border border-[#25D366]/30 text-[#25D366] font-semibold px-6 py-3.5 rounded-xl hover:bg-[#25D366]/22 transition-all text-sm"
                 >
@@ -661,7 +661,7 @@ export default function ContactPageClient() {
 
               <div className="space-y-5 mb-8">
                 {[
-                  { icon: MapPin, label: 'Office Location', value: 'Ranchi, Jharkhand, India', color: 'bg-red-50 text-red-600' },
+                  { icon: MapPin, label: 'Office Location', value: 'Lane No 5, Kamlesh Dubey Chowk, Pirra, Ratu, Ranchi 835222', color: 'bg-red-50 text-red-600' },
                   { icon: PhoneCall, label: 'Phone / WhatsApp', value: SITE.phone, color: 'bg-emerald-50 text-emerald-600', href: `tel:${SITE.phone}` },
                   { icon: Mail, label: 'Email Address', value: SITE.email, color: 'bg-blue-50 text-blue-600', href: `mailto:${SITE.email}` },
                   { icon: Clock, label: 'Working Hours', value: 'Mon–Sat | 10:00 AM – 7:00 PM IST', color: 'bg-amber-50 text-amber-600' },
@@ -686,7 +686,7 @@ export default function ContactPageClient() {
                 <p className="text-white/50 text-xs mb-3">Quick Connect</p>
                 <div className="flex gap-2">
                   <a
-                    href={`https://wa.me/91XXXXXXXXXX`}
+                    href={`https://wa.me/918788424727`}
                     target="_blank" rel="noopener noreferrer"
                     className="flex-1 flex items-center justify-center gap-1.5 bg-[#25D366] text-white font-bold py-2.5 rounded-lg text-xs hover:bg-[#1fa855] transition-colors"
                   >
@@ -776,7 +776,7 @@ export default function ContactPageClient() {
               Book Free Strategy Call
             </a>
             <a
-              href={`https://wa.me/91XXXXXXXXXX?text=Hi%2C%20I%27d%20like%20to%20build%20a%20growth%20system%20for%20my%20business`}
+              href={`https://wa.me/918788424727?text=Hi%2C%20I%27d%20like%20to%20build%20a%20growth%20system%20for%20my%20business`}
               target="_blank" rel="noopener noreferrer"
               className="flex items-center gap-2 bg-[#25D366]/15 border border-[#25D366]/30 text-[#25D366] font-semibold px-7 py-4 rounded-xl hover:bg-[#25D366]/22 transition-all text-sm"
             >

@@ -78,7 +78,7 @@ export default function ServicePage({ params }: Props) {
       <CTABanner
         title={`Ready to Start with ${service.title}?`}
         subtitle="Book a free 30-minute strategy call. No obligations. We'll map out exactly how this service can grow your business."
-        primaryCTA={{ label: 'Book Free Strategy Call →', href: '/contact' }}
+        primaryCTA={{ label: 'Book Free Strategy Call →', href: '/contact-scalifylabs' }}
         secondaryCTA={{ label: 'See All Services', href: '/#services' }}
         dark
       />

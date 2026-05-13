@@ -316,13 +316,13 @@ export default function WhyScalifyPageClient() {
 
               <div className="flex flex-wrap gap-4 mb-10">
                 <Link
-                  href="/services/google-ads"
+                  href="/services/google-ads-services"
                   className="flex items-center gap-2 bg-saffron text-white font-bold px-7 py-3.5 rounded-xl shadow-[0_4px_20px_rgba(255,101,0,0.35)] hover:bg-saffron-dark hover:-translate-y-0.5 transition-all text-sm"
                 >
                   Explore Growth Systems <ArrowRight className="w-4 h-4" />
                 </Link>
                 <Link
-                  href="/contact"
+                  href="/contact-scalifylabs"
                   className="flex items-center gap-2 bg-white/8 border border-white/20 text-white font-semibold px-6 py-3.5 rounded-xl hover:bg-white/12 transition-all text-sm"
                 >
                   <PhoneCall className="w-4 h-4" />
@@ -632,7 +632,7 @@ export default function WhyScalifyPageClient() {
               </p>
             </div>
             <Link
-              href="/contact"
+              href="/contact-scalifylabs"
               className="flex items-center gap-2 bg-saffron text-white font-bold text-sm px-5 py-3 rounded-xl hover:bg-saffron-dark transition-colors shrink-0 whitespace-nowrap"
             >
               Work with Arvind <ArrowRight className="w-4 h-4" />
@@ -756,20 +756,20 @@ export default function WhyScalifyPageClient() {
 
           <div className="flex flex-wrap justify-center gap-4">
             <Link
-              href="/contact"
+              href="/contact-scalifylabs"
               className="flex items-center gap-2 bg-saffron text-white font-bold px-8 py-4 rounded-xl shadow-[0_4px_24px_rgba(255,101,0,0.40)] hover:bg-saffron-dark hover:-translate-y-0.5 transition-all text-sm"
             >
               <PhoneCall className="w-4 h-4" />
               Book Free Strategy Call
             </Link>
             <Link
-              href="/services/google-ads"
+              href="/services/google-ads-services"
               className="flex items-center gap-2 bg-white/8 border border-white/20 text-white font-semibold px-7 py-4 rounded-xl hover:bg-white/12 transition-all text-sm"
             >
               Explore Services <ArrowRight className="w-4 h-4" />
             </Link>
             <a
-              href="https://wa.me/91XXXXXXXXXX?text=Hi%2C%20I%27d%20like%20to%20learn%20about%20Scalify%20Labs%20growth%20systems"
+              href="https://wa.me/918788424727?text=Hi%2C%20I%27d%20like%20to%20learn%20about%20Scalify%20Labs%20growth%20systems"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 bg-[#25D366]/15 border border-[#25D366]/30 text-[#25D366] font-semibold px-7 py-4 rounded-xl hover:bg-[#25D366]/20 transition-all text-sm"

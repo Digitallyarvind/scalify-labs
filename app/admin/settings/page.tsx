@@ -5,7 +5,7 @@ import { useState } from 'react'
 export default function SettingsPage() {
   const [saved, setSaved] = useState(false)
   const [profile, setProfile] = useState({
-    biz: 'Scalify Labs', name: 'Arvind Gupta', phone: '+91 XXXXX XXXXX',
+    biz: 'Scalify Labs', name: 'Arvind Gupta', phone: '+91 87884 24727',
     email: 'hello@scalifylabs.com', city: 'Ranchi, Jharkhand', web: 'https://scalifylabs.com',
   })
   const [weights, setWeights] = useState({ acad: 30, psych: 30, interview: 25, motivation: 15 })
@@ -35,7 +35,7 @@ export default function SettingsPage() {
           {[
             { label: 'Business Name', key: 'biz', placeholder: 'Scalify Labs' },
             { label: 'Founder Name', key: 'name', placeholder: 'Arvind Gupta' },
-            { label: 'Phone', key: 'phone', placeholder: '+91 XXXXX XXXXX' },
+            { label: 'Phone', key: 'phone', placeholder: '+91 87884 24727' },
             { label: 'Email', key: 'email', placeholder: 'hello@scalifylabs.com' },
             { label: 'City', key: 'city', placeholder: 'Ranchi, Jharkhand' },
             { label: 'Website', key: 'web', placeholder: 'https://scalifylabs.com' },

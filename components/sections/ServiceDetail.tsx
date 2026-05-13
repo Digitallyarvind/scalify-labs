@@ -80,7 +80,7 @@ export function ServiceDetail({ service, relatedServices }: Props) {
                 </div>
 
                 <Link
-                  href="/contact"
+                  href="/contact-scalifylabs"
                   className="block w-full bg-saffron text-white font-bold text-sm px-5 py-3 rounded-xl text-center hover:bg-saffron-dark transition-colors"
                 >
                   Get Free Consultation →

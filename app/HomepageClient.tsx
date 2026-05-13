@@ -215,9 +215,9 @@ const SERVICE_GROUPS = [
     bg: 'bg-blue-50 border-blue-100',
     dot: 'bg-blue-500',
     services: [
-      { name: 'SEO Services', desc: 'Page-1 organic rankings', href: '/services/seo', icon: Search },
+      { name: 'SEO Services', desc: 'Page-1 organic rankings', href: '/services/affordable-seo-services', icon: Search },
       { name: 'Local SEO & GMB', desc: 'Dominate Google Maps', href: '/services/gmb', icon: Star },
-      { name: 'Google Ads', desc: 'Search & Display campaigns', href: '/services/google-ads', icon: TrendingUp },
+      { name: 'Google Ads', desc: 'Search & Display campaigns', href: '/services/google-ads-services', icon: TrendingUp },
       { name: 'Meta Ads', desc: 'Facebook & Instagram growth', href: '/services/meta-ads', icon: Target },
     ],
   },
@@ -227,7 +227,7 @@ const SERVICE_GROUPS = [
     bg: 'bg-emerald-50 border-emerald-100',
     dot: 'bg-emerald-500',
     services: [
-      { name: 'WhatsApp Marketing', desc: '98% open-rate automation', href: '/services/whatsapp-marketing', icon: MessageSquare },
+      { name: 'WhatsApp Marketing', desc: '98% open-rate automation', href: '/services/whatsapp-marketing-agency', icon: MessageSquare },
       { name: 'RCS Messaging', desc: 'Rich media at scale', href: '/services/rcs-messaging', icon: Smartphone },
       { name: 'OBD Voice Calls', desc: 'Automated bulk calling', href: '/services/obd', icon: PhoneIncoming },
       { name: 'Email Marketing', desc: 'Nurture & conversion flows', href: '#', icon: Mail },
@@ -324,7 +324,7 @@ export default function HomepageClient() {
 
               <div className="flex flex-wrap gap-4 mb-10">
                 <Link
-                  href="/contact"
+                  href="/contact-scalifylabs"
                   className="flex items-center gap-2 bg-saffron text-white font-bold px-7 py-3.5 rounded-xl shadow-[0_4px_20px_rgba(255,101,0,0.35)] hover:bg-saffron-dark hover:-translate-y-0.5 transition-all text-sm"
                 >
                   <PhoneCall className="w-4 h-4" />
@@ -418,7 +418,7 @@ export default function HomepageClient() {
               <p className="text-white/50 text-sm">Get a free audit — we'll identify exactly where you're losing leads.</p>
             </div>
             <Link
-              href="/contact"
+              href="/contact-scalifylabs"
               className="flex items-center gap-2 bg-saffron text-white font-bold px-7 py-3.5 rounded-xl shadow-[0_4px_14px_rgba(255,101,0,0.30)] hover:bg-saffron-dark transition-all text-sm whitespace-nowrap"
             >
               Get Free Growth Audit <ArrowRight className="w-4 h-4" />
@@ -837,14 +837,14 @@ export default function HomepageClient() {
 
           <div className="flex flex-wrap justify-center gap-4 mb-10">
             <Link
-              href="/contact"
+              href="/contact-scalifylabs"
               className="flex items-center gap-2 bg-saffron text-white font-bold px-8 py-4 rounded-xl shadow-[0_4px_24px_rgba(255,101,0,0.38)] hover:bg-saffron-dark hover:-translate-y-0.5 transition-all text-sm"
             >
               <PhoneCall className="w-4 h-4" />
               Book Free Strategy Call
             </Link>
             <a
-              href="https://wa.me/91XXXXXXXXXX?text=Hi%2C%20I%27d%20like%20to%20grow%20my%20business%20with%20Scalify%20Labs"
+              href="https://wa.me/918788424727?text=Hi%2C%20I%27d%20like%20to%20grow%20my%20business%20with%20Scalify%20Labs"
               target="_blank" rel="noopener noreferrer"
               className="flex items-center gap-2 bg-[#25D366]/15 border border-[#25D366]/30 text-[#25D366] font-semibold px-7 py-4 rounded-xl hover:bg-[#25D366]/22 transition-all text-sm"
             >

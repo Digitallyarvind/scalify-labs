@@ -737,7 +737,7 @@ export default function Super30PageClient({ batch, seatsLeft }: Props) {
 
               <div className="flex gap-3">
                 <a
-                  href={`https://wa.me/91XXXXXXXXXX?text=Hi%2C%20I%27d%20like%20to%20apply%20for%20Super%2030`}
+                  href={`https://wa.me/918788424727?text=Hi%2C%20I%27d%20like%20to%20apply%20for%20Super%2030`}
                   target="_blank" rel="noopener noreferrer"
                   className="flex items-center gap-2 bg-[#25D366]/15 border border-[#25D366]/30 text-[#25D366] font-semibold px-5 py-3 rounded-xl hover:bg-[#25D366]/22 transition-all text-sm"
                 >

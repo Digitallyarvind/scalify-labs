@@ -43,7 +43,7 @@ export function Hero() {
 
             <div className="flex flex-wrap gap-3 mb-14">
               <Link
-                href="/contact"
+                href="/contact-scalifylabs"
                 className="bg-saffron text-white font-bold text-base px-7 py-3.5 rounded-xl hover:bg-saffron-dark transition-all hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(255,101,0,0.3)]"
               >
                 Free Strategy Call →

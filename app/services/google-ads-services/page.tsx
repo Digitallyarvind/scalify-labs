@@ -18,13 +18,13 @@ export const metadata: Metadata = {
     'Performance Max campaigns',
     'Google Ads Ranchi',
   ],
-  alternates: { canonical: `${SITE.url}/services/google-ads` },
+  alternates: { canonical: `${SITE.url}/services/google-ads-services` },
   openGraph: {
     title: 'Google Ads Management Services | Lead Generation & PPC Growth | Scalify Labs',
     description:
       'Performance-focused Google Ads management — Search, YouTube, Display, Performance Max, remarketing. Built for leads, calls, and business growth.',
     type: 'website',
-    url: `${SITE.url}/services/google-ads`,
+    url: `${SITE.url}/services/google-ads-services`,
     siteName: SITE.name,
   },
   twitter: {
@@ -47,7 +47,7 @@ const schema = {
     { '@type': 'Offer', name: 'Scaling Campaign Management', description: '20% management fee on ad spend above ₹50,000/month' },
   ],
   areaServed: { '@type': 'Country', name: 'India' },
-  url: `${SITE.url}/services/google-ads`,
+  url: `${SITE.url}/services/google-ads-services`,
 }
 
 export default function GoogleAdsPage() {

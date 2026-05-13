@@ -256,7 +256,7 @@ export default async function BlogPostPage({ params }: Props) {
                 </div>
                 <div className="mt-5 pt-5 border-t border-white/10 flex flex-wrap gap-3">
                   <Link
-                    href="/contact"
+                    href="/contact-scalifylabs"
                     className="flex items-center gap-1.5 bg-saffron text-white font-bold text-sm px-5 py-2.5 rounded-xl hover:bg-saffron-dark transition-colors"
                   >
                     Work with Arvind <ArrowRight className="w-4 h-4" />
@@ -303,7 +303,7 @@ export default async function BlogPostPage({ params }: Props) {
                   30 minutes with Arvind Gupta — get a custom growth plan for your business.
                 </p>
                 <Link
-                  href="/contact"
+                  href="/contact-scalifylabs"
                   className="block w-full bg-saffron text-white font-bold text-sm py-2.5 rounded-xl text-center hover:bg-saffron-dark transition-colors"
                 >
                   Book Free Call →
@@ -351,10 +351,10 @@ export default async function BlogPostPage({ params }: Props) {
                 </h3>
                 <Link
                   href={
-                    post.category === 'SEO' ? '/services/seo' :
-                    post.category === 'Google Ads' ? '/services/google-ads' :
+                    post.category === 'SEO' ? '/services/affordable-seo-services' :
+                    post.category === 'Google Ads' ? '/services/google-ads-services' :
                     post.category === 'Meta Ads' ? '/services/meta-ads' :
-                    post.category === 'WhatsApp Marketing' ? '/services/whatsapp-marketing' :
+                    post.category === 'WhatsApp Marketing' ? '/services/whatsapp-marketing-agency' :
                     '/contact'
                   }
                   className="flex items-center gap-1 text-saffron text-xs font-bold hover:gap-2 transition-all"
@@ -403,7 +403,7 @@ export default async function BlogPostPage({ params }: Props) {
             Book a free strategy call with our team. We&apos;ll build a custom growth plan based on your industry, goals, and budget.
           </p>
           <Link
-            href="/contact"
+            href="/contact-scalifylabs"
             className="inline-flex items-center gap-2 bg-saffron text-white font-bold px-8 py-4 rounded-xl shadow-[0_4px_20px_rgba(255,101,0,0.35)] hover:bg-saffron-dark hover:-translate-y-0.5 transition-all text-sm"
           >
             Book Free Strategy Call

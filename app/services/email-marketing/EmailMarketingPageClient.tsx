@@ -618,7 +618,7 @@ export default function EmailMarketingPageClient() {
                   </div>
                 ))}
               </div>
-              <a href={`https://wa.me/91XXXXXXXXXX?text=Hi%2C%20I%27d%20like%20to%20discuss%20email%20marketing%20systems%20for%20my%20business`}
+              <a href={`https://wa.me/918788424727?text=Hi%2C%20I%27d%20like%20to%20discuss%20email%20marketing%20systems%20for%20my%20business`}
                 target="_blank" rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 bg-[#25D366]/15 border border-[#25D366]/30 text-green-700 font-semibold px-5 py-3 rounded-xl hover:bg-[#25D366]/22 transition-all text-sm">
                 <MessageSquare className="w-4 h-4" /> Talk on WhatsApp
