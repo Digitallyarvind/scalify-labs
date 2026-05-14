@@ -27,6 +27,7 @@ const FOOTER_RESOURCES = [
   { label: 'SEO Resources', href: '/blog?category=SEO' },
   { label: 'WhatsApp Playbooks', href: '/blog?category=WhatsApp+Marketing' },
   { label: 'Privacy Policy', href: '/privacy-policy' },
+  { label: 'Terms & Conditions', href: '/terms-and-conditions' },
 ]
 
 const SOCIAL_LINKS = [
@@ -158,7 +159,7 @@ export function Footer() {
           </span>
           <div className="flex gap-5">
             <Link href="/privacy-policy" className="hover:text-saffron transition-colors">Privacy Policy</Link>
-            <span className="hover:text-saffron cursor-pointer transition-colors">Terms of Use</span>
+            <Link href="/terms-and-conditions" className="hover:text-saffron transition-colors">Terms of Use</Link>
             <Link href="/sitemap.xml" className="hover:text-saffron transition-colors">Sitemap</Link>
           </div>
         </div>
