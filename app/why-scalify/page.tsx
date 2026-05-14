@@ -54,7 +54,9 @@ const schema = {
 export default function WhyScalifyPage() {
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: `{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What makes Scalify Labs different from other digital marketing agencies?","acceptedAnswer":{"@type":"Answer","text":"Scalify Labs builds connected growth infrastructure — not isolated services. SEO, ads, CRM, WhatsApp, AI workflows, and analytics work together in one system. This connected approach delivers 2–3x better results than managing separate vendors."}},{"@type":"Question","name":"Who is the founder of Scalify Labs?","acceptedAnswer":{"@type":"Answer","text":"Arvind Gupta is the founder of Scalify Labs with 15+ years of experience in SEO, performance marketing, CRM systems, and EdTech growth. He previously built the Dheya career mentoring ecosystem which scaled to thousands of student interactions across India."}},{"@type":"Question","name":"What is Scalify Labs experience and track record?","acceptedAnswer":{"@type":"Answer","text":"Scalify Labs has 15+ years of combined experience, 100+ businesses helped, 5000+ students guided, and 10,000+ leads generated across education, healthcare, real estate, retail, and service businesses."}}]}` }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: `{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://scalifylabs.com"},{"@type":"ListItem","position":2,"name":"Why Scalify Labs","item":"https://scalifylabs.com/why-scalify"}]}` }} />
+            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
       <WhyScalifyPageClient />
     </>
   )

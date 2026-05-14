@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { submitS30Application } from '@/lib/actions'
+import { trackS30Application } from '@/lib/analytics'
 
 export function Super30Form({ batchId, seatsLeft }: { batchId: string; seatsLeft: number }) {
   const [step, setStep] = useState(1)
@@ -36,6 +37,7 @@ export function Super30Form({ batchId, seatsLeft }: { batchId: string; seatsLeft
     setErrorMsg('')
     try {
       await submitS30Application({ ...form, batch_id: batchId })
+      trackS30Application()
       setStatus('success')
     } catch (e: unknown) {
       setStatus('error')

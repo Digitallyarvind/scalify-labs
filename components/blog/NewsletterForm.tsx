@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { CheckCircle2, Loader2 } from 'lucide-react'
+import { trackNewsletterSignup } from '@/lib/analytics'
 
 export function NewsletterForm({ variant = 'default' }: { variant?: 'default' | 'inline' | 'dark' }) {
   const [email, setEmail] = useState('')
@@ -18,6 +19,7 @@ export function NewsletterForm({ variant = 'default' }: { variant?: 'default' | 
         body: JSON.stringify({ email }),
       })
       if (!res.ok) throw new Error()
+      trackNewsletterSignup()
       setStatus('success')
       setEmail('')
     } catch {

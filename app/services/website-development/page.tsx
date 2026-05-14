@@ -53,6 +53,8 @@ export default function WebsiteDevelopmentPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
       />
+            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: `{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What types of websites does Scalify Labs build?","acceptedAnswer":{"@type":"Answer","text":"Scalify Labs builds business websites, service business websites, landing pages for campaigns, education and coaching websites, clinic and healthcare websites, real estate websites, and ecommerce websites — all conversion-focused with lead capture and SEO built in."}},{"@type":"Question","name":"How long does website development take?","acceptedAnswer":{"@type":"Answer","text":"A standard 5–10 page business website typically takes 2–3 weeks. Landing pages: 3–5 days. eCommerce websites: 4–6 weeks. Timelines depend on content readiness and revision cycles."}},{"@type":"Question","name":"Does Scalify Labs include SEO in website development?","acceptedAnswer":{"@type":"Answer","text":"Yes — every website includes: on-page SEO for all pages, structured data (schema markup), mobile-first responsive design, sub-2-second load speed, Google Analytics and Search Console setup, and proper meta tags and canonical URLs."}}]}` }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: `{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://scalifylabs.com"},{"@type":"ListItem","position":2,"name":"Website Development","item":"https://scalifylabs.com/services/website-development"}]}` }} />
       <WebDevPageClient />
     </>
   )

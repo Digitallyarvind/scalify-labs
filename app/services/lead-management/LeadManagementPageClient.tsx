@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { submitLead } from '@/lib/actions'
+import { trackLead } from '@/lib/analytics'
 import {
   CheckCircle2, ArrowRight, PhoneCall, Database, Zap, BarChart3,
   X, AlertCircle, Users, GitBranch, Bell, RefreshCw, Shield, Clock,

@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { submitLead } from '@/lib/actions'
+import { trackLead } from '@/lib/analytics'
 
 interface LeadFormProps {
   title?: string
@@ -42,6 +43,7 @@ export function LeadForm({ title, subtitle, source, defaultCity, showMessage, sh
         service_interest: fd.get('service') as string || undefined,
         message: fd.get('message') as string || undefined,
       })
+      trackLead(source, fd.get('service') as string || undefined)
       setStatus('success')
       form.reset()
     } catch {

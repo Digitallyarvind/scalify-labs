@@ -1,14 +1,13 @@
 import { MetadataRoute } from 'next'
 import { createServerClient } from '@/lib/supabase'
-import { SERVICES, CITIES, SITE } from '@/lib/data'
+import { CITIES, SITE } from '@/lib/data'
 import type { Post } from '@/types/database'
 
-export const revalidate = 3600 // Regenerate every hour
+export const revalidate = 3600
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const db = createServerClient()
 
-  // Fetch all published blog posts
   const { data: postsRaw } = await db
     .from('posts')
     .select('slug, published_at, updated_at')
@@ -18,29 +17,47 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const now = new Date().toISOString()
 
+  // All service pages with correct current slugs
+  const SERVICE_PAGES = [
+    'google-ads-services',
+    'affordable-seo-services',
+    'meta-ads',
+    'whatsapp-marketing-agency',
+    'gmb',
+    'website-development',
+    'rcs-messaging',
+    'obd',
+    'ai-calling',
+    'specialized-ads',
+    'email-marketing',
+    'lead-management',
+    'lead-to-revenue',
+  ]
+
   return [
-    // Homepage
+    // Homepage — highest priority
     { url: SITE.url, lastModified: now, changeFrequency: 'weekly', priority: 1.0 },
 
     // Core pages
-    { url: `${SITE.url}/blog`, lastModified: now, changeFrequency: 'daily', priority: 0.9 },
+    { url: `${SITE.url}/why-scalify`, lastModified: now, changeFrequency: 'monthly', priority: 0.9 },
     { url: `${SITE.url}/super-30`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
-    { url: `${SITE.url}/contact`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${SITE.url}/blog`, lastModified: now, changeFrequency: 'daily', priority: 0.85 },
+    { url: `${SITE.url}/contact-scalifylabs`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
 
-    // Service pages (high priority)
-    ...SERVICES.map(s => ({
-      url: `${SITE.url}/services/${s.slug}`,
+    // Service pages
+    ...SERVICE_PAGES.map(slug => ({
+      url: `${SITE.url}/services/${slug}`,
       lastModified: now,
       changeFrequency: 'monthly' as const,
       priority: 0.85,
     })),
 
-    // City pages (good for local SEO)
+    // City landing pages (local SEO)
     ...CITIES.map(c => ({
       url: `${SITE.url}/cities/${c.slug}`,
       lastModified: now,
       changeFrequency: 'monthly' as const,
-      priority: 0.8,
+      priority: 0.75,
     })),
 
     // Blog posts

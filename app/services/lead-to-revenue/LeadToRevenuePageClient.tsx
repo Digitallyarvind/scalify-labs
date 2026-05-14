@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { submitLead } from '@/lib/actions'
+import { trackLead } from '@/lib/analytics'
 import {
   CheckCircle2, ArrowRight, PhoneCall, MessageSquare, Rocket,
   TrendingUp, Database, BrainCircuit, Search, BarChart3,

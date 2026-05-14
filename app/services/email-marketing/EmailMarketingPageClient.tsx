@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { submitLead } from '@/lib/actions'
+import { trackLead } from '@/lib/analytics'
 import {
   Mail, CheckCircle2, ArrowRight, Zap, Database, BarChart3,
   TrendingUp, RefreshCw, Shield, Layers, GitBranch, Globe,

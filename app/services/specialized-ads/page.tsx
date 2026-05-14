@@ -49,7 +49,9 @@ const schema = {
 export default function SpecializedAdsPage() {
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: `{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What specialized advertising platforms does Scalify Labs manage?","acceptedAnswer":{"@type":"Answer","text":"Scalify Labs manages LinkedIn Ads (B2B targeting), Quora Ads (intent-based advertising), Truecaller Ads (caller ID advertising), Taboola native ads, Outbrain native ads, ShareChat regional ads, Moj ads, and Inshorts sponsored content."}},{"@type":"Question","name":"When should I use LinkedIn Ads vs Google Ads?","acceptedAnswer":{"@type":"Answer","text":"LinkedIn Ads are best for B2B businesses targeting professionals by job title, company, industry, or seniority. Google Ads are better for capturing high-intent customers actively searching for your product. LinkedIn typically has higher CPL but better B2B quality."}},{"@type":"Question","name":"What is native advertising and how does it work?","acceptedAnswer":{"@type":"Answer","text":"Native advertising (Taboola, Outbrain) shows your content as recommended articles on major news and media websites. It blends with editorial content making it less intrusive and better for awareness and content marketing goals than traditional display ads."}}]}` }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: `{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://scalifylabs.com"},{"@type":"ListItem","position":2,"name":"Specialized Advertising Platforms","item":"https://scalifylabs.com/services/specialized-ads"}]}` }} />
+            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
       <SpecializedAdsPageClient />
     </>
   )

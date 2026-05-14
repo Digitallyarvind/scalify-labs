@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { submitLead } from '@/lib/actions'
+import { trackLead } from '@/lib/analytics'
 import {
   CheckCircle, X, ChevronDown, ArrowRight, TrendingUp,
   Target, BarChart3, Zap, Activity, Shield, Layers,

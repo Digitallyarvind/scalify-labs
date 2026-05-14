@@ -63,6 +63,8 @@ export default function OBDVoiceCallPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
       />
+            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: `{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What are OBD voice calls?","acceptedAnswer":{"@type":"Answer","text":"OBD (Outbound Dialing) voice calls are automated pre-recorded messages delivered to thousands of potential customers simultaneously. Used for lead generation, promotions, appointment reminders, and event announcements."}},{"@type":"Question","name":"How much does OBD voice calling cost?","acceptedAnswer":{"@type":"Answer","text":"OBD calls cost ₹0.15 per connected call. Management setup and campaign management fees apply separately. Minimum volume: 10,000 calls per campaign. TRAI-compliant DND scrubbing is included."}},{"@type":"Question","name":"Is OBD calling legal in India?","acceptedAnswer":{"@type":"Answer","text":"Yes — TRAI-compliant OBD campaigns are legal in India. Scalify Labs handles DND (Do Not Disturb) scrubbing, TRAI-compliant timing (9 AM–9 PM), and proper header registration to ensure full compliance."}}]}` }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: `{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://scalifylabs.com"},{"@type":"ListItem","position":2,"name":"OBD Voice Calls","item":"https://scalifylabs.com/services/obd"}]}` }} />
       <OBDPageClient />
     </>
   )

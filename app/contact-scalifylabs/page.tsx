@@ -61,7 +61,9 @@ export default function ContactPage() {
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: `{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How can I contact Scalify Labs?","acceptedAnswer":{"@type":"Answer","text":"Phone and WhatsApp: +91 87884 24727. Email: hello@scalifylabs.com. Office: Lane No 5, Kamlesh Dubey Chowk, Pirra, Ratu, Ranchi 835222, Jharkhand. Working hours: Monday to Saturday, 10 AM to 7 PM IST."}},{"@type":"Question","name":"Does Scalify Labs offer free consultations?","acceptedAnswer":{"@type":"Answer","text":"Yes — all initial strategy calls are completely free. A 30-minute session covers business goals, current marketing setup, and growth challenges before any recommendations or pricing is shared."}},{"@type":"Question","name":"Can Scalify Labs work with businesses outside Ranchi?","acceptedAnswer":{"@type":"Answer","text":"Yes — all services are delivered remotely. Scalify Labs serves businesses across India including Delhi, Mumbai, Bangalore, Pune, Patna, Jamshedpur, and beyond."}},{"@type":"Question","name":"How quickly does Scalify Labs respond to inquiries?","acceptedAnswer":{"@type":"Answer","text":"WhatsApp inquiries are answered within 2 hours during working hours. Form submissions and emails are responded to within 24 hours. For urgent queries, WhatsApp at +91 87884 24727 is the fastest channel."}}]}` }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: `{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://scalifylabs.com"},{"@type":"ListItem","position":2,"name":"Contact Scalify Labs","item":"https://scalifylabs.com/contact-scalifylabs"}]}` }} />
+            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
       <ContactPageClient />
     </>
   )

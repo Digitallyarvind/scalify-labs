@@ -64,6 +64,8 @@ export default function RCSMessagingPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
       />
+            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: `{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is RCS messaging?","acceptedAnswer":{"@type":"Answer","text":"RCS (Rich Communication Services) is the next evolution of SMS that allows businesses to send rich interactive messages with images, carousels, buttons, and analytics — delivered to the native messaging app without requiring any app download."}},{"@type":"Question","name":"How much does RCS messaging cost?","acceptedAnswer":{"@type":"Answer","text":"RCS messages cost approximately ₹0.16 per delivered message — significantly lower than WhatsApp API at ₹0.82 per marketing conversation. Campaign management fees apply separately."}},{"@type":"Question","name":"What are the benefits of RCS over SMS?","acceptedAnswer":{"@type":"Answer","text":"RCS supports images, videos, carousels, one-tap CTA buttons, verified sender badges, read receipts, delivery confirmation, and campaign analytics — making it 10x more engaging than plain SMS at a similar delivery cost."}}]}` }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: `{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://scalifylabs.com"},{"@type":"ListItem","position":2,"name":"RCS Messaging Services","item":"https://scalifylabs.com/services/rcs-messaging"}]}` }} />
       <RCSPageClient />
     </>
   )

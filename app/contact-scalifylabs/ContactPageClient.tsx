@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import { submitLead } from '@/lib/actions'
+import { trackLead } from '@/lib/analytics'
 import {
   PhoneCall, Mail, MessageSquare, Calendar, ArrowRight, CheckCircle2,
   TrendingUp, Database, BrainCircuit, Zap, Globe, Users, BarChart3,
