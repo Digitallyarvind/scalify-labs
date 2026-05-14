@@ -49,7 +49,12 @@ export const metadata: Metadata = {
     follow: true,
     googleBot: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1 },
   },
-  alternates: { canonical: SITE.url },
+  alternates: {
+    canonical: SITE.url,
+    types: {
+      'application/rss+xml': `${SITE.url}/feed.xml`,
+    },
+  },
   verification: {
     // Add Google Search Console verification token here when available
     // google: 'your-verification-token',
@@ -184,6 +189,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <head>
+        {/* RSS feed — auto-discovered by browsers and feed readers */}
+        <link rel="alternate" type="application/rss+xml" title="Scalify Labs — Digital Marketing Intelligence" href="/feed.xml" />
         {/* AI/LLM context file */}
         <link rel="alternate" type="text/plain" href="/llms.txt" title="LLM Context" />
 
