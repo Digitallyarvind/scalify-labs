@@ -21,6 +21,9 @@ const FOOTER_COMPANY = [
 ]
 
 const FOOTER_RESOURCES = [
+  { label: 'Education Marketing', href: '/digital-marketing-agencies-for-education-sector' },
+  { label: 'Healthcare Marketing', href: '/digital-marketing-for-healthcare' },
+  { label: 'Real Estate Marketing', href: '/digital-marketing-services-for-real-estate' },
   { label: 'Growth Insights', href: '/blog' },
   { label: 'Case Studies', href: '/blog' },
   { label: 'AI Marketing Guides', href: '/blog?category=AI+Tools' },

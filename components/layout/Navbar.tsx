@@ -59,7 +59,7 @@ const SERVICES = [
 ]
 
 const INDUSTRIES = [
-  { icon: GraduationCap, name: 'Education Solutions', desc: 'Coaching institutes, schools & EdTech', href: '#', accent: 'bg-blue-50 text-blue-600' },
+  { icon: GraduationCap, name: 'Education Solutions', desc: 'Student lead generation & admission funnels', href: '/digital-marketing-agencies-for-education-sector', accent: 'bg-blue-50 text-blue-600' },
   { icon: HeartPulse, name: 'Healthcare Solutions', desc: 'Patient acquisition & clinic growth funnel', href: '/digital-marketing-for-healthcare', accent: 'bg-red-50 text-red-600' },
   { icon: Building2, name: 'Real Estate Solutions', desc: 'Verified buyer leads & site visit funnels', href: '/digital-marketing-services-for-real-estate', accent: 'bg-amber-50 text-amber-600' },
   { icon: Sofa, name: 'Home Furnishing', desc: 'Furniture, interior & décor brands', href: '#', accent: 'bg-orange-50 text-orange-600' },
