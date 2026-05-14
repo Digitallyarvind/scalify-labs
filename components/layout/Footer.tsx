@@ -5,11 +5,11 @@ const FOOTER_SERVICES = [
   { label: 'SEO Services', href: '/services/affordable-seo-services' },
   { label: 'Google Ads', href: '/services/google-ads-services' },
   { label: 'Meta Ads', href: '/services/meta-ads' },
+  { label: 'Social Media Marketing', href: '/social-media-marketing' },
   { label: 'WhatsApp Marketing', href: '/services/whatsapp-marketing-agency' },
-  { label: 'CRM Automation', href: '/services/lead-to-revenue' },
+  { label: 'CRM Automation', href: '/services/lead-management' },
   { label: 'AI Calling & Agents', href: '/services/ai-calling' },
   { label: 'Local SEO & GMB', href: '/services/gmb' },
-  { label: 'Lead to Revenue', href: '/services/lead-to-revenue' },
 ]
 
 const FOOTER_COMPANY = [

@@ -52,7 +52,7 @@ const SERVICES = [
     items: [
       { icon: Palette, name: 'Ad Creatives', desc: 'Scroll-stopping visuals for every platform', href: '#' },
       { icon: Video, name: 'Video Editing', desc: 'Reels, brand films & ad videos', href: '#' },
-      { icon: LayoutGrid, name: 'Social Media Content', desc: 'Consistent content calendar execution', href: '#' },
+      { icon: LayoutGrid, name: 'Social Media Marketing', desc: 'Content, ads & lead gen for local brands', href: '/social-media-marketing' },
       { icon: Users, name: 'Influencer Marketing', desc: 'Local & regional creator partnerships', href: '#' },
     ],
   },
