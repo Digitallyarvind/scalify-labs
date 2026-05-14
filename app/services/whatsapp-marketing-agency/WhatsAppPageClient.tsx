@@ -142,13 +142,13 @@ const WHY_CARDS = [
 
 const FAQ_ITEMS = [
   { q: 'Which WhatsApp platforms do you support?', a: 'We work with WATI, Interakt, and AiSensy — the three leading official WhatsApp Business API platforms in India. We recommend the best fit based on your budget, team size, and automation requirements.' },
-  { q: 'Is platform subscription pricing included in ₹10,000/month?', a: 'No. The ₹10,000/month covers Scalify Labs\' agency management charges — campaign strategy, automation setup, workflow design, and ongoing management. Platform subscription (WATI/Interakt/AiSensy) and Meta conversation charges are billed separately by the respective platforms.' },
+  { q: 'Is platform subscription pricing included in the agency fee?', a: 'No. The agency management fee (starting ₹10,000/month) covers Scalify Labs\' charges — campaign strategy, automation setup, workflow design, and ongoing management. Platform subscription (WATI/Interakt/AiSensy) and Meta conversation charges are billed separately by the respective platforms.' },
   { q: 'Can workflows automate follow-ups automatically?', a: 'Yes. That is the core of what we build. When a user responds, presses a button, or takes an action, the next message or flow triggers automatically without any manual effort from your team.' },
   { q: 'Do you support CRM integration?', a: 'Yes. We integrate WhatsApp platforms with popular CRMs like HubSpot, Zoho, Salesforce, and custom CRMs via API. Leads automatically get tagged, scored, and routed based on WhatsApp interactions.' },
   { q: 'Can WhatsApp campaigns run at scale?', a: 'Yes. With official WhatsApp Business API, there are no limits on broadcast message volumes (subject to contact opt-in and Meta quality rating). We manage campaigns reaching lakhs of contacts per month for our clients.' },
   { q: 'Do you create message templates?', a: 'Yes. We write, design, and get Meta approval for all message templates including promotional, transactional, and utility templates. Template fees, if any, are part of the platform\'s billing, not ours.' },
   { q: 'Are Meta conversation charges included?', a: 'No. Meta charges per conversation (24-hour session). Marketing conversation rates in India are approximately ₹0.82 per session. These charges are billed by Meta directly through the WhatsApp platform you subscribe to.' },
-  { q: 'Can you manage campaigns on a monthly basis?', a: 'Yes. Our ₹10,000/month retainer covers ongoing campaign management — planning new broadcasts, optimising automation flows, monitoring analytics, and adapting strategy based on performance data.' },
+  { q: 'Can you manage campaigns on a monthly basis?', a: 'Yes. Our monthly retainer (starting ₹10,000/month) covers ongoing campaign management — planning new broadcasts, optimising automation flows, monitoring analytics, and adapting strategy based on performance data.' },
 ]
 
 // ─── ENQUIRY MODAL ─────────────────────────────────────────────────────────────
@@ -263,7 +263,7 @@ export default function WhatsAppPageClient() {
             <div className="space-y-7">
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-50 border border-green-100 text-green-800 text-xs font-semibold">
                 <MessageCircle className="w-3.5 h-3.5" />
-                Official WhatsApp Business API Partner · India
+                WhatsApp API Marketing Agency · India
               </div>
               <h1 className="text-4xl sm:text-5xl font-extrabold text-navy leading-[1.1] tracking-tight">
                 WhatsApp API Marketing &amp;{' '}
@@ -279,7 +279,7 @@ export default function WhatsAppPageClient() {
               {/* Pricing card */}
               <div className="bg-green-600 rounded-2xl px-5 py-4 text-white inline-block shadow-lg shadow-green-200">
                 <p className="text-[11px] opacity-80 uppercase tracking-wider font-semibold mb-1">Agency Management Charges</p>
-                <p className="text-3xl font-black">₹10,000<span className="text-sm font-semibold opacity-80">/month</span></p>
+                <p className="text-3xl font-black">Starting ₹10k<span className="text-sm font-semibold opacity-80">/month</span></p>
                 <p className="text-[11px] opacity-70 mt-1.5">Platform subscription &amp; Meta conversation charges billed separately.</p>
               </div>
 
@@ -407,7 +407,7 @@ export default function WhatsAppPageClient() {
                   <div><p className="text-[9px] text-slate-500">Read Rate</p><p className="text-sm font-extrabold text-slate-900">78% Avg</p></div>
                 </div>
                 <div className="absolute -bottom-4 -left-6 bg-green-600 rounded-2xl shadow-xl px-4 py-2.5 text-white">
-                  <p className="text-[9px] opacity-70 font-medium uppercase tracking-wider">Agency Fee</p>
+                  <p className="text-[9px] opacity-70 font-medium uppercase tracking-wider">Starting From</p>
                   <p className="text-lg font-black">₹10K<span className="text-xs font-semibold opacity-80">/mo</span></p>
                 </div>
                 <div className="absolute top-14 -left-8 bg-white rounded-xl shadow-xl border border-slate-100 px-2.5 py-2">
@@ -643,7 +643,7 @@ export default function WhatsAppPageClient() {
             {/* Header */}
             <div className="bg-gradient-to-r from-green-600 to-emerald-600 px-8 py-8 text-center text-white">
               <p className="text-xs uppercase tracking-widest opacity-80 font-semibold mb-2">Agency Management Fee</p>
-              <p className="text-6xl font-black">₹10,000</p>
+              <p className="text-6xl font-black">Starting ₹10k</p>
               <p className="text-lg font-semibold opacity-80 mt-1">per month</p>
             </div>
 
@@ -735,7 +735,7 @@ export default function WhatsAppPageClient() {
           </h2>
           <p className="text-white/80 text-lg mb-3">Automate engagement, follow-ups, reminders, lead nurturing, and customer journeys using official WhatsApp API systems.</p>
           <p className="text-white/60 text-sm mb-8 flex items-center justify-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5" /> Agency management ₹10,000/month · Platform subscription separate
+            <Sparkles className="w-3.5 h-3.5" /> Agency management starting ₹10k/month · Platform subscription separate
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <button onClick={() => open()} className="flex items-center gap-2 px-7 py-3.5 bg-white text-green-700 font-bold rounded-full shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all">

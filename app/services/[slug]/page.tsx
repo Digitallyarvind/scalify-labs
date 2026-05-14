@@ -8,9 +8,17 @@ interface Props {
   params: { slug: string }
 }
 
-// Pre-generate all service pages at build time (SSG)
+// Slugs that have dedicated page directories — skip them here so the specific
+// route takes full priority without any static-generation conflict.
+const DEDICATED_SLUGS = new Set([
+  'meta-ads', 'gmb', 'website-development', 'obd', 'lead-to-revenue',
+  'affordable-seo-services', 'google-ads-services', 'whatsapp-marketing-agency',
+  'ai-calling', 'rcs-messaging', 'email-marketing', 'lead-management', 'specialized-ads',
+])
+
+// Pre-generate only legacy service pages at build time (SSG)
 export function generateStaticParams() {
-  return SERVICES.map(s => ({ slug: s.slug }))
+  return SERVICES.filter(s => !DEDICATED_SLUGS.has(s.slug)).map(s => ({ slug: s.slug }))
 }
 
 // Dynamic metadata per service page
