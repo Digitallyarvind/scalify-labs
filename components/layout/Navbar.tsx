@@ -59,10 +59,10 @@ const SERVICES = [
 ]
 
 const INDUSTRIES = [
-  { icon: GraduationCap, name: 'Education', desc: 'Coaching institutes, schools & EdTech', href: '#', accent: 'bg-blue-50 text-blue-600' },
-  { icon: HeartPulse, name: 'Doctors & Clinics', desc: 'Healthcare & wellness providers', href: '#', accent: 'bg-red-50 text-red-600' },
-  { icon: Building2, name: 'Real Estate', desc: 'Builders, brokers & property developers', href: '#', accent: 'bg-emerald-50 text-emerald-600' },
-  { icon: Sofa, name: 'Home Furnishing', desc: 'Furniture, interior & décor brands', href: '#', accent: 'bg-amber-50 text-amber-600' },
+  { icon: GraduationCap, name: 'Education Solutions', desc: 'Coaching institutes, schools & EdTech', href: '#', accent: 'bg-blue-50 text-blue-600' },
+  { icon: HeartPulse, name: 'Healthcare Solutions', desc: 'Clinics, doctors & wellness providers', href: '#', accent: 'bg-red-50 text-red-600' },
+  { icon: Building2, name: 'Real Estate Solutions', desc: 'Verified buyer leads & site visit funnels', href: '/digital-marketing-services-for-real-estate', accent: 'bg-amber-50 text-amber-600' },
+  { icon: Sofa, name: 'Home Furnishing', desc: 'Furniture, interior & décor brands', href: '#', accent: 'bg-orange-50 text-orange-600' },
   { icon: ShoppingBag, name: 'Local Businesses', desc: 'Retail, restaurants & service providers', href: '#', accent: 'bg-purple-50 text-purple-600' },
 ]
 
