@@ -26,6 +26,7 @@ const FOOTER_RESOURCES = [
   { label: 'AI Marketing Guides', href: '/blog?category=AI+Tools' },
   { label: 'SEO Resources', href: '/blog?category=SEO' },
   { label: 'WhatsApp Playbooks', href: '/blog?category=WhatsApp+Marketing' },
+  { label: 'Privacy Policy', href: '/privacy-policy' },
 ]
 
 const SOCIAL_LINKS = [
@@ -156,9 +157,9 @@ export function Footer() {
             © {year} {SITE.name}. All rights reserved. Built in Ranchi 🇮🇳
           </span>
           <div className="flex gap-5">
-            <span className="hover:text-saffron cursor-pointer transition-colors">Privacy Policy</span>
+            <Link href="/privacy-policy" className="hover:text-saffron transition-colors">Privacy Policy</Link>
             <span className="hover:text-saffron cursor-pointer transition-colors">Terms of Use</span>
-            <span className="hover:text-saffron cursor-pointer transition-colors">Sitemap</span>
+            <Link href="/sitemap.xml" className="hover:text-saffron transition-colors">Sitemap</Link>
           </div>
         </div>
       </div>
