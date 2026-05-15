@@ -181,7 +181,7 @@ export function Navbar() {
               <div className="font-black text-[1.1rem] tracking-tight text-[#0B0F1E] leading-tight">
                 Scalify<span className="text-[#FF6500]">Labs</span>
               </div>
-              <div className="text-[10px] text-slate-400 font-medium mt-0.5 hidden sm:block">Growth Systems for Businesses & Professionals</div>
+              <div className="text-[10px] text-slate-400 font-medium mt-0.5 hidden sm:block">Scale Smarter. Grow Faster.</div>
             </div>
           </Link>
 
@@ -228,39 +228,7 @@ export function Navbar() {
               </div>
             </DropItem>
 
-            {/* Lead to Revenue */}
-            <DropItem label="Lead to Revenue" active={active === 'l2r'} onOpen={() => openMenu('l2r')} onClose={scheduleClose}>
-              <div className="absolute top-[calc(100%+10px)] left-1/2 -translate-x-1/2 w-[460px] bg-white rounded-2xl shadow-[0_8px_48px_rgba(0,0,0,0.12)] border border-slate-100 overflow-hidden"
-                onMouseEnter={cancelClose} onMouseLeave={scheduleClose}>
-                <div className="absolute -top-[6px] left-1/2 -translate-x-1/2 w-3 h-3 bg-white border-t border-l border-slate-100 rotate-45" />
-                <div className="p-5">
-                  <div className="flex items-center gap-3 mb-4 pb-4 border-b border-slate-100">
-                    <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-[#FF6500]/10">
-                      <Target className="w-5 h-5 text-[#FF6500]" />
-                    </div>
-                    <div>
-                      <p className="font-bold text-[#0B0F1E] text-sm">Connected Growth Infrastructure</p>
-                      <p className="text-xs text-slate-400">Traffic → Leads → CRM → Automation → Revenue</p>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-3 gap-1 mb-4">
-                    {L2R_ITEMS.map(item => (
-                      <Link key={item.label} href={item.href}
-                        className="flex items-center gap-1.5 px-2.5 py-2 rounded-lg hover:bg-slate-50 transition-colors group/l2r text-xs">
-                        <ArrowRight className="w-3 h-3 text-slate-300 group-hover/l2r:text-[#FF6500] transition-colors shrink-0" />
-                        <span className="text-[#0B0F1E] group-hover/l2r:text-[#FF6500] transition-colors font-medium leading-tight">{item.label}</span>
-                      </Link>
-                    ))}
-                  </div>
-                  <Link href="/services/lead-to-revenue"
-                    className="flex items-center justify-between w-full px-4 py-3 rounded-xl font-bold text-sm text-white hover:opacity-90 transition-opacity"
-                    style={{ background: '#FF6500' }}>
-                    Explore Lead to Revenue <ArrowRight className="w-4 h-4" />
-                  </Link>
-                  <p className="text-[10px] text-slate-400 text-center mt-2">Built for businesses needing growth systems — not isolated services.</p>
-                </div>
-              </div>
-            </DropItem>
+            <NavLink href="/services/lead-to-revenue" active={isActive('/services/lead-to-revenue')}>Lead to Revenue</NavLink>
 
             {/* Growth Solutions */}
             <DropItem label="Growth Solutions" active={active === 'solutions'} onOpen={() => openMenu('solutions')} onClose={scheduleClose}>
@@ -302,10 +270,6 @@ export function Navbar() {
 
           {/* Right CTAs */}
           <div className="hidden lg:flex items-center gap-2.5">
-            <Link href="/super-30"
-              className="px-4 py-2 rounded-lg text-sm font-semibold border border-slate-200 text-[#0B0F1E] hover:bg-slate-50 transition-colors">
-              Super 30 Login
-            </Link>
             <Link href="/contact-scalifylabs"
               className="flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-sm font-bold text-white hover:bg-[#E05800] transition-colors shadow-[0_2px_12px_rgba(255,101,0,0.3)]"
               style={{ background: '#FF6500' }}>
@@ -367,9 +331,6 @@ export function Navbar() {
                   className="flex items-center justify-center gap-2 py-3.5 rounded-xl font-bold text-white text-sm"
                   style={{ background: '#FF6500' }}>
                   Book Growth Call <ArrowRight className="w-4 h-4" />
-                </Link>
-                <Link href="/super-30" className="flex items-center justify-center py-3.5 rounded-xl font-bold text-sm border-2 border-slate-200 text-[#0B0F1E]">
-                  Super 30 Login
                 </Link>
               </div>
             </div>

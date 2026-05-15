@@ -3,17 +3,46 @@ import { SITE } from '@/lib/data'
 import { ArrowRight, MapPin } from 'lucide-react'
 
 // ─── DATA ─────────────────────────────────────────────────────────────────────
-const SERVICES = [
-  { label: 'Google Ads',           href: '/services/google-ads-services' },
-  { label: 'Meta Ads',             href: '/services/meta-ads' },
-  { label: 'SEO Services',         href: '/services/affordable-seo-services' },
-  { label: 'Website Development',  href: '/services/website-development' },
-  { label: 'Email Marketing',      href: '/services/email-marketing' },
-  { label: 'Lead Management',      href: '/services/lead-management' },
-  { label: 'WhatsApp Automation',  href: '/services/whatsapp-marketing-agency' },
-  { label: 'AI Calling & Agents',  href: '/services/ai-calling' },
-  { label: 'Social Media Marketing', href: '/social-media-marketing' },
-  { label: 'Local SEO & GMB',      href: '/services/gmb' },
+
+// Services in 4 columns (mirrors header)
+const SERVICES_COLS = [
+  {
+    label: 'Advertising',
+    items: [
+      { label: 'Google Ads',               href: '/services/google-ads-services' },
+      { label: 'Meta Ads',                 href: '/services/meta-ads' },
+      { label: 'Specialized Platform Ads', href: '/services/specialized-ads' },
+      { label: 'Email Marketing',          href: '/services/email-marketing' },
+    ],
+  },
+  {
+    label: 'Organic Growth',
+    items: [
+      { label: 'Website Development',  href: '/services/website-development' },
+      { label: 'SEO Services',         href: '/services/affordable-seo-services' },
+      { label: 'Local SEO & GMB',      href: '/services/gmb' },
+      { label: 'Lead Management',      href: '/services/lead-management' },
+      { label: 'Lead to Revenue',      href: '/services/lead-to-revenue' },
+    ],
+  },
+  {
+    label: 'Communication & Automation',
+    items: [
+      { label: 'WhatsApp Automation',  href: '/services/whatsapp-marketing-agency' },
+      { label: 'RCS Messaging',        href: '/services/rcs-messaging' },
+      { label: 'OBD Voice Calls',      href: '/services/obd' },
+      { label: 'AI Calling & Agents',  href: '/services/ai-calling' },
+    ],
+  },
+  {
+    label: 'Creative',
+    items: [
+      { label: 'Social Media Marketing', href: '/social-media-marketing' },
+      { label: 'Ad Creatives',           href: '#' },
+      { label: 'Video Editing',          href: '#' },
+      { label: 'Influencer Marketing',   href: '#' },
+    ],
+  },
 ]
 
 const SOLUTIONS = [
@@ -24,19 +53,18 @@ const SOLUTIONS = [
   { label: 'Local Business Solutions',  href: '#' },
 ]
 
-const PROGRAMS = [
-  { label: 'Super 30 Program',              href: '/super-30' },
-  { label: 'Performance Marketing Program', href: '/super-30' },
-  { label: 'AI Growth Program',             href: '/super-30' },
-  { label: 'Career Growth Programs',        href: '/super-30' },
+// Programs + Community combined
+const PROGRAMS_COMMUNITY = [
+  { label: 'Super 30 Program',          href: '/super-30' },
+  { label: 'Jharkhand Growth Adda™',    href: '/jharkhand-growth-adda' },
+  { label: 'Join Community Free',       href: '/jharkhand-growth-adda' },
+  { label: 'Careers at Scalify Labs',   href: '/careers' },
 ]
 
-const COMMUNITY = [
-  { label: 'Jharkhand Growth Adda™', href: '/jharkhand-growth-adda' },
-  { label: 'Join Community',          href: '/jharkhand-growth-adda' },
-  { label: 'Partner With Us',         href: '/contact-scalifylabs' },
-  { label: 'Business Networking',     href: '/jharkhand-growth-adda' },
-  { label: 'Growth Resources',        href: '/blog' },
+const COMPANY = [
+  { label: 'Why Scalify Labs', href: '/why-scalify' },
+  { label: 'Growth Insights',  href: '/blog' },
+  { label: 'Contact Us',       href: '/contact-scalifylabs' },
 ]
 
 const SOCIAL = [
@@ -67,47 +95,44 @@ const SEO_SERVICES = [
   { label: 'Digital Marketing in Jamshedpur',  href: '/cities/jamshedpur' },
   { label: 'Digital Marketing in Dhanbad',     href: '/cities/dhanbad' },
   { label: 'Digital Marketing in Bokaro',      href: '/cities/bokaro' },
-  { label: 'SEO Services Ranchi',              href: '/cities/ranchi' },
+  { label: 'SEO Services Ranchi',              href: '/services/affordable-seo-services' },
   { label: 'Google Ads Agency Ranchi',         href: '/services/google-ads-services' },
-  { label: 'Email Marketing Services Ranchi',  href: '/services/email-marketing' },
+  { label: 'Email Marketing Ranchi',           href: '/services/email-marketing' },
   { label: 'Website Development Ranchi',       href: '/services/website-development' },
   { label: 'Lead Generation Ranchi',           href: '/services/lead-to-revenue' },
-  { label: 'AI Automation Services Ranchi',    href: '/services/ai-calling' },
+  { label: 'AI Automation Ranchi',             href: '/services/ai-calling' },
 ]
 
 const SEO_COURSES = [
-  { label: 'Digital Marketing Course Ranchi',       href: '/super-30' },
-  { label: 'Digital Marketing Course Jamshedpur',   href: '/super-30' },
-  { label: 'Digital Marketing Course Dhanbad',      href: '/super-30' },
-  { label: 'Performance Marketing Course Ranchi',   href: '/super-30' },
-  { label: 'SEO Course Ranchi',                     href: '/super-30' },
-  { label: 'Google Ads Training Ranchi',            href: '/super-30' },
-  { label: 'Email Marketing Course Ranchi',         href: '/super-30' },
-  { label: 'AI Marketing Course Ranchi',            href: '/super-30' },
-  { label: 'CRM Automation Training Ranchi',        href: '/super-30' },
-  { label: 'Digital Skills Training Ranchi',        href: '/super-30' },
+  { label: 'Digital Marketing Course Ranchi',     href: '/super-30' },
+  { label: 'Digital Marketing Course Jamshedpur', href: '/super-30' },
+  { label: 'Performance Marketing Course Ranchi', href: '/super-30' },
+  { label: 'SEO Course Ranchi',                   href: '/super-30' },
+  { label: 'Google Ads Training Ranchi',          href: '/super-30' },
+  { label: 'AI Marketing Course Ranchi',          href: '/super-30' },
+  { label: 'CRM Automation Training Ranchi',      href: '/super-30' },
+  { label: 'Digital Skills Training Ranchi',      href: '/super-30' },
 ]
 
 const year = new Date().getFullYear()
 
-// ─── FOOTER ───────────────────────────────────────────────────────────────────
 export function Footer() {
   return (
     <>
-      {/* ── COMMUNITY CTA BANNER ────────────────────────────────────────── */}
+      {/* ── COMMUNITY CTA BANNER ──────────────────────────────────────── */}
       <section className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #FF6500 0%, #FF8C00 50%, #FFA500 100%)' }}>
         <div className="absolute inset-0 pointer-events-none opacity-10"
           style={{ backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '28px 28px' }} />
         <div className="relative max-w-[1400px] mx-auto px-6 py-16 lg:py-20">
-          <div className="max-w-[700px]">
+          <div className="max-w-[680px]">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold mb-5 bg-white/20 text-white">
-              🌱 Community
+              🌱 Free Community
             </div>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white leading-[1.15] tracking-tight mb-3">
               Join Jharkhand Growth Adda™
             </h2>
             <p className="text-xl font-semibold text-white/80 mb-3">Local Connections. Digital Growth.</p>
-            <p className="text-base text-white/70 leading-relaxed mb-8 max-w-[520px]">
+            <p className="text-base text-white/70 leading-relaxed mb-8 max-w-[500px]">
               A free community helping Jharkhand business owners connect, learn and grow digitally.
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
@@ -120,31 +145,34 @@ export function Footer() {
                 Learn More
               </Link>
             </div>
-            <p className="text-sm text-white/60 mt-4">Free for early members · Limited founding seats</p>
+            <p className="text-sm text-white/60 mt-4">Free for early members</p>
           </div>
         </div>
       </section>
 
-      {/* ── MAIN FOOTER ─────────────────────────────────────────────────── */}
+      {/* ── MAIN FOOTER ───────────────────────────────────────────────── */}
       <footer style={{ background: '#F8FAFC' }} className="border-t border-slate-200">
 
-        {/* 5-column grid */}
-        <div className="max-w-[1400px] mx-auto px-6 pt-16 pb-10">
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-10">
+        <div className="max-w-[1400px] mx-auto px-6 pt-14 pb-10">
+          <div className="grid grid-cols-1 lg:grid-cols-[220px_1fr_180px] gap-10">
 
             {/* Column 1 — About */}
-            <div className="col-span-2 sm:col-span-3 lg:col-span-1">
-              <Link href="/" className="inline-flex items-center gap-2.5 mb-5">
+            <div>
+              <Link href="/" className="inline-flex items-center gap-2.5 mb-4">
                 <div className="w-8 h-8 bg-[#FF6500] rounded-[9px] flex items-center justify-center">
                   <span className="text-white font-black text-sm">S</span>
                 </div>
                 <span className="font-black text-[1.05rem] text-[#0B0F1E]">Scalify<span className="text-[#FF6500]">Labs</span></span>
               </Link>
-              <p className="text-sm text-slate-500 leading-relaxed mb-4">
-                ScalifyLabs helps businesses grow using SEO, Ads, Websites, CRM, Automation, AI systems, Lead generation & Training.
+              <p className="text-xs font-semibold text-[#FF6500] mb-3">Scale Smarter. Grow Faster.</p>
+              <p className="text-sm text-slate-500 leading-relaxed mb-5">
+                Growth systems for businesses — SEO, Ads, CRM, Automation, AI & Lead Generation.
               </p>
-              <p className="text-xs font-semibold text-[#FF6500] mb-5">Mission: Help 10,000+ businesses grow digitally.</p>
-              {/* Socials */}
+              <div className="space-y-1.5 text-sm text-slate-500 mb-5">
+                <p><a href="tel:+918788424727" className="hover:text-[#FF6500] transition-colors">+91 8788424727</a></p>
+                <p><a href="mailto:hello@scalifylabs.com" className="hover:text-[#FF6500] transition-colors">hello@scalifylabs.com</a></p>
+                <p className="text-xs leading-relaxed">Lane No 5, Kamlesh Dubey Chowk, Pirra, Ratu, Ranchi 835222</p>
+              </div>
               <div className="flex flex-wrap gap-2">
                 {SOCIAL.map(s => (
                   <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.label}
@@ -155,85 +183,62 @@ export function Footer() {
               </div>
             </div>
 
-            {/* Column 2 — Services */}
+            {/* Column 2 — Services (4 sub-columns) */}
             <div>
-              <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">Services</p>
-              <ul className="space-y-2">
-                {SERVICES.map(s => (
-                  <li key={s.label}>
-                    <Link href={s.href} className="text-sm text-slate-500 hover:text-[#FF6500] transition-colors">{s.label}</Link>
-                  </li>
+              <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-5">Services</p>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
+                {SERVICES_COLS.map(col => (
+                  <div key={col.label}>
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-[#FF6500] mb-2.5">{col.label}</p>
+                    <ul className="space-y-1.5">
+                      {col.items.map(item => (
+                        <li key={item.label}>
+                          <Link href={item.href} className="text-xs text-slate-500 hover:text-[#FF6500] transition-colors leading-snug block">{item.label}</Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 ))}
-                <li>
-                  <Link href="/contact-scalifylabs" className="inline-flex items-center gap-1 text-sm font-semibold text-[#FF6500] hover:gap-2 transition-all mt-1">
-                    View All Services <ArrowRight className="w-3 h-3" />
-                  </Link>
-                </li>
-              </ul>
-            </div>
+              </div>
 
-            {/* Column 3 — Growth Solutions */}
-            <div>
-              <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">Growth Solutions</p>
-              <ul className="space-y-2">
-                {SOLUTIONS.map(s => (
-                  <li key={s.label}>
-                    <Link href={s.href} className="text-sm text-slate-500 hover:text-[#FF6500] transition-colors">{s.label}</Link>
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-6">
-                <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3">Lead to Revenue</p>
-                <Link href="/services/lead-to-revenue" className="inline-flex items-center gap-1 text-sm font-semibold text-[#FF6500] hover:gap-2 transition-all">
-                  Explore System <ArrowRight className="w-3 h-3" />
-                </Link>
+              {/* Solutions row below */}
+              <div className="mt-7 pt-5 border-t border-slate-200">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">Growth Solutions</p>
+                <div className="flex flex-wrap gap-x-5 gap-y-1.5">
+                  {SOLUTIONS.map(s => (
+                    <Link key={s.label} href={s.href} className="text-xs text-slate-500 hover:text-[#FF6500] transition-colors">{s.label}</Link>
+                  ))}
+                </div>
               </div>
             </div>
 
-            {/* Column 4 — Programs */}
+            {/* Column 3 — Programs / Community / Company */}
             <div>
-              <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">Programs</p>
+              <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">Programs & Community</p>
               <ul className="space-y-2">
-                {PROGRAMS.map(s => (
+                {PROGRAMS_COMMUNITY.map(s => (
                   <li key={s.label}>
                     <Link href={s.href} className="text-sm text-slate-500 hover:text-[#FF6500] transition-colors">{s.label}</Link>
                   </li>
                 ))}
               </ul>
-              <div className="mt-6">
+              <div className="mt-5 pt-4 border-t border-slate-200">
                 <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3">Company</p>
                 <ul className="space-y-2">
-                  {[
-                    { label: 'Why Scalify Labs', href: '/why-scalify' },
-                    { label: 'Growth Insights', href: '/blog' },
-                    { label: 'Contact Us', href: '/contact-scalifylabs' },
-                  ].map(s => (
+                  {COMPANY.map(s => (
                     <li key={s.label}>
                       <Link href={s.href} className="text-sm text-slate-500 hover:text-[#FF6500] transition-colors">{s.label}</Link>
                     </li>
                   ))}
                 </ul>
               </div>
-            </div>
-
-            {/* Column 5 — Community */}
-            <div>
-              <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">Community</p>
-              <ul className="space-y-2">
-                {COMMUNITY.map(s => (
-                  <li key={s.label}>
-                    <Link href={s.href} className="text-sm text-slate-500 hover:text-[#FF6500] transition-colors">{s.label}</Link>
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-6">
+              <div className="mt-5 pt-4 border-t border-slate-200">
                 <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3">Legal</p>
                 <ul className="space-y-2">
                   {[
-                    { label: 'Privacy Policy', href: '/privacy-policy' },
-                    { label: 'Terms & Conditions', href: '/terms-and-conditions' },
-                    { label: 'Sitemap', href: '/sitemap.xml' },
-                    { label: 'RSS Feed', href: '/feed.xml' },
+                    { label: 'Privacy Policy',    href: '/privacy-policy' },
+                    { label: 'Terms & Conditions',href: '/terms-and-conditions' },
+                    { label: 'Sitemap',           href: '/sitemap.xml' },
                   ].map(s => (
                     <li key={s.label}>
                       <Link href={s.href} className="text-sm text-slate-500 hover:text-[#FF6500] transition-colors">{s.label}</Link>
@@ -245,34 +250,30 @@ export function Footer() {
           </div>
         </div>
 
-        {/* ── SEO RESOURCE HUB ──────────────────────────────────────────── */}
+        {/* SEO Resource Hub */}
         <div className="border-t border-slate-200 bg-white">
-          <div className="max-w-[1400px] mx-auto px-6 py-8">
-            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-5">Explore Growth Resources</p>
-            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-x-6 gap-y-2">
-              <div className="col-span-2 sm:col-span-2">
+          <div className="max-w-[1400px] mx-auto px-6 py-7">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-4">Explore Growth Resources</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div>
                 <p className="text-[9px] font-bold uppercase tracking-widest text-slate-300 mb-2">Services by City</p>
                 <div className="flex flex-wrap gap-x-4 gap-y-1">
-                  {SEO_SERVICES.map(l => (
-                    <Link key={l.label} href={l.href} className="text-[11px] text-slate-400 hover:text-[#FF6500] transition-colors">{l.label}</Link>
-                  ))}
+                  {SEO_SERVICES.map(l => <Link key={l.label} href={l.href} className="text-[11px] text-slate-400 hover:text-[#FF6500] transition-colors">{l.label}</Link>)}
                 </div>
               </div>
-              <div className="col-span-2 sm:col-span-2 lg:col-span-3">
+              <div>
                 <p className="text-[9px] font-bold uppercase tracking-widest text-slate-300 mb-2">Courses & Training</p>
                 <div className="flex flex-wrap gap-x-4 gap-y-1">
-                  {SEO_COURSES.map(l => (
-                    <Link key={l.label} href={l.href} className="text-[11px] text-slate-400 hover:text-[#FF6500] transition-colors">{l.label}</Link>
-                  ))}
+                  {SEO_COURSES.map(l => <Link key={l.label} href={l.href} className="text-[11px] text-slate-400 hover:text-[#FF6500] transition-colors">{l.label}</Link>)}
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* ── BOTTOM BAR ─────────────────────────────────────────────────── */}
+        {/* Bottom bar */}
         <div className="border-t border-slate-200" style={{ background: '#F1F5F9' }}>
-          <div className="max-w-[1400px] mx-auto px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400">
+          <div className="max-w-[1400px] mx-auto px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-400">
             <p>© {year} {SITE.name} · Helping businesses build connected growth systems.</p>
             <div className="flex items-center gap-1.5">
               <MapPin className="w-3 h-3" />
@@ -282,7 +283,7 @@ export function Footer() {
         </div>
       </footer>
 
-      {/* Mobile bottom padding for sticky bar */}
+      {/* Mobile spacer for sticky nav bar */}
       <div className="h-14 lg:hidden" />
     </>
   )

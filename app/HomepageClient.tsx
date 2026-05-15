@@ -1,640 +1,659 @@
 'use client'
 
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
 import {
-  ArrowRight, CheckCircle2, PhoneCall, MessageSquare,
-  TrendingUp, Search, Database, BrainCircuit, BarChart3,
-  Globe, Zap, GitBranch, Layers, Target, Users,
-  GraduationCap, HeartPulse, Building2, ShoppingBag,
-  Mail, Smartphone, Rocket, Star,
+  ArrowRight, Check, ChevronRight, Star,
+  TrendingUp, Search, MessageCircle, BarChart3, Database,
+  Zap, Globe, Target, Shield, Users, Activity,
+  GraduationCap, HeartPulse, Building2, ShoppingBag, Sofa, Store,
+  CheckCircle, BookOpen, Layers, Mail, Monitor, PhoneCall,
+  Brain, LineChart, Repeat2, Megaphone,
 } from 'lucide-react'
 
-// ─── FOUNDER VISUAL ───────────────────────────────────────────────────────────
+// ─── DATA ─────────────────────────────────────────────────────────────────────
+const WA = 'https://wa.me/918788424727?text=' + encodeURIComponent('Hi, I want to learn more about Scalify Labs growth systems.')
 
-function FounderHeroCard() {
+const CLIENTS = [
+  'Dheya', 'City Health Guide', 'SD Plasto Fab', 'Sri Sidhi Vinayak & Co',
+  'GC Tiles', 'Brands Outlet', 'Lakshyarth', 'Career Bloom',
+  'KK Modi University', 'IMS Proschool', 'Imarticus Learning',
+]
+
+const METRICS = [
+  { icon: Target,    val: '100+',  label: 'Growth Campaigns Executed',   color: '#FF6500' },
+  { icon: Users,     val: '80%',   label: 'Client Retention Rate',        color: '#2563EB' },
+  { icon: Shield,    val: '50+',   label: 'Businesses Supported',         color: '#16A34A' },
+  { icon: Activity,  val: '100%',  label: 'Focus on Measurable Systems',  color: '#7C3AED' },
+]
+
+const PROBLEMS = [
+  { icon: '📉', title: 'Low Enquiries',           desc: 'Marketing spend with little or no lead flow.' },
+  { icon: '📍', title: 'Poor Google Ranking',      desc: 'Invisible to customers searching locally.' },
+  { icon: '📵', title: 'Weak Follow-up',           desc: 'Leads go cold. No system to nurture them.' },
+  { icon: '⚙️', title: 'Too Much Manual Work',     desc: 'Hours spent on tasks that should be automated.' },
+  { icon: '🕳️', title: 'Leads Getting Lost',       desc: 'No CRM. No pipeline. No visibility.' },
+  { icon: '🔗', title: 'Disconnected Tools',       desc: 'Ads, CRM, WhatsApp — all siloed.' },
+  { icon: '⏰', title: 'Slow Response Times',      desc: 'Competitors respond in minutes. You respond in hours.' },
+]
+
+const PIPELINE = [
+  { step: 'Traffic',         icon: Globe,        color: '#2563EB', sub: 'SEO + Ads' },
+  { step: 'Website',         icon: Monitor,      color: '#7C3AED', sub: 'Convert visitors' },
+  { step: 'Lead Capture',    icon: Target,       color: '#FF6500', sub: 'Forms + WhatsApp' },
+  { step: 'CRM',             icon: Database,     color: '#D97706', sub: 'Track every lead' },
+  { step: 'WhatsApp',        icon: MessageCircle,color: '#16A34A', sub: 'Instant follow-up' },
+  { step: 'Automation',      icon: Zap,          color: '#EA580C', sub: 'Run 24/7' },
+  { step: 'Revenue',         icon: TrendingUp,   color: '#059669', sub: 'Grow consistently' },
+]
+
+const SOLUTIONS = [
+  { icon: Search,        label: 'SEO',                       href: '/services/affordable-seo-services' },
+  { icon: TrendingUp,    label: 'Google Ads',                href: '/services/google-ads-services' },
+  { icon: Target,        label: 'Meta Ads',                  href: '/services/meta-ads' },
+  { icon: Star,          label: 'Local SEO',                 href: '/services/gmb' },
+  { icon: Monitor,       label: 'Website Development',       href: '/services/website-development' },
+  { icon: Database,      label: 'CRM Setup',                 href: '/services/lead-management' },
+  { icon: Mail,          label: 'Email Marketing',           href: '/services/email-marketing' },
+  { icon: MessageCircle, label: 'WhatsApp Automation',       href: '/services/whatsapp-marketing-agency' },
+  { icon: Layers,        label: 'Lead Management',           href: '/services/lead-management' },
+  { icon: Brain,         label: 'AI Automation',             href: '/services/ai-calling' },
+  { icon: BarChart3,     label: 'Analytics',                 href: '/services/affordable-seo-services' },
+  { icon: Globe,         label: 'Landing Pages',             href: '/services/website-development' },
+  { icon: Star,          label: 'Google Business Profile',   href: '/services/gmb' },
+  { icon: PhoneCall,     label: 'RCS Messaging',             href: '/services/rcs-messaging' },
+  { icon: BookOpen,      label: 'Content Marketing',         href: '/blog' },
+  { icon: Megaphone,     label: 'Video Editing',             href: '/services/specialized-ads' },
+  { icon: Repeat2,       label: 'Marketing Automation',      href: '/services/whatsapp-marketing-agency' },
+]
+
+const INDUSTRIES = [
+  { icon: HeartPulse,    label: 'Healthcare',       outcome: 'Patient enquiries + appointment systems',  href: '/digital-marketing-for-healthcare',                   color: 'text-red-600 bg-red-50' },
+  { icon: GraduationCap, label: 'Education',        outcome: 'Admission funnels + WhatsApp nurturing',    href: '/digital-marketing-agencies-for-education-sector',    color: 'text-blue-600 bg-blue-50' },
+  { icon: Building2,     label: 'Real Estate',      outcome: 'Verified buyer leads + site visit funnels', href: '/digital-marketing-services-for-real-estate',         color: 'text-amber-600 bg-amber-50' },
+  { icon: ShoppingBag,   label: 'Retail',           outcome: 'Walk-ins + catalogue & offer marketing',    href: '#',                                                   color: 'text-purple-600 bg-purple-50' },
+  { icon: Store,         label: 'Local Businesses', outcome: 'Google visibility + call & lead generation', href: '#',                                                  color: 'text-green-600 bg-green-50' },
+  { icon: Sofa,          label: 'Furniture & Tiles', outcome: 'WhatsApp catalogue + qualified lead funnels', href: '#',                                                color: 'text-orange-600 bg-orange-50' },
+]
+
+const WHY = [
+  { icon: Layers,    title: 'Connected Systems Thinking',    desc: 'We build ecosystems — not isolated campaigns. Every channel feeds the next.' },
+  { icon: BarChart3, title: 'Transparent Reporting',         desc: 'Weekly & monthly dashboards. You always know what\'s working and what isn\'t.' },
+  { icon: Globe,     title: 'Local Business Understanding',  desc: 'We understand Jharkhand markets, seasonal patterns, and local buyer psychology.' },
+  { icon: Zap,       title: 'Execution-Focused Approach',    desc: 'We don\'t just plan — we build, launch, track, and improve.' },
+  { icon: Database,  title: 'CRM + Automation Capability',   desc: 'Beyond ads: CRM setup, WhatsApp automation, and lead nurturing systems.' },
+  { icon: Shield,    title: 'Long-Term Growth Support',      desc: 'Partnerships, not projects. Your growth is our long-term commitment.' },
+]
+
+const PROCESS = [
+  { n: '01', icon: Target,    title: 'Strategy Session',    desc: 'Understand your business, goals, market, and current gaps.' },
+  { n: '02', icon: Layers,    title: 'Growth Blueprint',    desc: 'Plan the right systems, channels, and priorities for your stage.' },
+  { n: '03', icon: Zap,       title: 'Implementation',      desc: 'Build, launch, and connect your growth infrastructure.' },
+  { n: '04', icon: BarChart3, title: 'Analysis',            desc: 'Track KPIs, identify what\'s working, spot opportunities.' },
+  { n: '05', icon: Activity,  title: 'Reporting',           desc: 'Transparent weekly updates. You stay informed always.' },
+]
+
+const REVIEWS = [
+  { name: 'Neha Singh',       biz: 'Zero to Hero Stock Market', stars: 5, text: 'Scalify Labs transformed our online presence. Leads increased 3x in just 2 months!' },
+  { name: 'Kavya Shruti',     biz: 'Education Consultant',      stars: 5, text: 'The WhatsApp automation they built saved us hours every day. Highly recommended.' },
+  { name: 'Deepak Chauhan',   biz: 'Local Business Owner',      stars: 5, text: 'Our Google Maps ranking went from nowhere to top 3. More walk-ins than ever.' },
+  { name: 'Priya Mishra',     biz: 'Clinic Owner',              stars: 5, text: 'CRM setup was flawless. Now we never lose a patient enquiry.' },
+]
+
+const CASE_STUDIES = [
+  {
+    industry: '🏥 Clinic',        emoji: '🏥',
+    problem: 'Low patient enquiries despite Google Ads spend',
+    solution: 'Local SEO + Google Business Profile + WhatsApp appointment funnel',
+    result: '3× more monthly enquiries. 40% reduction in missed appointments.',
+    metric: '3×',    metricLabel: 'More Enquiries',
+  },
+  {
+    industry: '🎓 Coaching Institute', emoji: '🎓',
+    problem: 'High CPL of ₹400+ with poor admission conversion',
+    solution: 'Restructured Google Ads + SEO content + WhatsApp nurture',
+    result: 'CPL dropped to ₹95. Batch filled 15 days before deadline.',
+    metric: '₹95',   metricLabel: 'Cost Per Lead',
+  },
+  {
+    industry: '🏢 Real Estate', emoji: '🏢',
+    problem: 'Getting leads but only 5% converting to site visits',
+    solution: 'AI qualification + WhatsApp reminder sequence + CRM pipeline',
+    result: '18% site visit rate. 40% fewer fake leads reaching the team.',
+    metric: '18%',   metricLabel: 'Site Visit Rate',
+  },
+]
+
+const BLOGS = [
+  { cat: 'SEO',               title: 'Voice Search SEO: Optimize for Hey Google Queries',                      href: '/blog/voice-search-seo-optimize-hey-google',                     date: 'May 2026' },
+  { cat: 'AI Tools',          title: 'Chatbot Marketing: 24/7 Lead Capture & Qualification',                   href: '/blog/chatbot-marketing-lead-capture-qualification',              date: 'May 2026' },
+  { cat: 'CRM',               title: 'LinkedIn Lead Generation for B2B Services',                              href: '/blog/linkedin-lead-generation-b2b-services',                     date: 'May 2026' },
+  { cat: 'Digital Marketing', title: 'Conversion Rate Optimization: Turn Visitors into Leads',                 href: '/blog/conversion-rate-optimization-visitors-to-leads',           date: 'May 2026' },
+]
+
+// ─── HERO DASHBOARD MOCKUP ────────────────────────────────────────────────────
+function GrowthDashboard() {
+  const [tick, setTick] = useState(0)
+  useEffect(() => { const t = setInterval(() => setTick(n => n + 1), 2000); return () => clearInterval(t) }, [])
+
+  const metrics = [
+    { label: 'Website Traffic',    val: `${12400 + tick * 47}`,  delta: '+18%', color: '#2563EB' },
+    { label: 'Leads Generated',    val: `${148 + tick * 2}`,     delta: '+31%', color: '#16A34A' },
+    { label: 'WhatsApp Responses', val: `${94 + tick}`,          delta: '+24%', color: '#FF6500' },
+    { label: 'CRM Pipeline',       val: `₹${(4.2 + tick * 0.01).toFixed(1)}L`, delta: '+12%', color: '#7C3AED' },
+    { label: 'Revenue Growth',     val: `+${28 + Math.floor(tick * 0.1)}%`,   delta: 'MoM', color: '#059669' },
+  ]
+
   return (
-    <div className="relative max-w-sm mx-auto lg:mx-0">
-      {/* Portrait container */}
-      <div className="relative rounded-3xl overflow-hidden shadow-2xl aspect-[3/4]">
-        <Image
-          src="/founder.jpg"
-          alt="Arvind Gupta, Founder Scalify Labs"
-          fill
-          className="object-cover object-top"
-          priority
-          sizes="(max-width: 1024px) 100vw, 480px"
-        />
-        {/* Bottom name gradient overlay */}
-        <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/75 via-black/30 to-transparent p-6">
-          <p className="text-white font-bold text-lg">Arvind Gupta</p>
-          <p className="text-saffron font-mono text-xs tracking-wide">Founder & Growth Strategist · Scalify Labs</p>
+    <div className="w-full max-w-[460px] bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden">
+      {/* Header */}
+      <div className="bg-[#0B0F1E] px-5 py-3.5 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <div className="w-5 h-5 bg-[#FF6500] rounded-md flex items-center justify-center">
+            <span className="text-white text-[9px] font-black">S</span>
+          </div>
+          <span className="text-white text-xs font-bold">Growth Dashboard</span>
+        </div>
+        <div className="flex items-center gap-1.5 text-[10px] text-green-400 font-semibold">
+          <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />LIVE
         </div>
       </div>
-
-      {/* Floating chips */}
-      <div className="absolute top-5 -right-4 bg-emerald-500 text-white text-[0.65rem] font-bold px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5">
-        <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse inline-block" />
-        Lead Captured
+      {/* Metrics */}
+      <div className="p-4 grid grid-cols-1 gap-2.5">
+        {metrics.map((m, i) => (
+          <div key={m.label} className="flex items-center justify-between px-4 py-3 rounded-xl"
+            style={{ background: i === 0 ? '#F0F7FF' : i === 1 ? '#F0FDF4' : i === 2 ? '#FFF3E8' : i === 3 ? '#F5F3FF' : '#ECFDF5' }}>
+            <div className="flex items-center gap-2.5">
+              <div className="w-2 h-2 rounded-full" style={{ background: m.color }} />
+              <span className="text-xs font-medium text-slate-600">{m.label}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-black" style={{ color: m.color }}>{m.val}</span>
+              <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-white text-slate-500">{m.delta}</span>
+            </div>
+          </div>
+        ))}
       </div>
-      <div className="absolute top-24 -left-5 bg-white text-slate-700 text-[0.65rem] font-semibold px-3 py-1.5 rounded-xl shadow-xl border border-slate-100 flex items-center gap-1.5">
-        <TrendingUp className="w-3 h-3 text-saffron" /> Revenue +28%
-      </div>
-      <div className="absolute bottom-24 -right-5 bg-white text-slate-700 text-[0.65rem] font-semibold px-3 py-1.5 rounded-xl shadow-xl border border-slate-100 flex items-center gap-1.5">
-        <CheckCircle2 className="w-3 h-3 text-emerald-500" /> CRM Active
+      {/* Mini chart area */}
+      <div className="px-4 pb-4">
+        <div className="bg-[#F8FAFC] rounded-2xl p-3">
+          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Lead Pipeline</p>
+          <div className="flex items-end gap-1 h-12">
+            {[40, 55, 48, 70, 62, 85, 78, 90, 82, 95, 88, tick % 30 + 70].map((h, i) => (
+              <div key={i} className="flex-1 rounded-t transition-all duration-700" style={{ height: `${h}%`, background: i === 11 ? '#FF6500' : '#E8E3DA' }} />
+            ))}
+          </div>
+          <p className="text-[10px] text-slate-400 mt-1 text-right">Lead flow this month</p>
+        </div>
       </div>
     </div>
   )
 }
 
-// ─── DATA ─────────────────────────────────────────────────────────────────────
-
-const PROBLEMS = [
-  { icon: Search, title: 'Invisible on Google', desc: 'Competitors rank while your business goes unnoticed by potential customers.', color: 'text-blue-500 bg-blue-50' },
-  { icon: BarChart3, title: 'Wasted Ad Spend', desc: 'Campaigns running with no measurable ROI or conversion visibility.', color: 'text-red-500 bg-red-50' },
-  { icon: Database, title: 'No Lead Tracking', desc: 'Inquiries arriving across WhatsApp, email, and calls with zero organization.', color: 'text-amber-600 bg-amber-50' },
-  { icon: Zap, title: 'Weak Follow-Up', desc: 'Potential customers lost because response systems are manual and slow.', color: 'text-violet-500 bg-violet-50' },
-  { icon: GitBranch, title: 'No CRM System', desc: 'Sales pipeline operating from spreadsheets and memory — not systems.', color: 'text-emerald-600 bg-emerald-50' },
-  { icon: Layers, title: 'Disconnected Marketing', desc: 'SEO, ads, website, CRM, and WhatsApp running separately with no connection.', color: 'text-indigo-600 bg-indigo-50' },
-]
-
-const FLOW_STEPS = [
-  { label: 'SEO / Paid Ads / Social', desc: 'Traffic generation across channels', color: '#3B82F6' },
-  { label: 'Website & Landing Pages', desc: 'Conversion-optimized entry points', color: '#8B5CF6' },
-  { label: 'Lead Capture', desc: 'Forms, chatbots, WhatsApp', color: '#06B6D4' },
-  { label: 'CRM Integration', desc: 'Auto-capture and pipeline assignment', color: '#10B981' },
-  { label: 'WhatsApp Automation', desc: 'Instant 60-second response', color: '#25D366' },
-  { label: 'Lead Nurturing', desc: 'Multi-step engagement sequences', color: '#F59E0B' },
-  { label: 'Sales Follow-Up', desc: 'Qualified lead routing and proposals', color: '#FF6500' },
-  { label: 'Analytics & Revenue Tracking', desc: 'Full attribution and ROI reporting', color: '#EC4899' },
-]
-
-const PLATFORMS = ['Google Ads','Meta Ads','GA4','Google Tag Manager','WhatsApp','HubSpot','Zoho','WordPress','Mailchimp','SendGrid','Apollo','Bitrix24','SEMrush','Search Console']
-
-const GROWTH_STACK = [
-  {
-    group: 'Visibility Systems',
-    color: 'bg-blue-50 border-blue-100',
-    accent: 'bg-blue-600',
-    icon: Search,
-    services: [
-      { name: 'SEO Services', desc: 'Page-1 organic rankings', href: '/services/affordable-seo-services' },
-      { name: 'Google Ads', desc: 'Search, Display & Shopping', href: '/services/google-ads-services' },
-      { name: 'Meta Ads', desc: 'Facebook & Instagram growth', href: '/services/meta-ads' },
-      { name: 'Local SEO & GMB', desc: 'Google Maps domination', href: '/services/gmb' },
-      { name: 'Content Marketing', desc: 'Authority-building content', href: '/services/affordable-seo-services' },
-      { name: 'Specialized Platforms', desc: 'LinkedIn, Quora & native', href: '/services/specialized-ads' },
-    ],
-  },
-  {
-    group: 'Communication Systems',
-    color: 'bg-emerald-50 border-emerald-100',
-    accent: 'bg-emerald-600',
-    icon: MessageSquare,
-    services: [
-      { name: 'WhatsApp Marketing', desc: '98% open-rate automation', href: '/services/whatsapp-marketing-agency' },
-      { name: 'Email Marketing', desc: 'Bulk outreach & SMTP', href: '/services/email-marketing' },
-      { name: 'RCS Messaging', desc: 'Rich media at scale', href: '/services/rcs-messaging' },
-      { name: 'OBD Voice Calls', desc: 'Automated bulk calling', href: '/services/obd' },
-      { name: 'AI Calling & Agents', desc: 'AI voice follow-up systems', href: '/services/ai-calling' },
-      { name: 'Website Development', desc: 'Conversion-first websites', href: '/services/website-development' },
-    ],
-  },
-  {
-    group: 'Automation & CRM',
-    color: 'bg-violet-50 border-violet-100',
-    accent: 'bg-violet-600',
-    icon: Database,
-    services: [
-      { name: 'CRM Automation', desc: 'Lead pipeline & workflows', href: '/services/lead-management' },
-      { name: 'Lead to Revenue System', desc: 'Complete growth infrastructure', href: '/services/lead-to-revenue' },
-      { name: 'Lead Nurturing', desc: 'Multi-channel sequences', href: '/services/lead-to-revenue' },
-      { name: 'Funnel Automation', desc: 'End-to-end lead journeys', href: '/services/lead-to-revenue' },
-      { name: 'AI Workflows', desc: 'Intelligent automation', href: '/services/ai-calling' },
-      { name: 'Analytics & Reporting', desc: 'Revenue tracking & ROI', href: '/services/lead-to-revenue' },
-    ],
-  },
-]
-
-const INDUSTRIES = [
-  { icon: HeartPulse, name: 'Clinics & Healthcare', desc: 'Patient lead generation, appointment booking automation, and CRM follow-up workflows.', color: 'bg-red-50 text-red-600 border-red-100' },
-  { icon: GraduationCap, name: 'Education & Institutes', desc: 'Admission funnels, lead nurturing automation, and multi-channel student engagement.', color: 'bg-blue-50 text-blue-600 border-blue-100' },
-  { icon: Building2, name: 'Real Estate', desc: 'Property lead systems, site visit automation, and CRM pipeline management.', color: 'bg-emerald-50 text-emerald-600 border-emerald-100' },
-  { icon: ShoppingBag, name: 'Local Businesses', desc: 'Local SEO, Google Business optimization, WhatsApp engagement, and ads.', color: 'bg-amber-50 text-amber-600 border-amber-100' },
-  { icon: Globe, name: 'Ecommerce & Retail', desc: 'Performance campaigns, cart recovery, repeat customer automation.', color: 'bg-violet-50 text-violet-600 border-violet-100' },
-  { icon: Users, name: 'Service Businesses', desc: 'Lead generation, CRM workflows, WhatsApp nurturing, and conversion optimization.', color: 'bg-indigo-50 text-indigo-600 border-indigo-100' },
-]
-
-const CLIENTS = [
-  { name: 'GC Ceramics', type: 'Local Business', challenge: 'Low local visibility and no digital lead flow', system: 'Google Ads + Meta Ads + Local SEO', outcome: 'Significant increase in walk-in enquiries and digital leads' },
-  { name: 'Dheya', type: 'Education / EdTech', challenge: 'Scaling mentor ecosystem reach and student engagement', system: 'Multi-channel outreach + automation + CRM', outcome: 'Nationwide digital mentoring community built at scale' },
-  { name: 'Brands Outlet', type: 'Retail Fashion', challenge: 'Low repeat customer rate and no digital engagement system', system: 'Meta Ads + WhatsApp automation + retargeting', outcome: 'Improved repeat buyer rate and customer engagement' },
-  { name: 'City Health Guide', type: 'Healthcare', challenge: 'No patient lead generation or follow-up system', system: 'Local SEO + Google Ads + appointment automation', outcome: 'Consistent patient leads and appointment bookings' },
-  { name: 'Lakshyarth', type: 'Education', challenge: 'Low admission enquiries from digital channels', system: 'SEO + lead nurturing funnel + WhatsApp workflows', outcome: 'Increased admission enquiry volume and CRM visibility' },
-  { name: 'Career Bloom', type: 'Career Guidance', challenge: 'Weak digital presence and no lead capture system', system: 'Website + SEO + Google Ads + lead management', outcome: 'Improved digital visibility and consistent lead flow' },
-  { name: 'Sri Sidhi Vinayak & Co', type: 'Chartered Accountants', challenge: 'No systematic lead capture from digital platforms', system: 'Local SEO + Google Business + contact automation', outcome: 'Improved local discoverability and client enquiries' },
-  { name: 'SD Plaso Fab', type: 'Manufacturing / B2B', challenge: 'No B2B outreach or digital visibility system', system: 'LinkedIn outreach + email system + SEO', outcome: 'Better B2B visibility and structured enquiry management' },
-]
-
-const SUPER30_TOOLS = ['Google Ads','Meta Business','WordPress','GA4','Tag Manager','SEMrush','HubSpot','Zoho','ChatGPT','Claude','Canva','Zapier','Mailchimp','Apollo','Search Console']
-
-const INSIGHTS = [
-  { title: 'AI Marketing Trends for Indian Businesses in 2025', category: 'AI Marketing', read: '6 min', color: 'from-violet-600 to-purple-700' },
-  { title: 'WhatsApp Automation Playbook: Leads to Revenue', category: 'WhatsApp Marketing', read: '8 min', color: 'from-green-600 to-emerald-700' },
-  { title: 'Local SEO Checklist for Small Businesses in Jharkhand', category: 'SEO', read: '5 min', color: 'from-blue-600 to-indigo-700' },
-  { title: 'CRM Setup Guide for Indian SMBs', category: 'CRM Automation', read: '10 min', color: 'from-amber-600 to-orange-700' },
-]
-
-// ─── MAIN PAGE ─────────────────────────────────────────────────────────────────
-
+// ─── PAGE ─────────────────────────────────────────────────────────────────────
 export default function HomepageClient() {
+  const [reviewIdx, setReviewIdx] = useState(0)
+  const marqueeRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const t = setInterval(() => setReviewIdx(i => (i + 1) % REVIEWS.length), 4000)
+    return () => clearInterval(t)
+  }, [])
+
   return (
-    <>
+    <main className="overflow-x-hidden" style={{ fontFamily: 'Inter, sans-serif', color: '#1A1410' }}>
 
-      {/* ══ SECTION 1 — HERO (dark) ══════════════════════════════════════════ */}
-      <section className="relative bg-gradient-to-br from-[#0a1628] via-navy to-[#0c1830] overflow-hidden pt-36 pb-24">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_15%_60%,rgba(255,101,0,0.07),transparent_50%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_85%_30%,rgba(59,130,246,0.06),transparent_50%)]" />
-        <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle,rgba(255,255,255,0.018) 1px,transparent 1px)', backgroundSize: '48px 48px' }} />
-
-        <div className="relative max-w-7xl mx-auto px-6">
-          <div className="grid lg:grid-cols-[1.15fr_1fr] gap-16 items-center">
-
+      {/* ── HERO ──────────────────────────────────────────────────────────── */}
+      <section className="bg-white pt-12 pb-20 lg:pt-20 lg:pb-28 px-4">
+        <div className="max-w-[1200px] mx-auto">
+          <div className="grid lg:grid-cols-2 gap-14 items-center">
             {/* Left */}
             <div>
-              <div className="inline-flex items-center gap-2 bg-saffron/10 border border-saffron/20 text-saffron font-mono text-xs uppercase tracking-widest px-4 py-1.5 rounded-full mb-8">
-                <span className="w-1.5 h-1.5 rounded-full bg-saffron animate-pulse inline-block" />
-                Growth Infrastructure Company · Ranchi, Jharkhand
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold mb-6 border"
+                style={{ background: 'rgba(255,101,0,0.06)', borderColor: 'rgba(255,101,0,0.2)', color: '#FF6500' }}>
+                <Zap className="w-3.5 h-3.5" /> Growth Systems Company
               </div>
-
-              <h1 className="font-extrabold text-4xl lg:text-[3.25rem] text-white leading-[1.12] tracking-tight mb-6">
-                We Build{' '}
-                <span className="bg-gradient-to-r from-saffron via-orange-400 to-amber-400 bg-clip-text text-transparent">
-                  Connected Growth Systems
-                </span>{' '}
-                for Modern Businesses
+              <h1 className="font-black leading-[1.1] tracking-tight mb-6 text-[36px] sm:text-[48px] lg:text-[56px]" style={{ color: '#0B0F1E' }}>
+                Get More Leads, Better Follow-Ups & Connected Growth Systems{' '}
+                <span style={{ color: '#FF6500' }}>For Your Business</span>
               </h1>
-
-              <p className="text-white/65 text-xl leading-relaxed mb-8 max-w-[540px]">
-                Scalify Labs helps clinics, institutes, local businesses, and brands generate leads using SEO, paid ads, CRM automation, AI workflows, WhatsApp systems, and conversion-focused websites.
+              <p className="text-lg sm:text-xl leading-relaxed mb-8 max-w-[540px]" style={{ color: '#57534E' }}>
+                SEO + Ads + CRM + WhatsApp + Automation helping businesses scale consistently.
               </p>
-
-              {/* Trust chips */}
-              <div className="flex flex-wrap gap-2.5 mb-8">
-                {['15+ Years Experience','CRM & Automation Focused','Built for Indian Businesses','AI-Enabled Growth Systems'].map(t => (
-                  <span key={t} className="flex items-center gap-1.5 bg-white/8 border border-white/12 text-white/70 text-xs font-medium px-3.5 py-1.5 rounded-full">
-                    <CheckCircle2 className="w-3 h-3 text-saffron shrink-0" /> {t}
-                  </span>
-                ))}
-              </div>
-
-              {/* CTAs */}
-              <div className="flex flex-wrap gap-4 mb-12">
-                <Link href="/contact-scalifylabs"
-                  className="flex items-center gap-2 bg-saffron text-white font-bold px-8 py-4 rounded-xl shadow-[0_4px_20px_rgba(255,101,0,0.32)] hover:bg-saffron-dark hover:-translate-y-0.5 transition-all text-sm">
-                  <PhoneCall className="w-4 h-4" /> Book Free Growth Audit
-                </Link>
-                <Link href="/services/lead-to-revenue"
-                  className="flex items-center gap-2 border border-white/20 text-white font-semibold px-7 py-4 rounded-xl hover:bg-white/8 transition-all text-sm">
-                  Explore Growth Systems <ArrowRight className="w-4 h-4" />
-                </Link>
-              </div>
-
-              {/* Mini metrics */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                {[
-                  { v: '50+', l: 'Businesses Helped' },
-                  { v: '10K+', l: 'Leads Generated' },
-                  { v: 'Multi-Channel', l: 'Automation Systems' },
-                  { v: 'Ranchi-Based', l: 'Growth Team' },
-                ].map(m => (
-                  <div key={m.l} className="bg-white/5 border border-white/10 rounded-xl p-3.5 text-center">
-                    <p className="text-white font-extrabold text-base leading-tight">{m.v}</p>
-                    <p className="text-white/40 font-mono text-[0.6rem] mt-0.5">{m.l}</p>
+              {/* Badges */}
+              <div className="flex flex-wrap gap-2 mb-8">
+                {['Growth Systems','CRM Automation','Lead Generation','Local SEO','AI Workflows'].map(b => (
+                  <div key={b} className="flex items-center gap-1.5 text-sm font-medium px-3 py-1.5 rounded-full border"
+                    style={{ background: '#F8FAFC', borderColor: '#E8E3DA', color: '#57534E' }}>
+                    <Check className="w-3.5 h-3.5" style={{ color: '#FF6500' }} /> {b}
                   </div>
                 ))}
               </div>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <Link href="/contact-scalifylabs"
+                  className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-bold text-white text-base hover:opacity-90 transition-opacity shadow-lg"
+                  style={{ background: '#FF6500', minHeight: 56 }}>
+                  Book Growth Call <ArrowRight className="w-5 h-5" />
+                </Link>
+                <Link href="#solutions"
+                  className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-bold text-base border-2 hover:bg-slate-50 transition-colors"
+                  style={{ color: '#0B0F1E', borderColor: '#E8E3DA', minHeight: 56 }}>
+                  Explore Solutions
+                </Link>
+              </div>
             </div>
-
-            {/* Right — Founder */}
-            <div className="hidden lg:flex justify-center">
-              <FounderHeroCard />
+            {/* Right — Dashboard */}
+            <div className="flex justify-center lg:justify-end">
+              <GrowthDashboard />
             </div>
           </div>
         </div>
       </section>
 
-      {/* ══ SECTION 2 — PROBLEMS (white) ════════════════════════════════════ */}
-      <section className="bg-white py-24">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="text-center mb-14">
-            <p className="font-mono text-xs text-saffron uppercase tracking-widest mb-3">Common Challenges</p>
-            <h2 className="font-extrabold text-4xl lg:text-5xl text-slate-900 mb-4">
-              What&apos;s Slowing Your<br />Business Growth?
-            </h2>
-            <p className="text-slate-500 text-lg max-w-xl mx-auto">
-              Many businesses lose revenue because marketing, follow-up, and customer systems operate separately — creating invisible gaps in the growth cycle.
-            </p>
+      {/* ── CLIENT MARQUEE ────────────────────────────────────────────────── */}
+      <section className="py-10 border-y border-slate-100" style={{ background: '#FAFAF8' }}>
+        <div className="max-w-[1200px] mx-auto px-4 mb-5">
+          <p className="text-center text-sm font-semibold text-slate-400">Businesses & Brands We've Worked With</p>
+        </div>
+        <div className="relative overflow-hidden">
+          <div className="flex gap-10 animate-[marquee_20s_linear_infinite] whitespace-nowrap">
+            {[...CLIENTS, ...CLIENTS].map((c, i) => (
+              <span key={i} className="text-lg font-black text-slate-200 hover:text-[#FF6500] transition-colors cursor-default shrink-0">{c}</span>
+            ))}
           </div>
+        </div>
+        <p className="text-center text-xs text-slate-400 mt-4 px-4">Growth systems built across education, healthcare, retail, local businesses and SMEs.</p>
+      </section>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-10">
-            {PROBLEMS.map(p => (
-              <div key={p.title} className="group border border-slate-100 rounded-2xl p-7 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-                <div className={`w-12 h-12 ${p.color} rounded-2xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform`}>
-                  <p.icon className="w-5.5 h-5.5 w-[22px] h-[22px]" />
+      {/* ── TRUST METRICS ─────────────────────────────────────────────────── */}
+      <section className="py-16 lg:py-20 px-4 bg-white">
+        <div className="max-w-[1200px] mx-auto">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
+            {METRICS.map(m => (
+              <div key={m.label} className="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm text-center hover:shadow-md hover:-translate-y-1 transition-all">
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-4" style={{ background: m.color + '12' }}>
+                  <m.icon className="w-6 h-6" style={{ color: m.color }} />
                 </div>
-                <h3 className="font-bold text-slate-800 text-lg mb-2">{p.title}</h3>
-                <p className="text-slate-500 text-sm leading-relaxed">{p.desc}</p>
+                <p className="text-4xl font-black mb-1" style={{ color: m.color, fontFamily: 'Syne, sans-serif' }}>{m.val}</p>
+                <p className="text-sm text-slate-500 leading-tight">{m.label}</p>
               </div>
             ))}
           </div>
+        </div>
+      </section>
 
-          {/* Bottom CTA bar */}
-          <div className="bg-gradient-to-r from-slate-900 to-navy rounded-2xl px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-5">
-            <p className="text-white font-semibold text-lg text-center sm:text-left">
-              Every disconnected system costs revenue. <span className="text-white/50 text-base font-normal">Fix the gaps before your competition does.</span>
-            </p>
-            <Link href="/contact-scalifylabs"
-              className="shrink-0 flex items-center gap-2 bg-saffron text-white font-bold px-7 py-3.5 rounded-xl hover:bg-saffron-dark transition-colors text-sm whitespace-nowrap">
-              Get Free Growth Audit <ArrowRight className="w-4 h-4" />
-            </Link>
+      {/* ── PROBLEMS ──────────────────────────────────────────────────────── */}
+      <section className="py-16 lg:py-24 px-4" style={{ background: '#FAFAF8' }}>
+        <div className="max-w-[1200px] mx-auto">
+          <div className="text-center mb-14">
+            <p className="text-xs font-bold uppercase tracking-widest text-[#FF6500] mb-3">The Problem</p>
+            <h2 className="font-black text-[28px] sm:text-[36px] lg:text-[44px] leading-[1.2]" style={{ color: '#0B0F1E' }}>
+              Why Most Businesses Struggle to Grow Digitally
+            </h2>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {PROBLEMS.map((p, i) => (
+              <div key={i} className="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all">
+                <span className="text-3xl block mb-3">{p.icon}</span>
+                <h3 className="font-bold text-base mb-1.5" style={{ color: '#0B0F1E' }}>{p.title}</h3>
+                <p className="text-sm leading-relaxed" style={{ color: '#57534E' }}>{p.desc}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ══ SECTION 3 — TRAFFIC TO REVENUE (dark) ══════════════════════════ */}
-      <section className="bg-navy py-24">
-        <div className="max-w-6xl mx-auto px-6">
+      {/* ── HOW CONNECTED GROWTH WORKS ────────────────────────────────────── */}
+      <section className="py-16 lg:py-24 px-4 bg-white">
+        <div className="max-w-[1000px] mx-auto">
           <div className="text-center mb-14">
-            <p className="font-mono text-xs text-saffron uppercase tracking-widest mb-3">Connected Infrastructure</p>
-            <h2 className="font-extrabold text-4xl lg:text-5xl text-white mb-4">
-              From Traffic to Revenue —<br />Connected Growth Infrastructure
+            <p className="text-xs font-bold uppercase tracking-widest text-[#FF6500] mb-3">The System</p>
+            <h2 className="font-black text-[28px] sm:text-[36px] lg:text-[44px] leading-[1.2]" style={{ color: '#0B0F1E' }}>
+              How Connected Growth Works
             </h2>
-            <p className="text-white/50 max-w-xl mx-auto text-lg">
-              Modern businesses don&apos;t need separate agencies. They need one connected system where every channel feeds into the next.
-            </p>
           </div>
-
-          {/* Flow */}
-          <div className="grid lg:grid-cols-[1fr_auto_1fr] gap-8 items-start mb-12">
-            {/* Left steps */}
-            <div className="space-y-3">
-              {FLOW_STEPS.slice(0, 4).map((s, i) => (
-                <div key={s.label} className="flex items-center gap-4 group">
-                  <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 font-mono font-bold text-sm text-white border"
-                    style={{ borderColor: s.color + '50', backgroundColor: s.color + '20', color: s.color }}>
-                    0{i + 1}
-                  </div>
-                  <div className="flex-1 border rounded-2xl px-4 py-3 group-hover:shadow-sm transition-all"
-                    style={{ borderColor: s.color + '30', backgroundColor: s.color + '08' }}>
-                    <p className="text-white font-semibold text-sm">{s.label}</p>
-                    <p className="text-white/40 text-xs font-mono">{s.desc}</p>
+          {/* Pipeline */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0 overflow-x-auto">
+            {PIPELINE.map((step, i) => (
+              <div key={step.step} className="flex sm:flex-col items-center gap-3 sm:gap-0 flex-1 min-w-[90px]">
+                <div className="relative flex sm:flex-col items-center sm:mb-2">
+                  {/* Connector line */}
+                  {i < PIPELINE.length - 1 && (
+                    <div className="hidden sm:block absolute top-1/2 left-full w-full h-0.5 -translate-y-1/2 z-0" style={{ background: `linear-gradient(to right, ${step.color}, ${PIPELINE[i+1].color})`, opacity: 0.3 }} />
+                  )}
+                  <div className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg relative z-10"
+                    style={{ background: step.color + '15', border: `2px solid ${step.color}30` }}>
+                    <step.icon className="w-6 h-6" style={{ color: step.color }} />
                   </div>
                 </div>
-              ))}
-            </div>
-
-            {/* Center arrow */}
-            <div className="hidden lg:flex flex-col items-center justify-center gap-3 self-center">
-              {[0,1,2].map(i => (
-                <div key={i} className="w-2 h-2 rounded-full bg-saffron/40" />
-              ))}
-              <div className="text-saffron text-2xl font-bold">↓</div>
-              {[0,1,2].map(i => (
-                <div key={i} className="w-2 h-2 rounded-full bg-saffron/40" />
-              ))}
-            </div>
-
-            {/* Right steps */}
-            <div className="space-y-3">
-              {FLOW_STEPS.slice(4).map((s, i) => (
-                <div key={s.label} className="flex items-center gap-4 group">
-                  <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 font-mono font-bold text-sm border"
-                    style={{ borderColor: s.color + '50', backgroundColor: s.color + '20', color: s.color }}>
-                    0{i + 5}
-                  </div>
-                  <div className="flex-1 border rounded-2xl px-4 py-3 group-hover:shadow-sm transition-all"
-                    style={{ borderColor: s.color + '30', backgroundColor: s.color + '08' }}>
-                    <p className="text-white font-semibold text-sm">{s.label}</p>
-                    <p className="text-white/40 text-xs font-mono">{s.desc}</p>
-                  </div>
+                <div className="text-center">
+                  <p className="font-bold text-sm" style={{ color: '#0B0F1E' }}>{step.step}</p>
+                  <p className="text-[11px]" style={{ color: '#57534E' }}>{step.sub}</p>
                 </div>
-              ))}
-            </div>
+                {i < PIPELINE.length - 1 && (
+                  <ArrowRight className="sm:hidden w-4 h-4 shrink-0" style={{ color: '#E8E3DA' }} />
+                )}
+              </div>
+            ))}
           </div>
-
-          {/* Platform strip */}
-          <div className="border-t border-white/8 pt-8">
-            <p className="text-white/25 font-mono text-[0.62rem] uppercase tracking-widest text-center mb-4">Platforms & Tools We Connect</p>
-            <div className="flex flex-wrap justify-center gap-2">
-              {PLATFORMS.map(p => (
-                <span key={p} className="bg-white/6 border border-white/10 text-white/50 font-mono text-xs px-3 py-1.5 rounded-lg">{p}</span>
-              ))}
-            </div>
-          </div>
-
           <div className="text-center mt-10">
             <Link href="/services/lead-to-revenue"
-              className="inline-flex items-center gap-2 bg-saffron text-white font-bold px-8 py-3.5 rounded-xl shadow-[0_4px_16px_rgba(255,101,0,0.28)] hover:bg-saffron-dark hover:-translate-y-0.5 transition-all text-sm">
-              Explore Lead-to-Revenue Systems <ArrowRight className="w-4 h-4" />
+              className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl font-bold text-white hover:opacity-90 transition-opacity"
+              style={{ background: '#FF6500' }}>
+              Explore Lead to Revenue System <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
         </div>
       </section>
 
-      {/* ══ SECTION 4 — GROWTH STACK (light grey) ══════════════════════════ */}
-      <section className="bg-[#F5F7FB] py-24">
-        <div className="max-w-7xl mx-auto px-6">
+      {/* ── SOLUTIONS GRID ────────────────────────────────────────────────── */}
+      <section id="solutions" className="py-16 lg:py-24 px-4 scroll-mt-20" style={{ background: '#FAFAF8' }}>
+        <div className="max-w-[1200px] mx-auto">
           <div className="text-center mb-14">
-            <p className="font-mono text-xs text-saffron uppercase tracking-widest mb-3">Complete Service Range</p>
-            <h2 className="font-extrabold text-4xl lg:text-5xl text-slate-900 mb-4">Complete Digital Growth Stack</h2>
-            <p className="text-slate-500 text-lg max-w-lg mx-auto">Every service is a module in your growth system — built to connect, not operate in isolation.</p>
+            <p className="text-xs font-bold uppercase tracking-widest text-[#FF6500] mb-3">Services</p>
+            <h2 className="font-black text-[28px] sm:text-[36px] lg:text-[44px] leading-[1.2]" style={{ color: '#0B0F1E' }}>
+              Growth Systems We Build
+            </h2>
           </div>
-
-          <div className="grid lg:grid-cols-3 gap-6">
-            {GROWTH_STACK.map(group => (
-              <div key={group.group} className={`border rounded-3xl overflow-hidden ${group.color}`}>
-                <div className="px-6 py-5 border-b border-current/10 flex items-center gap-3">
-                  <div className={`w-9 h-9 ${group.accent} rounded-xl flex items-center justify-center shrink-0`}>
-                    <group.icon className="w-4.5 h-4.5 w-[18px] h-[18px] text-white" />
-                  </div>
-                  <h3 className="font-bold text-slate-800 text-base">{group.group}</h3>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+            {SOLUTIONS.map((s, i) => (
+              <Link key={i} href={s.href}
+                className="flex items-center gap-2.5 bg-white rounded-2xl px-4 py-3.5 border border-slate-100 shadow-sm hover:shadow-md hover:border-[#FF6500]/30 hover:text-[#FF6500] transition-all group">
+                <div className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 group-hover:bg-[#FF6500]/10 bg-slate-50 transition-colors">
+                  <s.icon className="w-4 h-4 text-slate-400 group-hover:text-[#FF6500] transition-colors" />
                 </div>
-                <div className="p-4 space-y-2">
-                  {group.services.map(svc => (
-                    <Link key={svc.name} href={svc.href}
-                      className="flex items-center gap-3 bg-white/70 hover:bg-white border border-white rounded-xl px-4 py-3 hover:shadow-sm transition-all group">
-                      <div>
-                        <p className="font-semibold text-slate-800 text-sm group-hover:text-saffron transition-colors">{svc.name}</p>
-                        <p className="text-slate-400 text-xs">{svc.desc}</p>
-                      </div>
-                      <ArrowRight className="w-3.5 h-3.5 text-slate-300 ml-auto group-hover:text-saffron transition-colors" />
-                    </Link>
-                  ))}
-                </div>
-              </div>
+                <span className="text-sm font-semibold text-[#0B0F1E] group-hover:text-[#FF6500] transition-colors leading-tight">{s.label}</span>
+              </Link>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ══ SECTION 5 — WHY SCALIFY / FOUNDER (white) ════════════════════ */}
-      <section className="bg-white py-24">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="grid lg:grid-cols-[420px_1fr] gap-16 items-center">
-
-            {/* Founder image */}
-            <div className="relative">
-              <div className="relative rounded-3xl overflow-hidden shadow-xl aspect-[3/4]">
-                <Image
-                  src="/founder.jpg"
-                  alt="Arvind Gupta, Founder Scalify Labs"
-                  fill
-                  className="object-cover object-top"
-                  sizes="420px"
-                />
-                {/* Bottom overlay with name */}
-                <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent p-6">
-                  <p className="text-white font-bold text-base">Arvind Gupta</p>
-                  <p className="text-saffron font-mono text-xs">Founder, Scalify Labs · 15+ Years</p>
-                </div>
-              </div>
-              {/* Years badge */}
-              <div className="absolute -bottom-4 -right-4 bg-saffron text-white font-extrabold text-lg w-20 h-20 rounded-2xl flex flex-col items-center justify-center shadow-xl shadow-saffron/30">
-                <span>15+</span>
-                <span className="text-[0.6rem] font-normal opacity-80">Years Exp</span>
-              </div>
-            </div>
-
-            {/* Content */}
-            <div>
-              <p className="font-mono text-xs text-saffron uppercase tracking-widest mb-4">Our Approach</p>
-              <h2 className="font-extrabold text-4xl text-slate-900 leading-tight mb-6">
-                Built by Someone Who Has Worked<br />Inside Growth Systems
-              </h2>
-
-              <p className="text-slate-600 text-lg leading-relaxed mb-4">
-                Arvind Gupta has spent 15+ years working across EdTech, digital growth, admissions funnels, CRM systems, automation workflows, performance marketing, and revenue operations — not just running campaigns, but building the systems behind them.
-              </p>
-              <p className="text-slate-600 leading-relaxed mb-8">
-                Before Scalify Labs, he helped scale a nationwide mentor ecosystem at Dheya — connecting student outreach, CRM, and conversion systems at scale. That experience drives how we build growth infrastructure for every client today.
-              </p>
-
-              {/* Quote */}
-              <div className="relative bg-slate-50 border-l-4 border-saffron rounded-r-2xl px-7 py-6 mb-8">
-                <p className="text-slate-700 text-base leading-relaxed italic mb-3">
-                  &ldquo;Most businesses don&apos;t fail because of poor marketing alone. They fail because leads, follow-up, communication, and systems are disconnected.&rdquo;
-                </p>
-                <p className="text-saffron font-bold text-sm">— Arvind Gupta</p>
-              </div>
-
-              {/* Feature grid */}
-              <div className="grid grid-cols-2 gap-3">
-                {['ROI-Focused Execution','CRM & Automation Thinking','AI Workflow Integration','Business-First Strategy','Transparent Reporting','Long-Term Growth Focus'].map(f => (
-                  <div key={f} className="flex items-center gap-2.5 bg-slate-50 border border-slate-100 rounded-xl px-4 py-3">
-                    <CheckCircle2 className="w-4 h-4 text-saffron shrink-0" />
-                    <span className="text-slate-700 text-sm font-medium">{f}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ══ SECTION 6 — INDUSTRIES (light) ══════════════════════════════════ */}
-      <section className="bg-gradient-to-br from-slate-50 to-blue-50/30 py-24">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="text-center mb-12">
-            <p className="font-mono text-xs text-saffron uppercase tracking-widest mb-3">Sector Expertise</p>
-            <h2 className="font-extrabold text-4xl lg:text-5xl text-slate-900 mb-4">Industries We Understand Deeply</h2>
-            <p className="text-slate-500 text-lg max-w-lg mx-auto">Every industry has unique lead flows, decision cycles, and growth constraints. We know yours.</p>
+      {/* ── INDUSTRIES ────────────────────────────────────────────────────── */}
+      <section className="py-16 lg:py-24 px-4 bg-white">
+        <div className="max-w-[1200px] mx-auto">
+          <div className="text-center mb-14">
+            <p className="text-xs font-bold uppercase tracking-widest text-[#FF6500] mb-3">Industries</p>
+            <h2 className="font-black text-[28px] sm:text-[36px] lg:text-[44px] leading-[1.2]" style={{ color: '#0B0F1E' }}>
+              Industries We Support
+            </h2>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {INDUSTRIES.map(ind => (
-              <div key={ind.name} className={`border rounded-2xl p-7 bg-white hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group`}>
-                <div className={`w-12 h-12 ${ind.color} border rounded-2xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform`}>
-                  <ind.icon className="w-5.5 h-5.5 w-[22px] h-[22px]" />
+              <Link key={ind.label} href={ind.href}
+                className="group flex items-start gap-4 bg-white rounded-2xl p-5 border border-slate-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all">
+                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 ${ind.color} group-hover:scale-110 transition-transform`}>
+                  <ind.icon className="w-6 h-6" />
                 </div>
-                <h3 className="font-bold text-slate-800 text-lg mb-2">{ind.name}</h3>
-                <p className="text-slate-500 text-sm leading-relaxed">{ind.desc}</p>
-              </div>
+                <div>
+                  <p className="font-bold text-lg mb-1" style={{ color: '#0B0F1E' }}>{ind.label}</p>
+                  <p className="text-sm leading-relaxed" style={{ color: '#57534E' }}>{ind.outcome}</p>
+                  <div className="flex items-center gap-1 mt-2 text-xs font-semibold text-[#FF6500] group-hover:gap-2 transition-all">
+                    Learn more <ChevronRight className="w-3.5 h-3.5" />
+                  </div>
+                </div>
+              </Link>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ══ SECTION 7 — CLIENT STORIES (white) ══════════════════════════════ */}
-      <section className="bg-white py-24">
-        <div className="max-w-7xl mx-auto px-6">
+      {/* ── WHY SCALIFYLABS ───────────────────────────────────────────────── */}
+      <section className="py-16 lg:py-24 px-4" style={{ background: '#FAFAF8' }}>
+        <div className="max-w-[1200px] mx-auto">
           <div className="text-center mb-14">
-            <p className="font-mono text-xs text-saffron uppercase tracking-widest mb-3">Proven Impact</p>
-            <h2 className="font-extrabold text-4xl lg:text-5xl text-slate-900 mb-4">Real Businesses. Real Growth Systems.</h2>
-            <p className="text-slate-500 text-lg max-w-lg mx-auto">Growth systems built for businesses across Ranchi, Jharkhand, and India.</p>
+            <p className="text-xs font-bold uppercase tracking-widest text-[#FF6500] mb-3">Why Us</p>
+            <h2 className="font-black text-[28px] sm:text-[36px] lg:text-[44px] leading-[1.2]" style={{ color: '#0B0F1E' }}>
+              Why Businesses Choose ScalifyLabs
+            </h2>
           </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {WHY.map((w, i) => (
+              <div key={i} className="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all">
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4" style={{ background: 'rgba(255,101,0,0.08)' }}>
+                  <w.icon className="w-6 h-6 text-[#FF6500]" />
+                </div>
+                <h3 className="font-bold text-lg mb-2" style={{ color: '#0B0F1E' }}>{w.title}</h3>
+                <p className="text-sm leading-relaxed" style={{ color: '#57534E' }}>{w.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
+      {/* ── PROCESS ───────────────────────────────────────────────────────── */}
+      <section className="py-16 lg:py-24 px-4 bg-white">
+        <div className="max-w-[1200px] mx-auto">
+          <div className="text-center mb-14">
+            <p className="text-xs font-bold uppercase tracking-widest text-[#FF6500] mb-3">Process</p>
+            <h2 className="font-black text-[28px] sm:text-[36px] lg:text-[44px] leading-[1.2]" style={{ color: '#0B0F1E' }}>
+              Simple Process. Clear Execution.
+            </h2>
+          </div>
+          <div className="grid sm:grid-cols-5 gap-5 relative">
+            <div className="hidden sm:block absolute top-10 left-[10%] right-[10%] h-px" style={{ background: 'linear-gradient(to right, #FFE4D1, #FF6500, #FFE4D1)' }} />
+            {PROCESS.map((step, i) => (
+              <div key={i} className="relative flex flex-col items-center text-center group">
+                <div className="relative z-10 w-20 h-20 bg-white rounded-2xl border-2 shadow-lg flex flex-col items-center justify-center mb-5 group-hover:border-[#FF6500] transition-colors"
+                  style={{ borderColor: '#E8E3DA' }}>
+                  <step.icon className="w-7 h-7 text-[#FF6500] mb-0.5" />
+                  <span className="text-[10px] font-black text-slate-300">{step.n}</span>
+                </div>
+                <h3 className="font-bold text-sm mb-1.5" style={{ color: '#0B0F1E' }}>{step.title}</h3>
+                <p className="text-xs leading-relaxed" style={{ color: '#57534E' }}>{step.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── REVIEWS ───────────────────────────────────────────────────────── */}
+      <section className="py-16 lg:py-24 px-4" style={{ background: '#FAFAF8' }}>
+        <div className="max-w-[1200px] mx-auto">
+          <div className="text-center mb-12">
+            <p className="text-xs font-bold uppercase tracking-widest text-[#FF6500] mb-3">Reviews</p>
+            <h2 className="font-black text-[28px] sm:text-[36px] lg:text-[44px] leading-[1.2]" style={{ color: '#0B0F1E' }}>
+              What Businesses Say
+            </h2>
+          </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {CLIENTS.map(c => (
-              <div key={c.name} className="group bg-[#F9FAFB] border border-slate-100 rounded-2xl p-6 hover:shadow-md hover:border-slate-200 hover:-translate-y-0.5 transition-all duration-300">
-                <div className="mb-4">
-                  <span className="bg-saffron/10 text-saffron font-mono text-[0.62rem] uppercase tracking-wider px-2.5 py-1 rounded-full">{c.type}</span>
+            {REVIEWS.map((r, i) => (
+              <div key={i} className={`bg-white rounded-2xl p-5 border shadow-sm transition-all ${i === reviewIdx ? 'border-[#FF6500]/30 shadow-lg scale-[1.01]' : 'border-slate-100'}`}>
+                <div className="flex gap-0.5 mb-3">
+                  {[1,2,3,4,5].map(s => <Star key={s} className="w-4 h-4 fill-[#FF6500] text-[#FF6500]" />)}
                 </div>
-                <h3 className="font-bold text-slate-800 text-base mb-3">{c.name}</h3>
-                <div className="space-y-2.5 text-xs">
-                  <div>
-                    <p className="text-slate-400 font-mono uppercase tracking-wider text-[0.58rem] mb-0.5">Challenge</p>
-                    <p className="text-slate-600">{c.challenge}</p>
-                  </div>
-                  <div>
-                    <p className="text-slate-400 font-mono uppercase tracking-wider text-[0.58rem] mb-0.5">System</p>
-                    <p className="text-slate-600">{c.system}</p>
-                  </div>
-                  <div className="bg-white border border-slate-100 rounded-xl p-2.5">
-                    <p className="text-slate-700 font-medium">{c.outcome}</p>
-                  </div>
+                <p className="text-sm leading-relaxed mb-4" style={{ color: '#57534E' }}>"{r.text}"</p>
+                <div>
+                  <p className="font-bold text-sm" style={{ color: '#0B0F1E' }}>{r.name}</p>
+                  <p className="text-xs" style={{ color: '#9C9189' }}>{r.biz}</p>
+                  <p className="text-[10px] text-green-600 font-semibold mt-1">✓ Google Verified</p>
                 </div>
               </div>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* ══ SECTION 8 — SUPER 30 (light) ════════════════════════════════════ */}
-      <section className="bg-gradient-to-br from-slate-900 to-navy py-24 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_80%_50%,rgba(255,101,0,0.06),transparent_55%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_20%_30%,rgba(59,130,246,0.05),transparent_50%)]" />
-
-        <div className="relative max-w-6xl mx-auto px-6">
-          <div className="grid lg:grid-cols-[1fr_400px] gap-14 items-center">
-            <div>
-              <span className="inline-flex items-center gap-2 bg-saffron/10 border border-saffron/20 text-saffron font-mono text-xs uppercase tracking-widest px-4 py-1.5 rounded-full mb-7">
-                <Rocket className="w-3.5 h-3.5" /> Growth Accelerator
-              </span>
-              <h2 className="font-extrabold text-4xl lg:text-5xl text-white leading-tight mb-5">
-                Building the Next Generation of<br />
-                <span className="text-saffron">Full Stack Growth Professionals</span>
-              </h2>
-              <p className="text-white/60 text-lg leading-relaxed mb-7 max-w-[500px]">
-                A hands-on accelerator focused on SEO, paid ads, CRM systems, automation, AI workflows, analytics, and business growth thinking — not just tool operation.
-              </p>
-              <div className="flex flex-wrap gap-2.5 mb-8">
-                {['Real Campaign Execution','AI Tools & Workflows','CRM & Automation','Google & Meta Ads','SEO & Content','Analytics & Reporting'].map(f => (
-                  <span key={f} className="flex items-center gap-1.5 bg-white/8 border border-white/12 text-white/70 text-xs px-3 py-1.5 rounded-full">
-                    <CheckCircle2 className="w-3 h-3 text-saffron shrink-0" /> {f}
-                  </span>
-                ))}
-              </div>
-              <Link href="/super-30"
-                className="inline-flex items-center gap-2 bg-saffron text-white font-bold px-8 py-4 rounded-xl shadow-[0_4px_16px_rgba(255,101,0,0.30)] hover:bg-saffron-dark hover:-translate-y-0.5 transition-all text-sm">
-                Explore Super 30 Program <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
-
-            {/* Tools ecosystem */}
-            <div className="bg-white/5 border border-white/10 rounded-3xl p-6">
-              <p className="text-white/30 font-mono text-[0.62rem] uppercase tracking-widest mb-4">Tools You&apos;ll Master</p>
-              <div className="flex flex-wrap gap-2">
-                {SUPER30_TOOLS.map(t => (
-                  <span key={t} className="bg-white/8 border border-white/12 text-white/70 text-[0.65rem] font-mono px-3 py-1.5 rounded-xl hover:bg-white/14 transition-colors">
-                    {t}
-                  </span>
-                ))}
-              </div>
-              <div className="mt-6 pt-5 border-t border-white/8 grid grid-cols-3 gap-3">
-                {[{ v: '45', l: 'Days' }, { v: '30', l: 'Max Seats' }, { v: 'Offline', l: 'Ranchi' }].map(s => (
-                  <div key={s.l} className="text-center">
-                    <p className="text-white font-extrabold text-xl">{s.v}</p>
-                    <p className="text-white/35 font-mono text-[0.6rem]">{s.l}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ══ SECTION 9 — INSIGHTS (light grey) ══════════════════════════════ */}
-      <section className="bg-[#F5F7FB] py-24">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex items-end justify-between mb-12 flex-wrap gap-4">
-            <div>
-              <p className="font-mono text-xs text-saffron uppercase tracking-widest mb-3">Knowledge Hub</p>
-              <h2 className="font-extrabold text-4xl text-slate-900">Growth Insights & Resources</h2>
-            </div>
-            <Link href="/blog" className="flex items-center gap-1.5 text-saffron font-semibold text-sm hover:gap-2.5 transition-all">
-              View All Insights <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-
-          {/* Category pills */}
-          <div className="flex flex-wrap gap-2 mb-8">
-            {['AI Marketing','SEO & Organic','CRM Automation','Lead Generation','WhatsApp Marketing','Growth Systems'].map(cat => (
-              <Link key={cat} href={`/blog?category=${encodeURIComponent(cat)}`}
-                className="px-4 py-1.5 bg-white border border-slate-200 text-slate-600 hover:border-saffron hover:text-saffron font-medium text-xs rounded-full transition-colors">
-                {cat}
-              </Link>
-            ))}
-          </div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {INSIGHTS.map(a => (
-              <Link key={a.title} href="/blog" className="group bg-white border border-slate-100 rounded-2xl overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-                <div className={`bg-gradient-to-br ${a.color} h-36 flex items-end p-4`}>
-                  <span className="bg-white/20 text-white text-[0.65rem] font-mono font-medium px-2.5 py-1 rounded-full">{a.category}</span>
-                </div>
-                <div className="p-5">
-                  <h3 className="font-bold text-slate-800 text-sm leading-snug mb-3 group-hover:text-saffron transition-colors line-clamp-2">{a.title}</h3>
-                  <div className="flex items-center justify-between">
-                    <span className="text-slate-400 text-xs font-mono">{a.read} read</span>
-                    <span className="text-saffron font-bold text-xs flex items-center gap-1 group-hover:gap-1.5 transition-all">
-                      Read <ArrowRight className="w-3 h-3" />
-                    </span>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ══ SECTION 10 — FINAL CTA (dark) ══════════════════════════════════ */}
-      <section className="relative bg-gradient-to-br from-[#0a1628] via-navy to-[#0c1830] py-28 overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_30%_50%,rgba(255,101,0,0.08),transparent_55%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_75%_30%,rgba(59,130,246,0.06),transparent_50%)]" />
-        <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle,rgba(255,255,255,0.018) 1px,transparent 1px)', backgroundSize: '48px 48px' }} />
-
-        <div className="relative max-w-4xl mx-auto px-6 text-center">
-          <p className="font-mono text-xs text-saffron uppercase tracking-widest mb-5">Start Growing</p>
-          <h2 className="font-extrabold text-4xl lg:text-5xl text-white leading-tight mb-6">
-            Build a Smarter Growth System<br />
-            <span className="text-saffron">for Your Business</span>
-          </h2>
-          <p className="text-white/60 text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
-            From SEO and lead generation to CRM automation and AI workflows — Scalify Labs helps businesses build connected systems for scalable, measurable growth.
-          </p>
-          <div className="flex flex-wrap justify-center gap-5 mb-12">
-            <Link href="/contact-scalifylabs"
-              className="flex items-center gap-2 bg-saffron text-white font-bold px-9 py-4 rounded-xl shadow-[0_4px_24px_rgba(255,101,0,0.35)] hover:bg-saffron-dark hover:-translate-y-0.5 transition-all">
-              <PhoneCall className="w-4.5 h-4.5 w-[18px] h-[18px]" /> Book Free Strategy Call
-            </Link>
-            <a href={`https://wa.me/918788424727?text=Hi%20Scalify%20Labs%2C%20I%27d%20like%20to%20discuss%20growing%20my%20business`}
-              target="_blank" rel="noopener noreferrer"
-              className="flex items-center gap-2 bg-[#25D366]/15 border border-[#25D366]/30 text-[#25D366] font-semibold px-8 py-4 rounded-xl hover:bg-[#25D366]/22 transition-all">
-              <MessageSquare className="w-4.5 h-4.5 w-[18px] h-[18px]" /> WhatsApp Us
+          <div className="text-center mt-8">
+            <a href="https://g.page/r/scalifylabs/review" target="_blank" rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm border-2 hover:bg-slate-50 transition-colors"
+              style={{ color: '#0B0F1E', borderColor: '#E8E3DA' }}>
+              Read More Reviews <ArrowRight className="w-4 h-4" />
             </a>
           </div>
+        </div>
+      </section>
 
-          {/* Serving cities */}
-          <div>
-            <p className="text-white/20 font-mono text-[0.62rem] uppercase tracking-widest mb-3">Serving businesses in</p>
-            <div className="flex flex-wrap justify-center gap-x-3 gap-y-1">
-              {['Ranchi','Jamshedpur','Dhanbad','Bokaro','Patna','Delhi','Mumbai','Bangalore','Pune','and across India'].map(city => (
-                <span key={city} className="text-white/25 text-xs font-mono">{city}</span>
-              ))}
+      {/* ── CASE STUDIES ──────────────────────────────────────────────────── */}
+      <section className="py-16 lg:py-24 px-4 bg-white">
+        <div className="max-w-[1200px] mx-auto">
+          <div className="text-center mb-14">
+            <p className="text-xs font-bold uppercase tracking-widest text-[#FF6500] mb-3">Proof</p>
+            <h2 className="font-black text-[28px] sm:text-[36px] lg:text-[44px] leading-[1.2]" style={{ color: '#0B0F1E' }}>
+              Real Growth. Real Results.
+            </h2>
+          </div>
+          <div className="grid sm:grid-cols-3 gap-6">
+            {CASE_STUDIES.map((c, i) => (
+              <div key={i} className="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all">
+                <div className="px-5 py-4 flex items-center justify-between" style={{ background: '#FAFAF8', borderBottom: '1px solid #E8E3DA' }}>
+                  <span className="font-bold text-sm" style={{ color: '#0B0F1E' }}>{c.industry}</span>
+                  <div className="text-right">
+                    <p className="text-2xl font-black text-[#FF6500]">{c.metric}</p>
+                    <p className="text-[10px] text-slate-400">{c.metricLabel}</p>
+                  </div>
+                </div>
+                <div className="p-5 space-y-3">
+                  <div>
+                    <p className="text-[10px] font-bold text-red-500 uppercase tracking-wider mb-1">Problem</p>
+                    <p className="text-sm text-slate-500">{c.problem}</p>
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-bold text-[#FF6500] uppercase tracking-wider mb-1">Solution</p>
+                    <p className="text-sm text-slate-500">{c.solution}</p>
+                  </div>
+                  <div className="px-3 py-2 rounded-xl" style={{ background: 'rgba(22,163,74,0.06)', border: '1px solid rgba(22,163,74,0.15)' }}>
+                    <p className="text-[10px] font-bold text-green-700 uppercase tracking-wider mb-1">Result</p>
+                    <p className="text-sm font-semibold text-green-800">{c.result}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── COMMUNITY ─────────────────────────────────────────────────────── */}
+      <section className="py-14 px-4" style={{ background: '#FFF9F2' }}>
+        <div className="max-w-[1200px] mx-auto">
+          <div className="bg-white rounded-3xl border border-orange-100 p-8 lg:p-12 shadow-sm">
+            <div className="grid lg:grid-cols-2 gap-10 items-center">
+              <div>
+                <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full mb-5"
+                  style={{ background: '#FFF3E8', color: '#FF6500' }}>
+                  🌱 Free Community
+                </div>
+                <h2 className="font-black text-[28px] sm:text-[34px] leading-[1.2] mb-3" style={{ color: '#0B0F1E' }}>
+                  Jharkhand Growth Adda™
+                </h2>
+                <p className="text-xl font-semibold mb-3 text-[#FF6500]">Local Connections. Digital Growth.</p>
+                <p className="text-base text-slate-500 leading-relaxed mb-5">
+                  A free community helping Jharkhand business owners connect, learn and grow digitally.
+                </p>
+                <div className="flex flex-wrap gap-2 mb-6">
+                  {['Networking','Growth Discussions','Local Opportunities','Business Referrals','Digital Guidance'].map(b => (
+                    <span key={b} className="text-xs font-semibold px-3 py-1.5 rounded-full border"
+                      style={{ background: 'rgba(255,101,0,0.06)', borderColor: 'rgba(255,101,0,0.2)', color: '#FF6500' }}>
+                      ✓ {b}
+                    </span>
+                  ))}
+                </div>
+                <Link href="/jharkhand-growth-adda"
+                  className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl font-bold text-white hover:opacity-90 transition-opacity"
+                  style={{ background: '#FF6500' }}>
+                  Join Free <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                {[
+                  { val: '🏢', label: 'Manufacturers', sub: 'Connect & collaborate' },
+                  { val: '🏥', label: 'Clinics',       sub: 'Healthcare network' },
+                  { val: '🎓', label: 'Educators',     sub: 'EdTech & coaching' },
+                  { val: '🛍️', label: 'Retailers',     sub: 'Local brands' },
+                ].map(c => (
+                  <div key={c.label} className="bg-[#FAFAF8] rounded-2xl p-4 border border-slate-100 text-center">
+                    <span className="text-2xl block mb-1.5">{c.val}</span>
+                    <p className="font-bold text-sm" style={{ color: '#0B0F1E' }}>{c.label}</p>
+                    <p className="text-xs" style={{ color: '#57534E' }}>{c.sub}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
       </section>
-    </>
+
+      {/* ── SUPER 30 (small) ──────────────────────────────────────────────── */}
+      <section className="py-12 px-4 bg-white">
+        <div className="max-w-[900px] mx-auto">
+          <div className="rounded-2xl p-7 flex flex-col sm:flex-row items-center justify-between gap-5"
+            style={{ background: '#0B0F1E' }}>
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-xs font-bold px-2.5 py-1 rounded-full text-white" style={{ background: '#FF6500' }}>
+                  Applications Open
+                </span>
+              </div>
+              <h3 className="font-black text-xl text-white mb-1">Super 30 Career Accelerator</h3>
+              <p className="text-sm text-white/60">45-day offline execution program · Ranchi · Only 30 seats</p>
+            </div>
+            <Link href="/super-30"
+              className="shrink-0 flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-white hover:opacity-90 transition-opacity"
+              style={{ background: '#FF6500' }}>
+              Apply Now <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ── INSIGHTS ──────────────────────────────────────────────────────── */}
+      <section className="py-16 lg:py-24 px-4" style={{ background: '#FAFAF8' }}>
+        <div className="max-w-[1200px] mx-auto">
+          <div className="flex items-center justify-between mb-10">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-widest text-[#FF6500] mb-2">Insights</p>
+              <h2 className="font-black text-[28px] sm:text-[34px]" style={{ color: '#0B0F1E' }}>Latest from the Blog</h2>
+            </div>
+            <Link href="/blog" className="hidden sm:flex items-center gap-1.5 text-sm font-semibold text-[#FF6500] hover:gap-2 transition-all">
+              View All <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {BLOGS.map((b, i) => (
+              <Link key={i} href={b.href}
+                className="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all group">
+                <span className="text-[10px] font-bold px-2.5 py-1 rounded-full inline-block mb-3"
+                  style={{ background: 'rgba(255,101,0,0.08)', color: '#FF6500' }}>
+                  {b.cat}
+                </span>
+                <h3 className="font-bold text-sm leading-snug mb-3 group-hover:text-[#FF6500] transition-colors" style={{ color: '#0B0F1E' }}>{b.title}</h3>
+                <p className="text-xs text-slate-400">{b.date}</p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── FINAL CTA ─────────────────────────────────────────────────────── */}
+      <section className="py-20 lg:py-28 px-4"
+        style={{ background: 'linear-gradient(135deg, #FFF9F5 0%, #FFF3E8 50%, #FFF9F5 100%)' }}>
+        <div className="max-w-[700px] mx-auto text-center">
+          <p className="text-xs font-bold uppercase tracking-widest text-[#FF6500] mb-5">Get Started</p>
+          <h2 className="font-black text-[32px] sm:text-[44px] lg:text-[52px] leading-[1.15] mb-5" style={{ color: '#0B0F1E' }}>
+            Ready To Build Growth Systems That Actually Work?
+          </h2>
+          <p className="text-lg text-slate-500 mb-10 leading-relaxed max-w-[500px] mx-auto">
+            Book a free strategy call and discover exactly how we can connect your marketing, CRM, and automation into one consistent growth engine.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/contact-scalifylabs"
+              className="flex items-center justify-center gap-2 px-9 py-4 rounded-xl font-bold text-white text-lg hover:opacity-90 transition-opacity shadow-lg"
+              style={{ background: '#FF6500' }}>
+              Book Growth Call <ArrowRight className="w-5 h-5" />
+            </Link>
+            <a href={WA} target="_blank" rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 px-9 py-4 rounded-xl font-bold text-lg border-2 hover:bg-white transition-colors"
+              style={{ color: '#0B0F1E', borderColor: '#E8E3DA' }}>
+              <MessageCircle className="w-5 h-5 text-green-600" /> WhatsApp Us
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* CSS for marquee */}
+      <style jsx global>{`
+        @keyframes marquee {
+          from { transform: translateX(0) }
+          to { transform: translateX(-50%) }
+        }
+      `}</style>
+    </main>
   )
 }

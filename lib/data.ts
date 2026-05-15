@@ -458,11 +458,11 @@ export type CitySlug = typeof CITIES[number]['slug']
 // ─────────────────────────────────────────────
 export const SITE = {
   name: 'Scalify Labs',
-  tagline: "Ranchi's #1 Digital Marketing Agency",
-  description: 'Scalify Labs is Ranchi\'s leading digital marketing agency. SEO, Google Ads, Meta Ads, WhatsApp Marketing, AI Systems for Indian businesses.',
+  tagline: 'Scale Smarter. Grow Faster.',
+  description: 'Scalify Labs builds connected growth systems — SEO, Google Ads, Meta Ads, CRM, WhatsApp Automation, AI workflows and Lead Generation for Indian businesses.',
   url: 'https://scalifylabs.com',
   founder: 'Arvind Gupta',
-  phone: '+91 87884 24727',
+  phone: '+91 8788424727',
   whatsapp: '918788424727',
   email: 'hello@scalifylabs.com',
   address: 'Lane No 5, Kamlesh Dubey Chowk, Pirra, Ratu, Ranchi 835222',
