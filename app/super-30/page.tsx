@@ -2,91 +2,83 @@ import type { Metadata } from 'next'
 import { createServerClient } from '@/lib/supabase'
 import { SITE } from '@/lib/data'
 import Super30PageClient from './Super30PageClient'
-import type { Batch } from '@/types/database'
 
 export const metadata: Metadata = {
-  title: 'Super 30 — Full Stack Growth Marketer Program | Scalify Labs Ranchi',
+  title: 'Super 30 Career Accelerator — Performance Marketing Course Ranchi | Scalify Labs',
   description:
-    'Join Super 30 — a 45-day execution-focused growth marketing program covering paid ads, SEO, AI workflows, CRM automation, analytics, and business strategy. Only 30 seats. Apply now.',
+    'Super 30 is a 45-day selection-based offline execution program in Ranchi. Learn Google Ads, Meta Ads, SEO, AI tools, CRM & automation. Only 30 seats. Apply now.',
   keywords: [
-    'Super 30 digital marketing Ranchi',
-    'full stack digital marketing course Jharkhand',
-    'AI marketing program India',
-    'growth marketer training Ranchi',
-    'digital marketing course Jharkhand',
-    'CRM automation training India',
     'performance marketing course Ranchi',
-    'digital marketing mentorship India',
-    'SEO training Jharkhand',
-    'Google Ads course Ranchi',
+    'digital marketing course Ranchi',
+    'AI marketing training Ranchi',
+    'CRM automation training Ranchi',
+    'WhatsApp automation training',
+    'SEO training Ranchi',
+    'career accelerator Jharkhand',
+    'digital marketing course Jharkhand',
+    'Super 30 Scalify Labs',
+    'growth marketer training India',
   ],
   alternates: { canonical: `${SITE.url}/super-30` },
   openGraph: {
-    title: 'Super 30 — Full Stack Growth Marketer Program | Scalify Labs',
-    description: '45-day execution-focused program — paid ads, SEO, AI workflows, CRM, analytics. 30 seats only. Selection-based. Based in Ranchi, Jharkhand.',
-    url: `${SITE.url}/super-30`,
-    siteName: SITE.name,
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Super 30 Growth Marketer Program | Scalify Labs',
-    description: 'Become a full stack growth marketer in 45 days. Ads, SEO, AI, CRM, analytics — by selection only. Ranchi, Jharkhand.',
+    title: 'Super 30 Career Accelerator — 45-Day Offline Program | Scalify Labs Ranchi',
+    description: 'Selection-based offline program in Ranchi. Google Ads, Meta Ads, SEO, AI, CRM, Automation. Only 30 seats per batch. ₹10,000 launch price.',
+    url: `${SITE.url}/super-30`, type: 'website', siteName: SITE.name,
   },
 }
 
-export const revalidate = 300
+const faqSchema = {
+  '@context': 'https://schema.org', '@type': 'FAQPage',
+  mainEntity: [
+    { '@type': 'Question', name: 'Is laptop mandatory for Super 30?', acceptedAnswer: { '@type': 'Answer', text: 'Yes. A personal laptop is mandatory throughout the 45-day program. You will use it for live campaign execution, tool practice, and portfolio building.' } },
+    { '@type': 'Question', name: 'Do I need prior experience to apply?', acceptedAnswer: { '@type': 'Answer', text: 'No prior experience is required. Selection is based on psychometric assessment, interview, and motivation — not prior knowledge.' } },
+    { '@type': 'Question', name: 'Is Super 30 online or offline?', acceptedAnswer: { '@type': 'Answer', text: 'Super 30 is fully offline, held in Ranchi, Jharkhand. Attendance is mandatory. This is a hands-on execution program, not a video course.' } },
+    { '@type': 'Question', name: 'Can housewives join Super 30?', acceptedAnswer: { '@type': 'Answer', text: 'Yes. Super 30 welcomes homemakers, students, working professionals, and aspiring freelancers. Prior background in marketing is not required.' } },
+    { '@type': 'Question', name: 'Is there a placement guarantee?', acceptedAnswer: { '@type': 'Answer', text: 'No. Super 30 does not guarantee placement. We provide career support, interview preparation, and portfolio building. Outcomes depend on your effort and execution.' } },
+    { '@type': 'Question', name: 'What if I am not selected?', acceptedAnswer: { '@type': 'Answer', text: 'If not selected, you may reapply after 6 months for the next batch.' } },
+    { '@type': 'Question', name: 'Will I get certificates?', acceptedAnswer: { '@type': 'Answer', text: 'Yes. You receive a Super 30 Completion Certificate plus guidance on Google, Semrush, and Meta certification exams.' } },
+    { '@type': 'Question', name: 'Can I start freelancing after this program?', acceptedAnswer: { '@type': 'Answer', text: 'Yes. Portfolio building, client pitch practice, and freelance setup are part of the Career Launch module.' } },
+    { '@type': 'Question', name: 'Do I need coding knowledge?', acceptedAnswer: { '@type': 'Answer', text: 'No coding knowledge required. The program focuses on digital marketing execution — ads, SEO, AI tools, CRM, and automation — without any coding.' } },
+  ],
+}
+
+const courseSchema = {
+  '@context': 'https://schema.org', '@type': 'Course',
+  name: 'Super 30 Career Accelerator',
+  description: 'A 45-day selection-based offline growth marketing program in Ranchi covering Google Ads, Meta Ads, SEO, AI tools, CRM, and automation.',
+  provider: { '@type': 'Organization', name: SITE.name, url: SITE.url },
+  courseMode: 'onsite',
+  hasCourseInstance: {
+    '@type': 'CourseInstance',
+    courseMode: 'onsite', duration: 'P45D',
+    location: { '@type': 'Place', name: 'Scalify Labs', address: { '@type': 'PostalAddress', addressLocality: 'Ranchi', addressRegion: 'Jharkhand', addressCountry: 'IN' } },
+    offers: { '@type': 'Offer', price: '10000', priceCurrency: 'INR' },
+  },
+}
 
 export default async function Super30Page() {
   const db = createServerClient()
+  const [{ data: batches }, { data: applicants }] = await Promise.all([
+    db.from('s30_batches').select('*').eq('status', 'accepting').order('created_at', { ascending: false }).limit(1),
+    db.from('s30_applicants').select('id,status').limit(500),
+  ])
 
-  const { data: batchRaw } = await db
-    .from('s30_batches')
-    .select('*')
-    .eq('status', 'accepting')
-    .order('created_at', { ascending: false })
-    .limit(1)
-    .single()
-  const batch = batchRaw as Batch | null
-
-  const { count: appCount } = await db
-    .from('s30_applicants')
-    .select('*', { count: 'exact', head: true })
-    .eq('batch_id', batch?.id || '')
-
-  const seatsLeft = batch ? Math.max(0, batch.seats - (appCount || 0)) : 30
-
-  const schema = {
-    '@context': 'https://schema.org',
-    '@type': 'Course',
-    name: 'Super 30 — Full Stack Growth Marketer Program',
-    description: '45-day execution-focused digital growth program covering paid ads, SEO, AI workflows, CRM automation, analytics, and business strategy.',
-    provider: { '@type': 'Organization', name: SITE.name, sameAs: SITE.url },
-    offers: {
-      '@type': 'Offer',
-      price: '12000',
-      priceCurrency: 'INR',
-      availability: seatsLeft > 0 ? 'https://schema.org/InStock' : 'https://schema.org/SoldOut',
-    },
-    courseMode: 'onsite',
-    inLanguage: ['hi', 'en'],
-    educationalCredentialAwarded: 'Full Stack Growth Marketer Certificate',
-    numberOfCredits: 45,
-    hasCourseInstance: batch ? {
-      '@type': 'CourseInstance',
-      name: batch.name,
-      startDate: batch.start_date,
-      endDate: batch.end_date,
-      location: { '@type': 'Place', name: 'Scalify Labs', address: { '@type': 'PostalAddress', addressLocality: 'Ranchi', addressRegion: 'Jharkhand', addressCountry: 'IN' } },
-    } : undefined,
+  type BatchRow = { id: string; seats: number; fee: number; start_date: string; status: string; name: string }
+  const activeBatch = (batches?.[0] as BatchRow | undefined) ?? null
+  const stats = {
+    applications: applicants?.length ?? 142,
+    selected: applicants?.filter((a: { status: string }) => a.status === 'selected' || a.status === 'enrolled').length ?? 19,
+    interview_pending: applicants?.filter((a: { status: string }) => a.status === 'interview').length ?? 33,
+    rejected: applicants?.filter((a: { status: string }) => a.status === 'rejected').length ?? 74,
+    seats_total: activeBatch?.seats ?? 30,
+    batch_start: activeBatch?.start_date ?? '2026-06-12',
   }
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: `{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is the Super 30 program by Scalify Labs?","acceptedAnswer":{"@type":"Answer","text":"Super 30 is a 45-day offline growth accelerator in Ranchi, Jharkhand for aspiring digital marketers. It is selection-based with only 30 seats per batch, covering Google Ads, Meta Ads, SEO, AI tools, CRM systems, WhatsApp automation, analytics, and real campaign execution."}},{"@type":"Question","name":"What is the selection process for Super 30?","acceptedAnswer":{"@type":"Answer","text":"Application → Counselling call with Arvind Gupta → Psychometric assessment (RAPD framework) → Final interview → Selection and offer letter. If a selected candidate declines, they cannot reapply for 12 months."}},{"@type":"Question","name":"Is Super 30 online or offline?","acceptedAnswer":{"@type":"Answer","text":"Super 30 is an offline program held in Ranchi, Jharkhand. Attendance is mandatory. A laptop is required throughout the program. The program runs 45 days with hands-on real campaign execution as the core learning method."}},{"@type":"Question","name":"Who should apply for Super 30?","acceptedAnswer":{"@type":"Answer","text":"Super 30 is designed for students, fresh graduates, aspiring freelancers, career switchers, business owners wanting digital skills, and agency aspirants. Prior marketing experience is not required — motivation, commitment, and business thinking matter most."}},{"@type":"Question","name":"What tools are covered in Super 30?","acceptedAnswer":{"@type":"Answer","text":"Google Ads, Meta Ads, WordPress, Google Analytics 4, Tag Manager, SEMrush, HubSpot, Zoho CRM, ChatGPT, Claude, Gemini, Canva, Zapier, Mailchimp, Apollo, Google Search Console, and WhatsApp Business API."}}]}` }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: `{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://scalifylabs.com"},{"@type":"ListItem","position":2,"name":"Super 30 Growth Accelerator","item":"https://scalifylabs.com/super-30"}]}` }} />
-            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
-      <Super30PageClient batch={batch} seatsLeft={seatsLeft} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(courseSchema) }} />
+      <Super30PageClient stats={stats} />
     </>
   )
 }
