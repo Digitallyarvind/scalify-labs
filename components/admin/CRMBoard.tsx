@@ -1,180 +1,334 @@
 'use client'
 
-import { useState } from 'react'
-import { updateLead, addLeadActivity, submitLead } from '@/lib/actions'
-import type { Lead } from '@/types/database'
+import { useState, useTransition } from 'react'
 
-const STAGES = ['new', 'contacted', 'qualified', 'proposal', 'negotiation', 'won', 'lost'] as const
-const STAGE_LABEL: Record<string, string> = {
-  new: 'New Lead', contacted: 'Contacted', qualified: 'Qualified',
-  proposal: 'Proposal Sent', negotiation: 'Negotiation', won: '✅ Won', lost: '❌ Lost',
-}
-const STAGE_COLOR: Record<string, string> = {
-  new: 'border-blue-500/40', contacted: 'border-purple-500/40', qualified: 'border-teal-500/40',
-  proposal: 'border-amber-500/40', negotiation: 'border-orange-500/40', won: 'border-green-500/40', lost: 'border-red-500/40',
-}
-const STAGE_DOT: Record<string, string> = {
-  new: 'bg-blue-400', contacted: 'bg-purple-400', qualified: 'bg-teal-400',
-  proposal: 'bg-amber-400', negotiation: 'bg-orange-400', won: 'bg-green-400', lost: 'bg-red-400',
-}
-const BUDGET_LABEL: Record<string, string> = {
-  '5-10k': '₹5K–10K/mo', '10-20k': '₹10K–20K/mo', '20-50k': '₹20K–50K/mo', '50k+': '₹50K+/mo'
-}
-const BUDGET_MID: Record<string, number> = { '5-10k': 7500, '10-20k': 15000, '20-50k': 35000, '50k+': 75000 }
-
-interface Props {
-  initialLeads: Lead[]
-  summary: { stage: string; count: number }[]
-  totalPipeline: number
+type Lead = {
+  id: string; name: string; phone: string; email?: string; business?: string
+  city?: string; source: string; service_interest?: string; message?: string
+  stage?: string; score?: number; deal_value?: number; follow_up_date?: string
+  created_at: string; utm_source?: string; utm_campaign?: string
 }
 
-export function CRMBoard({ initialLeads, summary, totalPipeline }: Props) {
-  const [leads, setLeads] = useState(initialLeads)
-  const [selected, setSelected] = useState<Lead | null>(null)
-  const [noteText, setNoteText] = useState('')
-  const [noteType, setNoteType] = useState<'note' | 'call' | 'email' | 'meeting'>('note')
-  const [showNewLead, setShowNewLead] = useState(false)
-  const [newLead, setNewLead] = useState({ name: '', phone: '', business: '', city: 'Ranchi', source: 'direct', service_interest: 'SEO Services', budget: '' })
-  const [saving, setSaving] = useState(false)
-  const [sourceFilter, setSourceFilter] = useState('all')
+const STAGES = ['new','contacted','qualified','proposal','negotiation','won','lost']
+const STAGE_LABELS: Record<string,string> = {
+  new:'New Lead', contacted:'Contacted', qualified:'Qualified',
+  proposal:'Proposal Sent', negotiation:'Negotiation', won:'Won', lost:'Lost'
+}
+const STAGE_COLORS: Record<string,string> = {
+  new:'#2563EB', contacted:'#7C3AED', qualified:'#FF6500',
+  proposal:'#D97706', negotiation:'#EA580C', won:'#16A34A', lost:'#DC2626'
+}
+const SOURCE_ICONS: Record<string,string> = {
+  'google-ads':'📊', 'meta-ads':'📱', 'organic':'🌱', 'whatsapp':'💬',
+  'referral':'👥', 'direct':'🌐', default:'📋'
+}
 
-  const filtered = sourceFilter === 'all' ? leads : leads.filter(l => l.source?.toLowerCase().includes(sourceFilter))
+async function moveStage(leadId: string, newStage: string) {
+  await fetch('/api/admin/leads/stage', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ id: leadId, stage: newStage })
+  })
+}
 
-  async function moveStage(id: string, newStage: Lead['stage']) {
-    setLeads(prev => prev.map(l => l.id === id ? { ...l, stage: newStage } : l))
-    if (selected?.id === id) setSelected(prev => prev ? { ...prev, stage: newStage } : null)
-    await updateLead(id, { stage: newStage })
-    await addLeadActivity({ lead_id: id, type: 'stage_change', content: `Stage changed to: ${STAGE_LABEL[newStage]}` })
-  }
+async function addActivity(leadId: string, type: string, content: string) {
+  await fetch('/api/admin/leads/activity', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ lead_id: leadId, type, content })
+  })
+}
 
-  async function addNote() {
-    if (!selected || !noteText.trim()) return
-    setSaving(true)
-    await addLeadActivity({ lead_id: selected.id, type: noteType, content: noteText.trim() })
-    setNoteText('')
-    setSaving(false)
-  }
+function ScoreBar({ score = 50 }: { score?: number }) {
+  const color = score >= 80 ? '#16A34A' : score >= 60 ? '#D97706' : '#DC2626'
+  return (
+    <div className="h-1 rounded-full bg-[#E8E3DA] overflow-hidden mt-1">
+      <div className="h-full rounded-full transition-all" style={{ width: `${score}%`, background: color }} />
+    </div>
+  )
+}
 
-  async function saveNewLead() {
-    if (!newLead.name || !newLead.phone) return
-    setSaving(true)
-    await submitLead({ ...newLead, source: newLead.source })
-    setShowNewLead(false)
-    setNewLead({ name: '', phone: '', business: '', city: 'Ranchi', source: 'direct', service_interest: 'SEO Services', budget: '' })
-    setSaving(false)
-    window.location.reload()
-  }
-
-  function scoreColor(score: number) {
-    if (score >= 80) return 'text-green-400'
-    if (score >= 60) return 'text-amber-400'
-    return 'text-red-400'
-  }
-
-  const won = leads.filter(l => l.stage === 'won').length
-  const convRate = leads.length ? Math.round((won / leads.length) * 100) : 0
-
-  const inputCls = "w-full bg-white/5 border border-white/10 rounded-lg text-white/70 text-xs font-mono px-3 py-2 outline-none focus:border-[#FF6500] transition-colors"
+function LeadCard({ lead, onSelect, onMove }: { lead: Lead; onSelect: (l: Lead) => void; onMove: (id: string, stage: string) => void }) {
+  const stageIdx = STAGES.indexOf(lead.stage || 'new')
+  const overdue = lead.follow_up_date && new Date(lead.follow_up_date) < new Date()
+  const srcIcon = SOURCE_ICONS[lead.source] || SOURCE_ICONS.default
+  const daysInStage = Math.floor((Date.now() - new Date(lead.created_at).getTime()) / 86400000)
 
   return (
-    <div className="flex h-full">
-      {/* Main pipeline */}
-      <div className="flex-1 overflow-hidden flex flex-col">
-        {/* Header */}
-        <div className="px-5 py-4 border-b border-white/6 flex items-center gap-4 flex-wrap bg-[#0D1117]">
-          <div>
-            <h1 className="text-white font-black text-xl tracking-tight">CRM Pipeline</h1>
-            <p className="text-white/30 text-xs font-mono mt-0.5">{leads.length} leads · ₹{(totalPipeline / 1000).toFixed(0)}K pipeline · {convRate}% conversion</p>
-          </div>
-          <div className="flex gap-2 ml-auto flex-wrap">
-            <select
-              value={sourceFilter}
-              onChange={e => setSourceFilter(e.target.value)}
-              className="bg-white/5 border border-white/10 rounded-lg text-white/50 text-xs font-mono px-3 py-2 outline-none"
-            >
-              <option value="all">All Sources</option>
-              {['website', 'whatsapp', 'referral', 'facebook', 'google', 'instagram', 'event'].map(s => (
-                <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>
-              ))}
-            </select>
-            <button
-              onClick={() => setShowNewLead(true)}
-              className="bg-[#FF6500] text-white font-bold text-xs px-4 py-2 rounded-lg hover:bg-[#E05800] transition-colors"
-            >
-              + New Lead
-            </button>
+    <div className="bg-white border border-[#E8E3DA] rounded-xl p-3 cursor-pointer hover:shadow-md hover:border-[#FF6500]/30 transition-all group"
+      onClick={() => onSelect(lead)}>
+      <div className="flex items-start justify-between mb-2">
+        <div className="min-w-0 flex-1">
+          <p className="text-sm font-semibold text-[#1A1410] truncate">{lead.name}</p>
+          {lead.business && <p className="text-[10px] text-[#9C9189] truncate">{lead.business}</p>}
+        </div>
+        <span className="text-base ml-1 shrink-0">{srcIcon}</span>
+      </div>
+      {lead.service_interest && (
+        <span className="inline-block text-[10px] font-mono px-1.5 py-0.5 rounded text-[#FF6500] bg-[rgba(255,101,0,0.08)] mb-2">
+          {lead.service_interest}
+        </span>
+      )}
+      <div className="flex items-center justify-between text-[10px] font-mono text-[#9C9189] mb-1.5">
+        <span>{lead.city || '—'}</span>
+        <span className={overdue ? 'text-red-500 font-bold' : ''}>
+          {lead.follow_up_date ? new Date(lead.follow_up_date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' }) : `${daysInStage}d`}
+        </span>
+      </div>
+      {lead.deal_value ? (
+        <p className="text-[10px] font-mono font-bold text-[#FF6500] mb-1.5">₹{(lead.deal_value/1000).toFixed(0)}K/mo</p>
+      ) : null}
+      <ScoreBar score={lead.score} />
+      <div className="flex items-center justify-between mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
+        <div className="flex gap-1">
+          {stageIdx > 0 && (
+            <button onClick={e => { e.stopPropagation(); onMove(lead.id, STAGES[stageIdx - 1]) }}
+              className="w-6 h-6 rounded-lg bg-[#F7F4EF] text-[#9C9189] hover:text-[#1A1410] text-xs flex items-center justify-center">←</button>
+          )}
+          {stageIdx < STAGES.length - 1 && (
+            <button onClick={e => { e.stopPropagation(); onMove(lead.id, STAGES[stageIdx + 1]) }}
+              className="w-6 h-6 rounded-lg bg-[#F7F4EF] text-[#9C9189] hover:text-[#1A1410] text-xs flex items-center justify-center">→</button>
+          )}
+        </div>
+        <a href={`https://wa.me/${lead.phone?.replace(/\D/g,'')}`} target="_blank" rel="noopener noreferrer"
+          onClick={e => e.stopPropagation()}
+          className="w-6 h-6 rounded-lg flex items-center justify-center text-xs text-green-600 bg-green-50 hover:bg-green-100">💬</a>
+      </div>
+    </div>
+  )
+}
+
+function DetailPanel({ lead, onClose, onStageChange }: { lead: Lead; onClose: () => void; onStageChange: (id: string, stage: string) => void }) {
+  const [actType, setActType] = useState('Note')
+  const [actText, setActText] = useState('')
+  const [saving, startSaving] = useTransition()
+
+  const proposal = `Hi ${lead.name},
+
+Thank you for your interest in Scalify Labs.
+
+Based on our conversation, here is our proposal for ${lead.service_interest || 'digital marketing services'}:
+
+✅ Monthly Retainer: ₹${lead.deal_value?.toLocaleString() || '15,000'}/month
+✅ Services: ${lead.service_interest || 'SEO + Google Ads + Content'}
+✅ Duration: 3-month minimum engagement
+✅ Reporting: Weekly + Monthly
+
+Ready to start? Reply YES to proceed.
+
+— Arvind Gupta | Scalify Labs
++91 87884 24727`
+
+  const waMsg = `Hi ${lead.name}! This is Arvind from Scalify Labs 🚀\n\nThanks for your enquiry about ${lead.service_interest || 'digital marketing'}. I'd love to understand your goals better.\n\nWhen would be a good time for a quick 15-min call?\n\n— Arvind | +91 87884 24727`
+
+  async function saveActivity() {
+    if (!actText.trim()) return
+    startSaving(async () => {
+      await addActivity(lead.id, actType, actText)
+      setActText('')
+    })
+  }
+
+  return (
+    <div className="fixed inset-y-0 right-0 w-[420px] bg-white border-l border-[#E8E3DA] shadow-2xl z-50 flex flex-col" style={{ top: 52 }}>
+      {/* Header */}
+      <div className="p-5 border-b border-[#E8E3DA] flex items-start justify-between">
+        <div>
+          <h2 className="font-black text-lg text-[#1A1410]" style={{ fontFamily: 'Syne, sans-serif' }}>{lead.name}</h2>
+          {lead.business && <p className="text-sm text-[#9C9189]">{lead.business}</p>}
+        </div>
+        <button onClick={onClose} className="w-8 h-8 rounded-lg hover:bg-[#F7F4EF] text-[#9C9189] hover:text-[#1A1410] flex items-center justify-center">✕</button>
+      </div>
+
+      <div className="flex-1 overflow-y-auto p-5 space-y-5">
+        {/* Contact info */}
+        <div className="space-y-2">
+          <p className="text-[10px] font-mono uppercase tracking-widest text-[#9C9189]">Contact</p>
+          <div className="grid grid-cols-2 gap-2 text-sm">
+            <div><span className="text-[10px] font-mono text-[#9C9189]">Phone</span><p className="font-mono text-[#1A1410]">{lead.phone}</p></div>
+            <div><span className="text-[10px] font-mono text-[#9C9189]">City</span><p className="text-[#1A1410]">{lead.city || '—'}</p></div>
+            <div><span className="text-[10px] font-mono text-[#9C9189]">Email</span><p className="text-[#1A1410] truncate">{lead.email || '—'}</p></div>
+            <div><span className="text-[10px] font-mono text-[#9C9189]">Source</span><p className="text-[#1A1410]">{lead.source}</p></div>
           </div>
         </div>
 
-        {/* Kanban */}
-        <div className="flex-1 overflow-x-auto overflow-y-hidden">
-          <div className="flex gap-3 h-full p-4 min-w-max">
+        {/* Service + Score */}
+        <div className="flex gap-3">
+          {lead.service_interest && (
+            <span className="text-xs px-2.5 py-1 rounded-full font-mono bg-[rgba(255,101,0,0.08)] text-[#FF6500]">
+              {lead.service_interest}
+            </span>
+          )}
+          {lead.deal_value ? (
+            <span className="text-xs px-2.5 py-1 rounded-full font-mono bg-[rgba(22,163,74,0.08)] text-[#16A34A]">
+              ₹{lead.deal_value.toLocaleString()}/mo
+            </span>
+          ) : null}
+        </div>
+
+        {/* Score bar */}
+        <div>
+          <div className="flex justify-between text-xs mb-1">
+            <span className="font-mono text-[#9C9189]">Lead Score</span>
+            <span className="font-bold text-[#1A1410]">{lead.score ?? 50}/100</span>
+          </div>
+          <ScoreBar score={lead.score} />
+        </div>
+
+        {/* Stage */}
+        <div>
+          <p className="text-[10px] font-mono uppercase tracking-widest text-[#9C9189] mb-2">Move Stage</p>
+          <div className="flex flex-wrap gap-1.5">
+            {STAGES.map(s => (
+              <button key={s} onClick={() => onStageChange(lead.id, s)}
+                className="text-[10px] font-mono px-2.5 py-1.5 rounded-lg border transition-all"
+                style={{
+                  background: lead.stage === s ? STAGE_COLORS[s] + '15' : 'transparent',
+                  color: lead.stage === s ? STAGE_COLORS[s] : '#9C9189',
+                  borderColor: lead.stage === s ? STAGE_COLORS[s] + '40' : '#E8E3DA',
+                  fontWeight: lead.stage === s ? 700 : 400,
+                }}>
+                {STAGE_LABELS[s]}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Message */}
+        {lead.message && (
+          <div>
+            <p className="text-[10px] font-mono uppercase tracking-widest text-[#9C9189] mb-1">Message</p>
+            <p className="text-sm text-[#57534E] bg-[#F7F4EF] rounded-lg p-3">{lead.message}</p>
+          </div>
+        )}
+
+        {/* Activity Logger */}
+        <div>
+          <p className="text-[10px] font-mono uppercase tracking-widest text-[#9C9189] mb-2">Add Activity</p>
+          <div className="flex gap-1.5 mb-2">
+            {['Note','Call','Email','Meeting','WhatsApp'].map(t => (
+              <button key={t} onClick={() => setActType(t)}
+                className="text-[10px] px-2 py-1 rounded-lg border transition-colors font-mono"
+                style={{ background: actType === t ? '#FF6500' : '#F7F4EF', color: actType === t ? 'white' : '#57534E', borderColor: '#E8E3DA' }}>
+                {t}
+              </button>
+            ))}
+          </div>
+          <textarea rows={3} value={actText} onChange={e => setActText(e.target.value)}
+            placeholder={`Add ${actType} note…`}
+            className="w-full bg-[#F7F4EF] border border-[#E8E3DA] rounded-lg text-sm p-3 resize-none focus:outline-none focus:border-[#FF6500] focus:ring-2 focus:ring-[rgba(255,101,0,0.1)]" />
+          <button onClick={saveActivity} disabled={saving || !actText.trim()}
+            className="mt-2 w-full py-2 rounded-lg bg-[#FF6500] text-white text-sm font-bold hover:bg-[#E05800] transition-colors disabled:opacity-50">
+            {saving ? 'Saving…' : 'Save Activity'}
+          </button>
+        </div>
+      </div>
+
+      {/* Action buttons */}
+      <div className="p-4 border-t border-[#E8E3DA] space-y-2">
+        <div className="grid grid-cols-2 gap-2">
+          <button
+            onClick={() => { navigator.clipboard.writeText(proposal) }}
+            className="py-2 rounded-lg text-xs font-semibold bg-[#F7F4EF] text-[#57534E] border border-[#E8E3DA] hover:bg-[#F0ECE4] transition-colors">
+            📋 Copy Proposal
+          </button>
+          <a href={`https://wa.me/${lead.phone?.replace(/\D/g, '')}?text=${encodeURIComponent(waMsg)}`}
+            target="_blank" rel="noopener noreferrer"
+            className="py-2 rounded-lg text-xs font-semibold bg-green-50 text-green-700 border border-green-100 hover:bg-green-100 transition-colors text-center">
+            💬 Open WhatsApp
+          </a>
+        </div>
+        <button
+          onClick={() => onStageChange(lead.id, 'won')}
+          className="w-full py-2 rounded-lg text-xs font-semibold bg-[rgba(22,163,74,0.08)] text-[#16A34A] border border-[rgba(22,163,74,0.2)] hover:bg-[rgba(22,163,74,0.15)] transition-colors">
+          🏆 Mark as Won
+        </button>
+      </div>
+    </div>
+  )
+}
+
+export function CRMBoard({ leads: initialLeads }: { leads: Lead[] }) {
+  const [leads, setLeads] = useState<Lead[]>(initialLeads)
+  const [selected, setSelected] = useState<Lead | null>(null)
+  const [search, setSearch] = useState('')
+  const [filterSource, setFilterSource] = useState('all')
+
+  const filtered = leads.filter(l => {
+    const matchSearch = !search ||
+      l.name?.toLowerCase().includes(search.toLowerCase()) ||
+      l.phone?.includes(search) ||
+      l.business?.toLowerCase().includes(search.toLowerCase())
+    const matchSource = filterSource === 'all' || l.source === filterSource
+    return matchSearch && matchSource
+  })
+
+  function handleMove(id: string, stage: string) {
+    setLeads(prev => prev.map(l => l.id === id ? { ...l, stage } : l))
+    if (selected?.id === id) setSelected(prev => prev ? { ...prev, stage } : null)
+    moveStage(id, stage).catch(console.error)
+  }
+
+  const sources = [...new Set(leads.map(l => l.source).filter(Boolean))]
+  const pipelineValue = leads.filter(l => l.stage !== 'lost').reduce((s, l) => s + (l.deal_value || 0), 0)
+  const hotLeads = leads.filter(l => (l.score ?? 0) >= 80 && l.stage !== 'won' && l.stage !== 'lost')
+
+  return (
+    <div className="flex h-full bg-[#F7F4EF]">
+      {/* Board */}
+      <div className="flex-1 min-w-0 flex flex-col overflow-hidden">
+        {/* Topbar */}
+        <div className="px-5 py-3 bg-white border-b border-[#E8E3DA] flex items-center gap-3">
+          <h1 className="text-lg font-black text-[#1A1410] mr-2" style={{ fontFamily: 'Syne, sans-serif' }}>CRM Pipeline</h1>
+          <input value={search} onChange={e => setSearch(e.target.value)}
+            placeholder="Search leads…"
+            className="flex-1 max-w-xs bg-[#F7F4EF] border border-[#E8E3DA] rounded-lg text-sm px-3 py-1.5 focus:outline-none focus:border-[#FF6500]" />
+          <select value={filterSource} onChange={e => setFilterSource(e.target.value)}
+            className="text-xs bg-[#F7F4EF] border border-[#E8E3DA] rounded-lg px-3 py-1.5 text-[#57534E] focus:outline-none">
+            <option value="all">All Sources</option>
+            {sources.map(s => <option key={s} value={s}>{s}</option>)}
+          </select>
+          <div className="ml-auto flex items-center gap-3">
+            <div className="text-right">
+              <p className="text-[10px] font-mono text-[#9C9189] uppercase tracking-widest">Pipeline</p>
+              <p className="text-sm font-black text-[#FF6500]">₹{Math.round(pipelineValue / 1000)}K/mo</p>
+            </div>
+            <div className="text-right">
+              <p className="text-[10px] font-mono text-[#9C9189] uppercase tracking-widest">Hot Leads</p>
+              <p className="text-sm font-black text-[#16A34A]">{hotLeads.length}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Kanban columns */}
+        <div className="flex-1 overflow-x-auto p-4">
+          <div className="flex gap-3 h-full" style={{ minWidth: `${STAGES.length * 240}px` }}>
             {STAGES.map(stage => {
-              const cards = filtered.filter(l => l.stage === stage)
-              const stageVal = cards.reduce((s, l) => s + (BUDGET_MID[l.budget || ''] || 0), 0)
+              const stageLeads = filtered.filter(l => (l.stage || 'new') === stage)
+              const stageValue = stageLeads.reduce((s, l) => s + (l.deal_value || 0), 0)
               return (
-                <div key={stage} className={`w-56 flex-shrink-0 flex flex-col border-t-2 ${STAGE_COLOR[stage]}`}>
-                  <div className="flex items-center justify-between px-2 py-2 mb-2">
-                    <div>
-                      <div className="text-white/80 font-bold text-xs">{STAGE_LABEL[stage]}</div>
-                      <div className="text-white/25 text-[10px] font-mono">₹{(stageVal / 1000).toFixed(0)}K pipeline</div>
+                <div key={stage} className="w-56 flex-shrink-0 flex flex-col">
+                  {/* Column header */}
+                  <div className="mb-2 px-3 py-2 rounded-lg" style={{ background: STAGE_COLORS[stage] + '10' }}>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold" style={{ color: STAGE_COLORS[stage] }}>{STAGE_LABELS[stage]}</span>
+                      <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-full text-white"
+                        style={{ background: STAGE_COLORS[stage] }}>
+                        {stageLeads.length}
+                      </span>
                     </div>
-                    <span className="bg-white/8 text-white/40 font-mono text-[10px] px-1.5 py-0.5 rounded-full">{cards.length}</span>
+                    {stageValue > 0 && (
+                      <p className="text-[10px] font-mono text-[#9C9189] mt-0.5">₹{Math.round(stageValue / 1000)}K/mo</p>
+                    )}
                   </div>
-
-                  <div className="flex-1 overflow-y-auto space-y-2 pb-2">
-                    {cards.map(lead => (
-                      <div
-                        key={lead.id}
-                        onClick={() => setSelected(lead)}
-                        className={`bg-[#111827] border border-white/8 rounded-xl p-3 cursor-pointer hover:border-[#FF6500]/40 transition-all ${selected?.id === lead.id ? 'border-[#FF6500]/50 bg-[#FF6500]/5' : ''}`}
-                      >
-                        <div className="flex items-start justify-between mb-1.5">
-                          <div className="text-white font-semibold text-xs leading-snug">{lead.name}</div>
-                          <span className={`text-[10px] font-mono font-bold ${scoreColor(lead.score || 50)}`}>{lead.score}</span>
-                        </div>
-                        <div className="text-white/35 text-[10px] font-mono mb-2 truncate">{lead.business}</div>
-                        <div className="flex items-center gap-1.5 flex-wrap mb-2">
-                          {lead.budget && (
-                            <span className="bg-[#FF6500]/10 text-[#FF6500] text-[9px] font-mono px-1.5 py-0.5 rounded">
-                              {BUDGET_LABEL[lead.budget]}
-                            </span>
-                          )}
-                          <span className="text-white/25 text-[9px] font-mono">{lead.source}</span>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <div className="flex gap-1">
-                            {STAGES.indexOf(stage) > 0 && (
-                              <button
-                                onClick={e => { e.stopPropagation(); moveStage(lead.id, STAGES[STAGES.indexOf(stage) - 1] as Lead['stage']) }}
-                                className="text-white/20 hover:text-white/60 text-xs px-1"
-                              >←</button>
-                            )}
-                            {STAGES.indexOf(stage) < STAGES.length - 1 && (
-                              <button
-                                onClick={e => { e.stopPropagation(); moveStage(lead.id, STAGES[STAGES.indexOf(stage) + 1] as Lead['stage']) }}
-                                className="text-white/20 hover:text-white/60 text-xs px-1"
-                              >→</button>
-                            )}
-                          </div>
-                          <button
-                            onClick={e => {
-                              e.stopPropagation()
-                              const msg = `Hi ${lead.name.split(' ')[0]}! 👋\n\nMain Arvind Gupta hoon, Scalify Labs se. ${lead.service_interest || 'Digital marketing'} ke baare mein baat karni thi. Kya aap free hain?\n\n— Arvind, Scalify Labs`
-                              window.open(`https://wa.me/${lead.phone?.replace(/\D/g, '')}?text=${encodeURIComponent(msg)}`, '_blank')
-                            }}
-                            className="text-green-400/50 hover:text-green-400 text-xs transition-colors"
-                          >💬</button>
-                        </div>
-                      </div>
+                  {/* Cards */}
+                  <div className="flex-1 space-y-2 overflow-y-auto pr-0.5">
+                    {stageLeads.map(l => (
+                      <LeadCard key={l.id} lead={l} onSelect={setSelected} onMove={handleMove} />
                     ))}
-
-                    <div
-                      onClick={() => setShowNewLead(true)}
-                      className="border border-dashed border-white/10 rounded-xl p-2 text-white/20 text-xs text-center cursor-pointer hover:border-white/20 hover:text-white/30 transition-all font-mono"
-                    >
-                      + add
-                    </div>
+                    {!stageLeads.length && (
+                      <div className="border-2 border-dashed border-[#E8E3DA] rounded-xl p-4 text-center">
+                        <p className="text-[10px] font-mono text-[#9C9189]">No leads</p>
+                      </div>
+                    )}
                   </div>
                 </div>
               )
@@ -183,171 +337,13 @@ export function CRMBoard({ initialLeads, summary, totalPipeline }: Props) {
         </div>
       </div>
 
-      {/* Lead Detail Panel */}
+      {/* Detail panel */}
       {selected && (
-        <div className="w-80 bg-[#0D1117] border-l border-white/6 flex flex-col overflow-hidden flex-shrink-0">
-          <div className="flex items-center justify-between px-4 py-3 border-b border-white/6">
-            <div className="font-bold text-white text-sm">{selected.name}</div>
-            <button onClick={() => setSelected(null)} className="text-white/30 hover:text-white text-lg">✕</button>
-          </div>
-
-          <div className="flex-1 overflow-y-auto p-4 space-y-4">
-            {/* Info */}
-            <div className="space-y-2">
-              {[
-                { label: 'Phone', value: selected.phone, icon: '📞' },
-                { label: 'Email', value: selected.email || '—', icon: '📧' },
-                { label: 'Business', value: selected.business || '—', icon: '🏢' },
-                { label: 'City', value: selected.city || '—', icon: '📍' },
-                { label: 'Service', value: selected.service_interest || '—', icon: '🎯' },
-                { label: 'Source', value: selected.source, icon: '📌' },
-                { label: 'Budget', value: BUDGET_LABEL[selected.budget || ''] || 'Not set', icon: '💰' },
-              ].map(f => (
-                <div key={f.label} className="flex gap-2 items-start">
-                  <span className="text-sm w-5 text-center flex-shrink-0">{f.icon}</span>
-                  <div>
-                    <div className="text-white/25 text-[9px] font-mono uppercase tracking-wider">{f.label}</div>
-                    <div className="text-white/70 text-xs">{f.value}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Stage */}
-            <div>
-              <div className="text-white/25 text-[9px] font-mono uppercase tracking-wider mb-1.5">Move Stage</div>
-              <select
-                value={selected.stage}
-                onChange={e => moveStage(selected.id, e.target.value as Lead['stage'])}
-                className="w-full bg-white/5 border border-white/10 rounded-lg text-white/70 text-xs font-mono px-3 py-2 outline-none"
-              >
-                {STAGES.map(s => <option key={s} value={s}>{STAGE_LABEL[s]}</option>)}
-              </select>
-            </div>
-
-            {/* Score */}
-            <div>
-              <div className="text-white/25 text-[9px] font-mono uppercase tracking-wider mb-1.5">Lead Score</div>
-              <div className="flex items-center gap-2">
-                <span className={`font-black text-2xl ${scoreColor(selected.score || 50)}`}>{selected.score || 50}</span>
-                <div className="flex-1 h-1.5 bg-white/8 rounded-full overflow-hidden">
-                  <div
-                    className={`h-full rounded-full ${(selected.score || 50) >= 80 ? 'bg-green-400' : (selected.score || 50) >= 60 ? 'bg-amber-400' : 'bg-red-400'}`}
-                    style={{ width: `${selected.score || 50}%` }}
-                  />
-                </div>
-                <span className="text-white/25 text-[10px] font-mono">/100</span>
-              </div>
-            </div>
-
-            {/* Quick actions */}
-            <div className="grid grid-cols-2 gap-2">
-              <button
-                onClick={() => {
-                  const msg = `Hi ${selected.name.split(' ')[0]}! 👋\n\nMain Arvind Gupta hoon, Scalify Labs se. Aapke saath ${selected.service_interest} ke baare mein baat karni thi.\n\n— Arvind`
-                  window.open(`https://wa.me/${selected.phone?.replace(/\D/g, '')}?text=${encodeURIComponent(msg)}`, '_blank')
-                }}
-                className="bg-green-500/10 border border-green-500/20 text-green-400 text-xs font-mono py-2 rounded-lg hover:bg-green-500/20 transition-colors"
-              >
-                💬 WhatsApp
-              </button>
-              <button
-                onClick={() => {
-                  const p = `DIGITAL MARKETING PROPOSAL\n${'='.repeat(32)}\nFor: ${selected.business || selected.name}\nContact: ${selected.phone}\nService: ${selected.service_interest}\nDate: ${new Date().toLocaleDateString()}\nBy: Arvind Gupta, Scalify Labs`
-                  navigator.clipboard.writeText(p)
-                }}
-                className="bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-mono py-2 rounded-lg hover:bg-blue-500/20 transition-colors"
-              >
-                📄 Copy Proposal
-              </button>
-            </div>
-
-            {/* Add note */}
-            <div>
-              <div className="text-white/25 text-[9px] font-mono uppercase tracking-wider mb-2">Add Activity</div>
-              <div className="flex gap-1 mb-2">
-                {(['note', 'call', 'email', 'meeting'] as const).map(t => (
-                  <button
-                    key={t}
-                    onClick={() => setNoteType(t)}
-                    className={`flex-1 text-[9px] font-mono py-1.5 rounded-lg transition-colors capitalize ${noteType === t ? 'bg-[#FF6500] text-white' : 'bg-white/5 text-white/30 hover:text-white/60'}`}
-                  >
-                    {t}
-                  </button>
-                ))}
-              </div>
-              <textarea
-                value={noteText}
-                onChange={e => setNoteText(e.target.value)}
-                rows={3}
-                placeholder="Add a note, call log, meeting summary…"
-                className="w-full bg-white/5 border border-white/10 rounded-lg text-white/70 text-xs font-mono px-3 py-2 outline-none focus:border-[#FF6500] resize-none transition-colors mb-2"
-              />
-              <button
-                onClick={addNote}
-                disabled={saving || !noteText.trim()}
-                className="w-full bg-[#FF6500] text-white font-bold text-xs py-2 rounded-lg hover:bg-[#E05800] disabled:opacity-30 transition-colors"
-              >
-                {saving ? 'Saving…' : 'Save Activity'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* New Lead Modal */}
-      {showNewLead && (
-        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
-          <div className="bg-[#111827] border border-white/10 rounded-2xl p-6 w-full max-w-md">
-            <div className="flex justify-between mb-5">
-              <div className="text-white font-bold text-base">New Lead</div>
-              <button onClick={() => setShowNewLead(false)} className="text-white/30 hover:text-white">✕</button>
-            </div>
-            <div className="grid grid-cols-2 gap-3 mb-3">
-              <div>
-                <div className="text-[9px] font-mono text-white/30 uppercase tracking-widest mb-1">Name *</div>
-                <input value={newLead.name} onChange={e => setNewLead(f => ({ ...f, name: e.target.value }))} placeholder="Rajesh Sharma" className={inputCls} />
-              </div>
-              <div>
-                <div className="text-[9px] font-mono text-white/30 uppercase tracking-widest mb-1">Phone *</div>
-                <input value={newLead.phone} onChange={e => setNewLead(f => ({ ...f, phone: e.target.value }))} placeholder="+91 98765 43210" className={inputCls} />
-              </div>
-              <div>
-                <div className="text-[9px] font-mono text-white/30 uppercase tracking-widest mb-1">Business</div>
-                <input value={newLead.business} onChange={e => setNewLead(f => ({ ...f, business: e.target.value }))} placeholder="Business name" className={inputCls} />
-              </div>
-              <div>
-                <div className="text-[9px] font-mono text-white/30 uppercase tracking-widest mb-1">City</div>
-                <input value={newLead.city} onChange={e => setNewLead(f => ({ ...f, city: e.target.value }))} className={inputCls} />
-              </div>
-            </div>
-            <div className="mb-3">
-              <div className="text-[9px] font-mono text-white/30 uppercase tracking-widest mb-1">Source</div>
-              <select value={newLead.source} onChange={e => setNewLead(f => ({ ...f, source: e.target.value }))} className={inputCls}>
-                {['website', 'whatsapp', 'referral', 'facebook', 'google', 'instagram', 'event', 'cold-call', 'direct'].map(s => (
-                  <option key={s} value={s}>{s}</option>
-                ))}
-              </select>
-            </div>
-            <div className="mb-4">
-              <div className="text-[9px] font-mono text-white/30 uppercase tracking-widest mb-1">Service Interest</div>
-              <select value={newLead.service_interest} onChange={e => setNewLead(f => ({ ...f, service_interest: e.target.value }))} className={inputCls}>
-                {['SEO Services', 'Google Ads', 'Meta Ads', 'WhatsApp Marketing', 'Website Development', 'AI Systems', 'Full Package', 'Lead to Revenue'].map(s => (
-                  <option key={s}>{s}</option>
-                ))}
-              </select>
-            </div>
-            <div className="flex gap-3">
-              <button onClick={() => setShowNewLead(false)} className="flex-1 border border-white/10 text-white/40 text-xs font-mono py-2.5 rounded-xl hover:border-white/20 transition-colors">Cancel</button>
-              <button onClick={saveNewLead} disabled={saving || !newLead.name || !newLead.phone} className="flex-1 bg-[#FF6500] text-white font-bold text-xs py-2.5 rounded-xl hover:bg-[#E05800] disabled:opacity-40 transition-colors">
-                {saving ? 'Adding…' : 'Add to Pipeline'}
-              </button>
-            </div>
-          </div>
-        </div>
+        <>
+          <div className="fixed inset-0 bg-black/10 z-40" onClick={() => setSelected(null)} />
+          <DetailPanel lead={selected} onClose={() => setSelected(null)} onStageChange={handleMove} />
+        </>
       )}
     </div>
   )
 }
-
-const inputCls = "w-full bg-white/5 border border-white/10 rounded-lg text-white/70 text-xs font-mono px-3 py-2 outline-none focus:border-[#FF6500] transition-colors"

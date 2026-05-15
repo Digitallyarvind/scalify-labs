@@ -2,119 +2,159 @@
 
 import { useState } from 'react'
 
+const WEIGHTS = [
+  { key: 'academic', label: 'Academic Score', default: 30 },
+  { key: 'psychometric', label: 'Psychometric Score', default: 30 },
+  { key: 'interview', label: 'Interview Score', default: 25 },
+  { key: 'motivation', label: 'Motivation Score', default: 15 },
+]
+
+function Card({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div className="bg-white border border-[#E8E3DA] rounded-xl p-5 shadow-sm">
+      <p className="text-[10px] font-mono uppercase tracking-widest text-[#9C9189] mb-4">{title}</p>
+      {children}
+    </div>
+  )
+}
+
+function Field({ label, value, onChange, type = 'text', placeholder = '' }: {
+  label: string; value: string; onChange: (v: string) => void; type?: string; placeholder?: string
+}) {
+  return (
+    <div>
+      <label className="block text-[10px] font-mono text-[#9C9189] uppercase tracking-widest mb-1.5">{label}</label>
+      <input type={type} value={value} onChange={e => onChange(e.target.value)} placeholder={placeholder}
+        className="w-full bg-[#F7F4EF] border border-[#E8E3DA] rounded-lg text-sm px-3 py-2.5 text-[#1A1410] focus:outline-none focus:border-[#FF6500] focus:shadow-[0_0_0_3px_rgba(255,101,0,0.1)] transition-all" />
+    </div>
+  )
+}
+
 export default function SettingsPage() {
-  const [saved, setSaved] = useState(false)
-  const [profile, setProfile] = useState({
-    biz: 'Scalify Labs', name: 'Arvind Gupta', phone: '+91 87884 24727',
-    email: 'hello@scalifylabs.com', city: 'Ranchi, Jharkhand', web: 'https://scalifylabs.com',
+  const [weights, setWeights] = useState({ academic: 30, psychometric: 30, interview: 25, motivation: 15 })
+  const [business, setBusiness] = useState({
+    name: 'Scalify Labs', founder: 'Arvind Gupta', phone: '+91 87884 24727',
+    email: 'hello@scalifylabs.com', city: 'Ranchi', website: 'https://scalifylabs.com'
   })
-  const [weights, setWeights] = useState({ acad: 30, psych: 30, interview: 25, motivation: 15 })
-  const [apiKey, setApiKey] = useState(() => typeof window !== 'undefined' ? localStorage.getItem('sl_api_key') || '' : '')
+  const [adminPhone, setAdminPhone] = useState('918788424727')
+  const [anthropicKey, setAnthropicKey] = useState('')
+  const [notifications, setNotifications] = useState({
+    new_lead: true, s30_application: true, career_application: true, seo_cron: true
+  })
+  const [saved, setSaved] = useState(false)
+
+  const weightTotal = Object.values(weights).reduce((s, v) => s + v, 0)
 
   function save() {
-    if (typeof window !== 'undefined') localStorage.setItem('sl_api_key', apiKey)
+    // In production, save to Supabase settings table via API
     setSaved(true)
     setTimeout(() => setSaved(false), 2000)
   }
 
-  const total = weights.acad + weights.psych + weights.interview + weights.motivation
-  const inputCls = "w-full bg-white/5 border border-white/10 rounded-lg text-white/70 text-sm px-3 py-2.5 outline-none focus:border-[#FF6500] transition-colors"
-
   return (
-    <div className="p-6 max-w-2xl">
-      <div className="mb-6">
-        <h1 className="text-white font-black text-2xl tracking-tight mb-1">Settings</h1>
-        <p className="text-white/30 text-sm font-mono">Business profile, scoring weights, API keys</p>
+    <div className="p-6 bg-[#F7F4EF] min-h-full space-y-6">
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-black text-[#1A1410]" style={{ fontFamily: 'Syne, sans-serif' }}>Settings</h1>
+        <button onClick={save}
+          className="px-5 py-2.5 rounded-lg bg-[#FF6500] text-white font-bold text-sm hover:bg-[#E05800] transition-colors">
+          {saved ? '✓ Saved' : 'Save Changes'}
+        </button>
       </div>
 
-      {/* Business Profile */}
-      <div className="bg-[#111827] border border-white/7 rounded-xl p-5 mb-4">
-        <div className="text-white font-bold text-base mb-1">Business Profile</div>
-        <div className="text-white/30 text-xs font-mono mb-4">Used in offer letters, proposals, and admin</div>
-        <div className="grid grid-cols-2 gap-3">
-          {[
-            { label: 'Business Name', key: 'biz', placeholder: 'Scalify Labs' },
-            { label: 'Founder Name', key: 'name', placeholder: 'Arvind Gupta' },
-            { label: 'Phone', key: 'phone', placeholder: '+91 87884 24727' },
-            { label: 'Email', key: 'email', placeholder: 'hello@scalifylabs.com' },
-            { label: 'City', key: 'city', placeholder: 'Ranchi, Jharkhand' },
-            { label: 'Website', key: 'web', placeholder: 'https://scalifylabs.com' },
-          ].map(f => (
-            <div key={f.key}>
-              <div className="text-[9px] font-mono text-white/25 uppercase tracking-widest mb-1.5">{f.label}</div>
-              <input
-                value={profile[f.key as keyof typeof profile]}
-                onChange={e => setProfile(p => ({ ...p, [f.key]: e.target.value }))}
-                placeholder={f.placeholder}
-                className={inputCls}
-              />
+      <div className="grid lg:grid-cols-2 gap-6">
+        {/* Business Profile */}
+        <Card title="Business Profile">
+          <div className="space-y-3">
+            <Field label="Business Name" value={business.name} onChange={v => setBusiness(b => ({ ...b, name: v }))} />
+            <Field label="Founder Name" value={business.founder} onChange={v => setBusiness(b => ({ ...b, founder: v }))} />
+            <div className="grid grid-cols-2 gap-3">
+              <Field label="Phone" value={business.phone} onChange={v => setBusiness(b => ({ ...b, phone: v }))} />
+              <Field label="City" value={business.city} onChange={v => setBusiness(b => ({ ...b, city: v }))} />
             </div>
-          ))}
-        </div>
-      </div>
+            <Field label="Email" type="email" value={business.email} onChange={v => setBusiness(b => ({ ...b, email: v }))} />
+            <Field label="Website" type="url" value={business.website} onChange={v => setBusiness(b => ({ ...b, website: v }))} />
+          </div>
+        </Card>
 
-      {/* S30 Score Weights */}
-      <div className="bg-[#111827] border border-white/7 rounded-xl p-5 mb-4">
-        <div className="text-white font-bold text-base mb-1">Super 30 Score Weights</div>
-        <div className="text-white/30 text-xs font-mono mb-4">
-          Must total 100% — currently {total}%{' '}
-          {total !== 100 && <span className="text-red-400">(adjust to equal 100)</span>}
-        </div>
-        <div className="grid grid-cols-2 gap-4">
-          {[
-            { label: 'Academic Score', key: 'acad' },
-            { label: 'Psychometric Score', key: 'psych' },
-            { label: 'Interview Score', key: 'interview' },
-            { label: 'Motivation Score', key: 'motivation' },
-          ].map(f => (
-            <div key={f.key}>
-              <div className="flex justify-between mb-1.5">
-                <div className="text-[9px] font-mono text-white/25 uppercase tracking-widest">{f.label}</div>
-                <div className="text-[#FF6500] text-[10px] font-mono">{weights[f.key as keyof typeof weights]}%</div>
+        {/* Super 30 Score Weights */}
+        <Card title="Super 30 — Score Weights">
+          <div className="space-y-4">
+            {WEIGHTS.map(w => (
+              <div key={w.key}>
+                <div className="flex justify-between mb-1.5">
+                  <label className="text-xs text-[#57534E] font-medium">{w.label}</label>
+                  <span className="text-xs font-mono font-bold text-[#FF6500]">{weights[w.key as keyof typeof weights]}%</span>
+                </div>
+                <input type="range" min={0} max={60} step={5}
+                  value={weights[w.key as keyof typeof weights]}
+                  onChange={e => setWeights(prev => ({ ...prev, [w.key]: Number(e.target.value) }))}
+                  className="w-full accent-[#FF6500]" />
               </div>
-              <input
-                type="range" min={0} max={100}
-                value={weights[f.key as keyof typeof weights]}
-                onChange={e => setWeights(w => ({ ...w, [f.key]: +e.target.value }))}
-                className="w-full accent-[#FF6500]"
-              />
+            ))}
+            <div className={`flex justify-between p-3 rounded-lg font-mono text-sm ${weightTotal === 100 ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-600'}`}>
+              <span>Total Weight</span>
+              <span className="font-black">{weightTotal}%</span>
             </div>
-          ))}
-        </div>
+            {weightTotal !== 100 && <p className="text-xs text-red-500">⚠️ Weights must total exactly 100%</p>}
+          </div>
+        </Card>
+
+        {/* API Keys */}
+        <Card title="API Configuration">
+          <div className="space-y-3">
+            <Field label="Admin WhatsApp Number" value={adminPhone} onChange={setAdminPhone} placeholder="918788424727" />
+            <div>
+              <label className="block text-[10px] font-mono text-[#9C9189] uppercase tracking-widest mb-1.5">Anthropic API Key (Claude AI)</label>
+              <input type="password" value={anthropicKey} onChange={e => setAnthropicKey(e.target.value)}
+                placeholder="sk-ant-api03-..."
+                className="w-full bg-[#F7F4EF] border border-[#E8E3DA] rounded-lg text-sm px-3 py-2.5 text-[#1A1410] focus:outline-none focus:border-[#FF6500] focus:shadow-[0_0_0_3px_rgba(255,101,0,0.1)] transition-all font-mono" />
+              <p className="text-[10px] text-[#9C9189] mt-1">Used for AI blog writing, SEO optimisation, and social repurposer</p>
+            </div>
+            <div>
+              <label className="block text-[10px] font-mono text-[#9C9189] uppercase tracking-widest mb-1.5">GSC Connection Status</label>
+              <div className="flex items-center gap-3 p-3 rounded-lg bg-[#F7F4EF]">
+                <div className="w-2 h-2 rounded-full bg-amber-400" />
+                <span className="text-sm text-[#57534E]">Not connected</span>
+                <button className="ml-auto text-xs px-3 py-1.5 rounded-lg bg-[#FF6500]/10 text-[#FF6500] font-semibold">Connect GSC</button>
+              </div>
+            </div>
+          </div>
+        </Card>
+
+        {/* Notifications */}
+        <Card title="WhatsApp Notifications">
+          <div className="space-y-3">
+            {[
+              { key: 'new_lead', label: 'New lead submitted' },
+              { key: 's30_application', label: 'New Super 30 application' },
+              { key: 'career_application', label: 'New career application' },
+              { key: 'seo_cron', label: 'SEO cron job completed' },
+            ].map(n => (
+              <div key={n.key} className="flex items-center justify-between py-2">
+                <span className="text-sm text-[#57534E]">{n.label}</span>
+                <button onClick={() => setNotifications(prev => ({ ...prev, [n.key]: !prev[n.key as keyof typeof prev] }))}
+                  className="relative w-10 h-5 rounded-full transition-colors"
+                  style={{ background: notifications[n.key as keyof typeof notifications] ? '#FF6500' : '#E8E3DA' }}>
+                  <div className="absolute w-4 h-4 bg-white rounded-full top-0.5 shadow transition-all"
+                    style={{ left: notifications[n.key as keyof typeof notifications] ? '22px' : '2px' }} />
+                </button>
+              </div>
+            ))}
+            <p className="text-[10px] text-[#9C9189] font-mono mt-2">
+              Notifications sent to: {adminPhone ? `+${adminPhone}` : 'Not configured'}
+            </p>
+          </div>
+        </Card>
       </div>
 
-      {/* AI API Key */}
-      <div className="bg-[#111827] border border-white/7 rounded-xl p-5 mb-5">
-        <div className="text-white font-bold text-base mb-1">Anthropic API Key</div>
-        <div className="text-white/30 text-xs font-mono mb-3">Used for AI writing assistant in the blog editor</div>
-        <input
-          type="password"
-          value={apiKey}
-          onChange={e => setApiKey(e.target.value)}
-          placeholder="sk-ant-api03-…"
-          className={inputCls}
-        />
-        <div className="text-white/20 text-[10px] font-mono mt-2">
-          Get your key at console.anthropic.com — stored locally in browser only
+      {/* Security */}
+      <Card title="Security">
+        <div className="grid sm:grid-cols-2 gap-4">
+          <Field label="Admin Email" type="email" value="admin@scalifylabs.com" onChange={() => {}} />
+          <Field label="New Password" type="password" value="" onChange={() => {}} placeholder="Leave blank to keep current" />
         </div>
-      </div>
-
-      {/* Admin Password hint */}
-      <div className="bg-amber-500/8 border border-amber-500/15 rounded-xl p-4 mb-5">
-        <div className="text-amber-400 font-bold text-sm mb-1">⚠️ Change Admin Password</div>
-        <div className="text-amber-400/60 text-xs leading-relaxed">
-          The default password is <code className="font-mono">scalify2026</code>. Change it in{' '}
-          <code className="font-mono">app/admin/layout.tsx</code> line ~60 before going live.
-          In production, replace with Supabase Auth.
-        </div>
-      </div>
-
-      <button
-        onClick={save}
-        className={`bg-[#FF6500] text-white font-bold text-sm px-6 py-3 rounded-xl hover:bg-[#E05800] transition-all ${saved ? 'bg-green-500 hover:bg-green-500' : ''}`}
-      >
-        {saved ? '✓ Saved!' : 'Save Settings'}
-      </button>
+        <p className="text-xs text-[#9C9189] mt-3">Current credentials: admin@scalifylabs.com · scalify2026</p>
+      </Card>
     </div>
   )
 }
