@@ -71,7 +71,7 @@ export default async function Super30Page() {
     interview_pending: applicants?.filter((a: { status: string }) => a.status === 'interview').length ?? 33,
     rejected: applicants?.filter((a: { status: string }) => a.status === 'rejected').length ?? 74,
     seats_total: activeBatch?.seats ?? 30,
-    batch_start: activeBatch?.start_date ?? '2026-06-12',
+    batch_start: activeBatch?.start_date ?? '2026-06-10',
   }
 
   return (

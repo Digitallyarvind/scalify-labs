@@ -96,7 +96,7 @@ const TOOLS = [
   { cat: 'SEO', tools: ['Semrush', 'Ahrefs'] },
   { cat: 'AI & Content', tools: ['ChatGPT', 'Claude', 'Canva'] },
   { cat: 'Automation', tools: ['Zapier', 'Make.com'] },
-  { cat: 'CRM', tools: ['HubSpot', 'Zoho CRM'] },
+  { cat: 'CRM', tools: ['Kylas CRM', 'TeleCRM'] },
   { cat: 'Analytics', tools: ['GA4', 'Tag Manager'] },
   { cat: 'Website', tools: ['WordPress', 'Elementor'] },
   { cat: 'Communication', tools: ['WhatsApp Business', 'Mailchimp'] },
@@ -129,23 +129,54 @@ const FAQS = [
   { q: 'Can I start freelancing after this program?', a: 'Yes. Portfolio building, client pitch practice, and freelance setup are part of the Career Launch module.' },
 ]
 
-// ─── ELIGIBILITY FORM ─────────────────────────────────────────────────────────
-function EligibilityForm({ mini = false, onSuccess }: { mini?: boolean; onSuccess?: () => void }) {
-  const [form, setForm] = useState({ name: '', phone: '', email: '', status: '', has_laptop: '' })
+// ─── 3-STEP APPLICATION FORM ──────────────────────────────────────────────────
+function EligibilityForm({ onSuccess }: { onSuccess?: () => void }) {
+  const [step, setStep] = useState(1)
+  const [form, setForm] = useState({
+    // Step 1 — Basic Info
+    name: '', phone: '', email: '', city: '', age: '',
+    // Step 2 — Background
+    status: '', education: '', has_laptop: '', hours_per_day: '',
+    // Step 3 — Motivation
+    why_join: '', goal_1yr: '', heard_from: '', commitment: false,
+  })
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState('')
-  const set = (k: keyof typeof form, v: string) => setForm(p => ({ ...p, [k]: v }))
+  const set = (k: keyof typeof form, v: string | boolean) => setForm(p => ({ ...p, [k]: v }))
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    if (!form.name.trim() || !form.phone.trim()) return
+  const inp = 'w-full bg-white border border-[#E8E3DA] rounded-xl px-4 py-3 text-sm text-[#1A1410] focus:outline-none focus:border-[#FF6500] focus:ring-2 focus:ring-[rgba(255,101,0,0.1)] transition-all'
+  const lbl = 'block text-[10px] font-semibold text-[#57534E] uppercase tracking-wider mb-1.5'
+
+  function RadioRow({ label, field, options }: { label: string; field: keyof typeof form; options: string[] }) {
+    return (
+      <div>
+        <label className={lbl}>{label}</label>
+        <div className="flex flex-wrap gap-2">
+          {options.map(opt => (
+            <button key={opt} type="button" onClick={() => set(field, opt)}
+              className="px-3 py-2 rounded-xl border text-xs font-medium transition-all"
+              style={{ background: form[field] === opt ? 'rgba(255,101,0,0.08)' : 'white', borderColor: form[field] === opt ? 'rgba(255,101,0,0.4)' : '#E8E3DA', color: form[field] === opt ? C.orange : '#57534E', fontWeight: form[field] === opt ? 700 : 400 }}>
+              {opt}
+            </button>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  async function handleFinalSubmit() {
+    if (!form.commitment) { setError('Please confirm your commitment to continue.'); return }
     setSubmitting(true); setError('')
     try {
       await submitS30Application({
         name: form.name.trim(), phone: form.phone.trim(),
         email: form.email || '',
-        occupation: form.status, city: '',
+        occupation: form.status,
+        education: form.education,
+        city: form.city,
+        why_join: form.why_join,
+        one_year_goal: form.goal_1yr,
         batch_id: '',
       })
       trackS30Application()
@@ -156,67 +187,160 @@ function EligibilityForm({ mini = false, onSuccess }: { mini?: boolean; onSucces
   }
 
   if (submitted) return (
-    <div className="text-center py-6">
-      <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-3">
-        <Check className="w-6 h-6 text-green-600" />
+    <div className="text-center py-8">
+      <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
+        <Check className="w-8 h-8 text-green-600" />
       </div>
-      <p className="font-bold text-[#1A1410]">Application received!</p>
-      <p className="text-sm text-[#57534E] mt-1">We'll reach out on WhatsApp within 24 hours.</p>
+      <p className="font-black text-xl text-[#1A1410] mb-2">Application Submitted! 🎉</p>
+      <p className="text-sm text-[#57534E] mb-1">Our team will call you within 24 hours on WhatsApp.</p>
+      <p className="text-xs text-[#9C9189]">If selected, you'll receive a counselling call within 48 hours.</p>
+      <a href={`https://wa.me/${WA}?text=${encodeURIComponent('Hi, I just applied for Super 30. My name is ' + form.name)}`}
+        target="_blank" rel="noopener noreferrer"
+        className="inline-flex items-center gap-2 mt-4 px-5 py-2.5 rounded-xl font-bold text-sm text-white"
+        style={{ background: '#25D366' }}>
+        💬 Message Us on WhatsApp
+      </a>
     </div>
   )
 
+  // Step progress indicator
+  const steps = [
+    { n: 1, label: 'Basic Info' },
+    { n: 2, label: 'Background' },
+    { n: 3, label: 'Motivation' },
+  ]
+
   return (
-    <form onSubmit={handleSubmit} className="space-y-3">
-      <div className={mini ? 'grid grid-cols-2 gap-3' : 'space-y-3'}>
-        <div>
-          <label className="block text-[10px] font-semibold text-[#57534E] uppercase tracking-wider mb-1.5">Full Name *</label>
-          <input required value={form.name} onChange={e => set('name', e.target.value)} placeholder="Your name"
-            className="w-full bg-white border border-[#E8E3DA] rounded-xl px-4 py-3 text-sm text-[#1A1410] focus:outline-none focus:border-[#FF6500] focus:ring-2 focus:ring-[rgba(255,101,0,0.1)] transition-all" />
-        </div>
-        <div>
-          <label className="block text-[10px] font-semibold text-[#57534E] uppercase tracking-wider mb-1.5">WhatsApp Number *</label>
-          <input required type="tel" value={form.phone} onChange={e => set('phone', e.target.value)} placeholder="+91 XXXXX XXXXX"
-            className="w-full bg-white border border-[#E8E3DA] rounded-xl px-4 py-3 text-sm text-[#1A1410] focus:outline-none focus:border-[#FF6500] focus:ring-2 focus:ring-[rgba(255,101,0,0.1)] transition-all" />
-        </div>
-        <div>
-          <label className="block text-[10px] font-semibold text-[#57534E] uppercase tracking-wider mb-1.5">Email</label>
-          <input type="email" value={form.email} onChange={e => set('email', e.target.value)} placeholder="your@email.com"
-            className="w-full bg-white border border-[#E8E3DA] rounded-xl px-4 py-3 text-sm text-[#1A1410] focus:outline-none focus:border-[#FF6500] focus:ring-2 focus:ring-[rgba(255,101,0,0.1)] transition-all" />
-        </div>
-        <div>
-          <label className="block text-[10px] font-semibold text-[#57534E] uppercase tracking-wider mb-1.5">Current Status</label>
-          <select value={form.status} onChange={e => set('status', e.target.value)}
-            className="w-full bg-white border border-[#E8E3DA] rounded-xl px-4 py-3 text-sm text-[#1A1410] focus:outline-none focus:border-[#FF6500] transition-all">
-            <option value="">Select…</option>
-            <option>Student</option>
-            <option>Fresh Graduate</option>
-            <option>Working Professional</option>
-            <option>Homemaker</option>
-            <option>Freelancer</option>
-            <option>Business Owner</option>
-            <option>Job Seeker</option>
-          </select>
-        </div>
+    <div>
+      {/* Step indicator */}
+      <div className="flex items-center gap-0 mb-6">
+        {steps.map((s, i) => (
+          <div key={s.n} className="flex items-center flex-1">
+            <div className="flex flex-col items-center">
+              <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-black transition-all"
+                style={{ background: step >= s.n ? C.orange : '#E8E3DA', color: step >= s.n ? 'white' : '#9C9189' }}>
+                {step > s.n ? <Check className="w-4 h-4" /> : s.n}
+              </div>
+              <p className="text-[9px] font-semibold mt-1 hidden sm:block" style={{ color: step >= s.n ? C.orange : '#9C9189' }}>{s.label}</p>
+            </div>
+            {i < steps.length - 1 && (
+              <div className="flex-1 h-0.5 mx-2 rounded-full transition-all"
+                style={{ background: step > s.n ? C.orange : '#E8E3DA' }} />
+            )}
+          </div>
+        ))}
       </div>
-      <div>
-        <label className="block text-[10px] font-semibold text-[#57534E] uppercase tracking-wider mb-2">Do you have a laptop?</label>
-        <div className="flex gap-3">
-          {['Yes, I own a laptop', 'No, I don\'t have one'].map(opt => (
-            <label key={opt} className={`flex-1 flex items-center gap-2 px-4 py-3 rounded-xl border cursor-pointer transition-all text-sm ${form.has_laptop === opt ? 'bg-[rgba(255,101,0,0.08)] border-[rgba(255,101,0,0.4)] text-[#FF6500] font-semibold' : 'border-[#E8E3DA] text-[#57534E]'}`}>
-              <input type="radio" name="laptop" value={opt} checked={form.has_laptop === opt} onChange={() => set('has_laptop', opt)} className="sr-only" />
-              {opt}
-            </label>
-          ))}
+
+      {/* ── STEP 1: Basic Info ── */}
+      {step === 1 && (
+        <div className="space-y-4">
+          <p className="text-sm font-bold text-[#1A1410] mb-4">Let's start with your basic details</p>
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className={lbl}>Full Name *</label>
+              <input required value={form.name} onChange={e => set('name', e.target.value)} placeholder="Your full name" className={inp} />
+            </div>
+            <div>
+              <label className={lbl}>WhatsApp Number *</label>
+              <input required type="tel" value={form.phone} onChange={e => set('phone', e.target.value)} placeholder="+91 XXXXX XXXXX" className={inp} />
+            </div>
+            <div>
+              <label className={lbl}>Email Address</label>
+              <input type="email" value={form.email} onChange={e => set('email', e.target.value)} placeholder="you@email.com" className={inp} />
+            </div>
+            <div>
+              <label className={lbl}>Your City *</label>
+              <input required value={form.city} onChange={e => set('city', e.target.value)} placeholder="e.g. Ranchi" className={inp} />
+            </div>
+            <div>
+              <label className={lbl}>Your Age</label>
+              <input type="number" min="16" max="50" value={form.age} onChange={e => set('age', e.target.value)} placeholder="e.g. 22" className={inp} />
+            </div>
+          </div>
+          <button
+            onClick={() => { if (!form.name.trim() || !form.phone.trim() || !form.city.trim()) { setError('Please fill Name, WhatsApp & City.'); return; } setError(''); setStep(2) }}
+            className="w-full py-4 rounded-xl font-bold text-white text-base flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"
+            style={{ background: C.orange }}>
+            Continue to Step 2 <ArrowRight className="w-5 h-5" />
+          </button>
+          {error && <p className="text-sm text-red-500 text-center">{error}</p>}
         </div>
-      </div>
-      {error && <p className="text-sm text-red-600 bg-red-50 px-3 py-2 rounded-lg">{error}</p>}
-      <button type="submit" disabled={submitting}
-        className="w-full py-4 rounded-xl font-bold text-white text-base flex items-center justify-center gap-2 hover:bg-[#E05800] transition-colors disabled:opacity-60"
-        style={{ background: C.orange, minHeight: 52 }}>
-        {submitting ? <><span className="w-5 h-5 border-2 border-white/40 border-t-white rounded-full animate-spin" />Submitting…</> : <>Check Eligibility Now <ArrowRight className="w-5 h-5" /></>}
-      </button>
-      <p className="text-center text-xs text-[#57534E]">Free · No spam · WhatsApp confirmation within 24 hours</p>
-    </form>
+      )}
+
+      {/* ── STEP 2: Background ── */}
+      {step === 2 && (
+        <div className="space-y-4">
+          <p className="text-sm font-bold text-[#1A1410] mb-4">Tell us about your background</p>
+          <RadioRow label="Current Status *" field="status" options={['Student','Fresh Graduate','Working Professional','Homemaker','Freelancer','Business Owner','Job Seeker']} />
+          <div>
+            <label className={lbl}>Highest Education</label>
+            <select value={form.education} onChange={e => set('education', e.target.value)} className={inp}>
+              <option value="">Select your education…</option>
+              <option>10th / High School</option>
+              <option>12th / Intermediate</option>
+              <option>Pursuing Graduation</option>
+              <option>Graduate (Any Stream)</option>
+              <option>Post Graduate</option>
+              <option>Diploma</option>
+            </select>
+          </div>
+          <RadioRow label="Do You Have a Laptop? *" field="has_laptop" options={['Yes, I own one', 'No, I need to arrange']} />
+          <RadioRow label="Hours Available Daily for Program" field="hours_per_day" options={['2–3 hours', '4–5 hours', '6+ hours']} />
+          <div className="flex gap-3">
+            <button onClick={() => setStep(1)} className="flex-1 py-3.5 rounded-xl font-bold text-sm border-2 hover:bg-[#F4F0E8] transition-colors" style={{ color: C.text, borderColor: C.border }}>← Back</button>
+            <button
+              onClick={() => { if (!form.status || !form.has_laptop) { setError('Please complete all required fields.'); return; } setError(''); setStep(3) }}
+              className="flex-1 py-3.5 rounded-xl font-bold text-white text-sm flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"
+              style={{ background: C.orange }}>
+              Continue to Step 3 <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+          {error && <p className="text-sm text-red-500 text-center">{error}</p>}
+        </div>
+      )}
+
+      {/* ── STEP 3: Motivation ── */}
+      {step === 3 && (
+        <div className="space-y-4">
+          <p className="text-sm font-bold text-[#1A1410] mb-4">This is the most important step — be honest</p>
+          <div>
+            <label className={lbl}>Why Do You Want to Join Super 30? *</label>
+            <textarea required rows={3} value={form.why_join} onChange={e => set('why_join', e.target.value)}
+              placeholder="Tell us honestly — what's your current situation, what are you struggling with, and why is this program right for you now?"
+              className={`${inp} resize-none`} />
+          </div>
+          <div>
+            <label className={lbl}>Where Do You See Yourself in 1 Year?</label>
+            <textarea rows={2} value={form.goal_1yr} onChange={e => set('goal_1yr', e.target.value)}
+              placeholder="e.g. Working as a performance marketer, running my own agency, freelancing with ₹50K/month…"
+              className={`${inp} resize-none`} />
+          </div>
+          <RadioRow label="How Did You Hear About Super 30?" field="heard_from" options={['Instagram','WhatsApp','YouTube','Friend/Referral','Google','Website']} />
+          {/* Commitment checkbox */}
+          <label className="flex items-start gap-3 p-4 rounded-xl border cursor-pointer transition-all hover:bg-[rgba(255,101,0,0.04)]"
+            style={{ borderColor: form.commitment ? 'rgba(255,101,0,0.4)' : '#E8E3DA', background: form.commitment ? 'rgba(255,101,0,0.04)' : 'transparent' }}>
+            <div onClick={() => set('commitment', !form.commitment)}
+              className="w-5 h-5 rounded flex items-center justify-center shrink-0 mt-0.5 transition-all border"
+              style={{ background: form.commitment ? C.orange : 'white', borderColor: form.commitment ? C.orange : '#E8E3DA' }}>
+              {form.commitment && <Check className="w-3 h-3 text-white" />}
+            </div>
+            <span className="text-sm text-[#57534E]">
+              I commit to attending all 45 days offline in Ranchi, dedicating 4–5 hours daily, bringing my laptop, and approaching this program with full seriousness.
+            </span>
+          </label>
+          {error && <p className="text-sm text-red-500 bg-red-50 px-3 py-2 rounded-lg">{error}</p>}
+          <div className="flex gap-3">
+            <button onClick={() => setStep(2)} className="flex-1 py-3.5 rounded-xl font-bold text-sm border-2 hover:bg-[#F4F0E8] transition-colors" style={{ color: C.text, borderColor: C.border }}>← Back</button>
+            <button onClick={handleFinalSubmit} disabled={submitting}
+              className="flex-1 py-3.5 rounded-xl font-bold text-white text-sm flex items-center justify-center gap-2 hover:opacity-90 transition-opacity disabled:opacity-60"
+              style={{ background: C.orange }}>
+              {submitting ? <><span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />Submitting…</> : <>Submit Application 🚀</>}
+            </button>
+          </div>
+          <p className="text-center text-xs text-[#9C9189]">Your application goes directly to Arvind Gupta · Response within 24 hours</p>
+        </div>
+      )}
+    </div>
   )
 }
 
@@ -237,7 +361,7 @@ export default function Super30PageClient({ stats }: { stats: Stats }) {
       <div className="py-2.5 px-4 text-center text-xs sm:text-sm font-semibold text-white" style={{ background: C.navy }}>
         <span className="animate-pulse mr-2">🔥</span>
         SUPER 30 BATCH 01 APPLICATIONS OPEN &nbsp;|&nbsp; Only {stats.seats_total} Seats &nbsp;|&nbsp; 45 Days &nbsp;|&nbsp; Offline in Ranchi &nbsp;|&nbsp; Laptop Mandatory
-        <span className="hidden sm:inline">&nbsp;|&nbsp; <a href="tel:+918788424727" className="underline">Have Questions? 8271686045</a></span>
+        <span className="hidden sm:inline">&nbsp;|&nbsp; <a href="tel:+918788424727" className="underline">Have Questions? +91 8788424727</a></span>
       </div>
 
       {/* ── HERO ───────────────────────────────────────────────────────────── */}
@@ -285,7 +409,7 @@ export default function Super30PageClient({ stats }: { stats: Stats }) {
                 <a href="#apply"
                   className="flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-bold text-white text-base hover:opacity-90 transition-opacity"
                   style={{ background: C.orange, minHeight: 52 }}>
-                  Check Your Eligibility Now <ArrowRight className="w-5 h-5" />
+                  Apply Now — Start Your Journey <ArrowRight className="w-5 h-5" />
                 </a>
                 <a href="#selection"
                   className="flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-bold text-base border-2 hover:bg-[#F4F0E8] transition-colors"
@@ -808,13 +932,13 @@ export default function Super30PageClient({ stats }: { stats: Stats }) {
                 <a href="tel:+918788424727"
                   className="flex items-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm border text-white hover:bg-white/5 transition-colors"
                   style={{ borderColor: 'rgba(255,255,255,0.2)' }}>
-                  📞 8271686045
+                  📞 +91 8788424727
                 </a>
               </div>
             </div>
             <div className="bg-white rounded-2xl p-7 shadow-2xl">
-              <h3 className="font-black text-xl text-[#1A1410] mb-1">Check Your Eligibility</h3>
-              <p className="text-sm text-[#57534E] mb-6">Takes 2 minutes. We'll respond within 24 hrs on WhatsApp.</p>
+              <h3 className="font-black text-xl text-[#1A1410] mb-1">Apply for Super 30 — Batch 01</h3>
+              <p className="text-sm text-[#57534E] mb-6">3 quick steps · Takes 5 minutes · We respond within 24 hrs on WhatsApp</p>
               <EligibilityForm />
             </div>
           </div>
@@ -828,7 +952,7 @@ export default function Super30PageClient({ stats }: { stats: Stats }) {
         <a href="#apply"
           className="flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-sm hover:opacity-90 transition-opacity"
           style={{ background: C.orange }}>
-          Check Your Eligibility Now <ArrowRight className="w-4 h-4" />
+          Apply Now — Start Your Journey <ArrowRight className="w-4 h-4" />
         </a>
         <a href="#selection"
           className="flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-sm border-2 hover:bg-white/5 transition-colors"
