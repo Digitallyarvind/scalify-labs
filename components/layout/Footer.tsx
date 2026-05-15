@@ -62,9 +62,10 @@ const PROGRAMS_COMMUNITY = [
 ]
 
 const COMPANY = [
-  { label: 'Why Scalify Labs', href: '/why-scalify' },
-  { label: 'Growth Insights',  href: '/blog' },
-  { label: 'Contact Us',       href: '/contact-scalifylabs' },
+  { label: 'Why Scalify Labs',    href: '/why-scalify' },
+  { label: "Founder's Profile",   href: '/founder/arvind-gupta' },
+  { label: 'Growth Insights',     href: '/blog' },
+  { label: 'Contact Us',          href: '/contact-scalifylabs' },
 ]
 
 const SOCIAL = [
