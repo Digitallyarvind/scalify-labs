@@ -49,28 +49,45 @@ export async function submitS30Application(formData: {
   source?: string
   why_join?: string
   one_year_goal?: string
-  batch_id: string
+  batch_id?: string   // optional — auto-resolved from active batch
 }) {
   const db = createServerClient()
 
-  // Check ban list
-  const { data: banned } = await table(db, 's30_applicants')
-    .select('ban_until, name')
-    .or(`phone.eq.${formData.phone},email.eq.${formData.email}`)
-    .not('ban_until', 'is', null)
-    .single() as { data: { ban_until: string | null } | null }
-
-  if (banned?.ban_until) {
-    const banDate = new Date(banned.ban_until)
-    if (banDate > new Date()) {
-      throw new Error(
-        `You cannot reapply until ${banDate.toLocaleDateString('en-IN')}. You declined your selection offer — a 12-month reapplication restriction applies.`
-      )
-    }
+  // Resolve batch_id: use provided value, or look up the current accepting batch
+  let batchId: string | null = formData.batch_id && formData.batch_id.trim() !== '' ? formData.batch_id : null
+  if (!batchId) {
+    const { data: activeBatch } = await (db.from as CallableFunction)('s30_batches')
+      .select('id')
+      .eq('status', 'accepting')
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .single() as { data: { id: string } | null }
+    batchId = activeBatch?.id ?? null
   }
 
-  const { error } = await table(db, 's30_applicants').insert({
-    batch_id: formData.batch_id,
+  // Check ban list (ignore errors — treat as no ban)
+  try {
+    const { data: banned } = await table(db, 's30_applicants')
+      .select('ban_until')
+      .or(`phone.eq.${formData.phone},email.eq.${formData.email}`)
+      .not('ban_until', 'is', null)
+      .limit(1)
+      .single() as { data: { ban_until: string | null } | null }
+
+    if (banned?.ban_until) {
+      const banDate = new Date(banned.ban_until)
+      if (banDate > new Date()) {
+        throw new Error(
+          `You cannot reapply until ${banDate.toLocaleDateString('en-IN')}. A 12-month reapplication restriction applies.`
+        )
+      }
+    }
+  } catch (e: unknown) {
+    if (e instanceof Error && e.message.includes('reapply')) throw e
+    // Otherwise ignore (no matching row = not banned)
+  }
+
+  const insertRow = {
     name: formData.name,
     phone: formData.phone,
     email: formData.email,
@@ -90,9 +107,12 @@ export async function submitS30Application(formData: {
     fee_status: 'pending',
     offer_sent: false,
     offer_declined: false,
-  })
+    ...(batchId ? { batch_id: batchId } : {}),
+  }
 
-  if (error) throw new Error('Failed to submit application')
+  const { error } = await (db.from as CallableFunction)('s30_applicants').insert(insertRow) as { error: { message: string } | null }
+
+  if (error) throw new Error(error.message || 'Failed to submit application')
   return { success: true }
 }
 
