@@ -16,6 +16,7 @@ const FOOTER_COMPANY = [
   { label: 'Home', href: '/' },
   { label: 'Why Scalify Labs', href: '/why-scalify' },
   { label: 'Super 30 Program', href: '/super-30' },
+  { label: 'Jharkhand Growth Adda', href: '/jharkhand-growth-adda' },
   { label: 'Growth Insights', href: '/blog' },
   { label: 'Contact Us', href: '/contact-scalifylabs' },
 ]
