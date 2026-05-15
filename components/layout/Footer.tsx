@@ -256,13 +256,19 @@ export function Footer() {
             <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-4">Explore Growth Resources</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div>
-                <p className="text-[9px] font-bold uppercase tracking-widest text-slate-300 mb-2">Services by City</p>
+                <div className="flex items-center gap-2 mb-2">
+                  <p className="text-[9px] font-bold uppercase tracking-widest text-slate-300">Services by City</p>
+                  <Link href="/digital-marketing-services-india" className="text-[9px] font-bold text-[#FF6500] hover:underline">View All Cities →</Link>
+                </div>
                 <div className="flex flex-wrap gap-x-4 gap-y-1">
                   {SEO_SERVICES.map(l => <Link key={l.label} href={l.href} className="text-[11px] text-slate-400 hover:text-[#FF6500] transition-colors">{l.label}</Link>)}
                 </div>
               </div>
               <div>
-                <p className="text-[9px] font-bold uppercase tracking-widest text-slate-300 mb-2">Courses & Training</p>
+                <div className="flex items-center gap-2 mb-2">
+                  <p className="text-[9px] font-bold uppercase tracking-widest text-slate-300">Courses & Training</p>
+                  <Link href="/digital-marketing-services-india" className="text-[9px] font-bold text-[#FF6500] hover:underline">View All →</Link>
+                </div>
                 <div className="flex flex-wrap gap-x-4 gap-y-1">
                   {SEO_COURSES.map(l => <Link key={l.label} href={l.href} className="text-[11px] text-slate-400 hover:text-[#FF6500] transition-colors">{l.label}</Link>)}
                 </div>

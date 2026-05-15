@@ -35,6 +35,7 @@ const PROBLEMS = [
   { icon: '🕳️', title: 'Leads Getting Lost',       desc: 'No CRM. No pipeline. No visibility.' },
   { icon: '🔗', title: 'Disconnected Tools',       desc: 'Ads, CRM, WhatsApp — all siloed.' },
   { icon: '⏰', title: 'Slow Response Times',      desc: 'Competitors respond in minutes. You respond in hours.' },
+  { icon: '💸', title: 'Wasted Ad Spend',          desc: 'Budget flowing to clicks that never convert to customers.' },
 ]
 
 const PIPELINE = [
@@ -73,7 +74,7 @@ const INDUSTRIES = [
   { icon: Building2,     label: 'Real Estate',      outcome: 'Verified buyer leads + site visit funnels', href: '/digital-marketing-services-for-real-estate',         color: 'text-amber-600 bg-amber-50' },
   { icon: ShoppingBag,   label: 'Retail',           outcome: 'Walk-ins + catalogue & offer marketing',    href: '#',                                                   color: 'text-purple-600 bg-purple-50' },
   { icon: Store,         label: 'Local Businesses', outcome: 'Google visibility + call & lead generation', href: '#',                                                  color: 'text-green-600 bg-green-50' },
-  { icon: Sofa,          label: 'Furniture & Tiles', outcome: 'WhatsApp catalogue + qualified lead funnels', href: '#',                                                color: 'text-orange-600 bg-orange-50' },
+  { icon: Sofa,          label: 'Home Furnishing',   outcome: 'WhatsApp catalogue + qualified lead funnels', href: '#',                                                color: 'text-orange-600 bg-orange-50' },
 ]
 
 const WHY = [
@@ -253,7 +254,7 @@ export default function HomepageClient() {
       {/* ── CLIENT MARQUEE ────────────────────────────────────────────────── */}
       <section className="py-10 border-y border-slate-100" style={{ background: '#FAFAF8' }}>
         <div className="max-w-[1200px] mx-auto px-4 mb-5">
-          <p className="text-center text-sm font-semibold text-slate-400">Businesses & Brands We've Worked With</p>
+          <p className="text-center text-sm font-semibold text-slate-400">Businesses & Brands our founder has Worked With</p>
         </div>
         <div className="relative overflow-hidden">
           <div className="flex gap-10 animate-[marquee_20s_linear_infinite] whitespace-nowrap">
@@ -472,7 +473,7 @@ export default function HomepageClient() {
             ))}
           </div>
           <div className="text-center mt-8">
-            <a href="https://g.page/r/scalifylabs/review" target="_blank" rel="noopener noreferrer"
+            <a href="https://share.google/XyPWkBexhOxDt2nuA" target="_blank" rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm border-2 hover:bg-slate-50 transition-colors"
               style={{ color: '#0B0F1E', borderColor: '#E8E3DA' }}>
               Read More Reviews <ArrowRight className="w-4 h-4" />
@@ -516,56 +517,6 @@ export default function HomepageClient() {
                 </div>
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── COMMUNITY ─────────────────────────────────────────────────────── */}
-      <section className="py-14 px-4" style={{ background: '#FFF9F2' }}>
-        <div className="max-w-[1200px] mx-auto">
-          <div className="bg-white rounded-3xl border border-orange-100 p-8 lg:p-12 shadow-sm">
-            <div className="grid lg:grid-cols-2 gap-10 items-center">
-              <div>
-                <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full mb-5"
-                  style={{ background: '#FFF3E8', color: '#FF6500' }}>
-                  🌱 Free Community
-                </div>
-                <h2 className="font-black text-[28px] sm:text-[34px] leading-[1.2] mb-3" style={{ color: '#0B0F1E' }}>
-                  Jharkhand Growth Adda™
-                </h2>
-                <p className="text-xl font-semibold mb-3 text-[#FF6500]">Local Connections. Digital Growth.</p>
-                <p className="text-base text-slate-500 leading-relaxed mb-5">
-                  A free community helping Jharkhand business owners connect, learn and grow digitally.
-                </p>
-                <div className="flex flex-wrap gap-2 mb-6">
-                  {['Networking','Growth Discussions','Local Opportunities','Business Referrals','Digital Guidance'].map(b => (
-                    <span key={b} className="text-xs font-semibold px-3 py-1.5 rounded-full border"
-                      style={{ background: 'rgba(255,101,0,0.06)', borderColor: 'rgba(255,101,0,0.2)', color: '#FF6500' }}>
-                      ✓ {b}
-                    </span>
-                  ))}
-                </div>
-                <Link href="/jharkhand-growth-adda"
-                  className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl font-bold text-white hover:opacity-90 transition-opacity"
-                  style={{ background: '#FF6500' }}>
-                  Join Free <ArrowRight className="w-4 h-4" />
-                </Link>
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                {[
-                  { val: '🏢', label: 'Manufacturers', sub: 'Connect & collaborate' },
-                  { val: '🏥', label: 'Clinics',       sub: 'Healthcare network' },
-                  { val: '🎓', label: 'Educators',     sub: 'EdTech & coaching' },
-                  { val: '🛍️', label: 'Retailers',     sub: 'Local brands' },
-                ].map(c => (
-                  <div key={c.label} className="bg-[#FAFAF8] rounded-2xl p-4 border border-slate-100 text-center">
-                    <span className="text-2xl block mb-1.5">{c.val}</span>
-                    <p className="font-bold text-sm" style={{ color: '#0B0F1E' }}>{c.label}</p>
-                    <p className="text-xs" style={{ color: '#57534E' }}>{c.sub}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
           </div>
         </div>
       </section>
